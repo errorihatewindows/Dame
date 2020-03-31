@@ -17,11 +17,6 @@ namespace Dame
             InitializeComponent();
 
             Dictionary<Tuple<int, int>, char> Board = new Dictionary<Tuple<int, int>, char>();
-
-            Board.Add(0,0>, 'B');
-            Board.Add("bmp", "paint.exe");
-            Board.Add("dib", "paint.exe");
-            Board.Add("rtf", "wordpad.exe");
         }
 
 
