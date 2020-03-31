@@ -20,7 +20,7 @@ namespace Dame
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            Draw_Piece(0, 0, 'S');
         }
 
 
@@ -65,8 +65,8 @@ namespace Dame
             Graphics man = this.CreateGraphics();
 
             //relative Koordinaten in absolute
-            int choor_x = 40 + (x * 50);
-            int choor_y = 40 + (y * 50);
+            int choor_x = 90 + (x * 50);
+            int choor_y = 90 + (y * 50);
 
             
             //Großbuchstabe
