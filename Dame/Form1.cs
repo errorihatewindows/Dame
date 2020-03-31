@@ -64,9 +64,9 @@ namespace Dame
         {
             Graphics man = this.CreateGraphics();
 
-            //relative Koordinaten in absolute
+            //relative Koordinaten in absolute + 0,0 nach links unten transformieren
             int choor_x = 90 + (x * 50);
-            int choor_y = 90 + (y * 50);
+            int choor_y = 90 + ((7 - y) * 50);
 
             
             //Großbuchstabe
