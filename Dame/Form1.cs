@@ -15,9 +15,6 @@ namespace Dame
         public Form1()
         {
             InitializeComponent();
-            //hey
-
-            //Yallah
 
         }
     }
