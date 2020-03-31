@@ -28,10 +28,10 @@ namespace Dame
 
 
 
-        private void Form1_Paint(object sender, PaintEventArgs e)
+        private void Form1_Paint(object sender, PaintEventArgs e)   //Schachbrett zeichnen
         {
 
-            //Schachbrett zeichnen
+    
 
             Graphics l = e.Graphics;
 
@@ -66,8 +66,8 @@ namespace Dame
 
 
 
-        //Zeichnet Spielfiguren an gegebener Stelle 
-        public void Draw(int x, int y, char piece)
+        
+        public void Draw(int x, int y, char piece)      //Zeichnet Spielfiguren an gegebener Stelle 
         {
             Graphics man = this.CreateGraphics();
 
