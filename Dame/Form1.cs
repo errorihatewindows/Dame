@@ -55,7 +55,7 @@ namespace Dame
                 for (int j = 125; j <= 450; j = j + 100)
                 {
                     l.DrawRectangle(pen, i, j, 50, 50);
-                    l.FillRectangle(brush, i, j, 50, 50);
+                    l.FillRectangle(brush, i, j, 50, 50);          
                 }
         }
     }
