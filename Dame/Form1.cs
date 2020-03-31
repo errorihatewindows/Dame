@@ -19,12 +19,16 @@ namespace Dame
 
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Draw(2, 1, 'w');
+            Draw(1, 8, 'b');
+        }
 
 
 
 
-
-       private void Form1_Paint(object sender, PaintEventArgs e)
+        private void Form1_Paint(object sender, PaintEventArgs e)
         {
 
             //Schachbrett zeichnen
@@ -60,29 +64,63 @@ namespace Dame
 
         }
 
-        public void Draw(int x, int y, int z)
+
+
+        //Zeichnet Spielfiguren an gegebener Stelle 
+        public void Draw(int x, int y, char piece)
         {
             Graphics man = this.CreateGraphics();
 
-            if (z == 1)
-            {
-                Pen pen = new Pen(Color.Black, 10);
-                Brush brush = Brushes.Black;
-            } else
-            {
-                Pen pen = new Pen(Color.White, 10);
-                Brush brush = Brushes.White;
-            }
-
-
+            //relative Koordinaten in absolute
+            int choor_x = 40 + (x * 50);
+            int choor_y = 40 + (y * 50);
 
             
-        }
+            //Großbuchstabe
+            if (piece < 97)
+            {
+                // ist es ein B?
+                if (piece == 66)
+                {
+                    
+                    //Dame Schwarz
+                    Pen pen = new Pen(Color.Black, 20);
+                    Brush brush = Brushes.IndianRed;
+                    man.DrawEllipse(pen, choor_x, choor_y, 20, 20);
+                    man.FillEllipse(brush, choor_x, choor_y, 20, 20);
 
-        private void button1_Click(object sender, EventArgs e)
-        {
+                } else
+                {
 
+                    //Dame weiß
+                    Pen pen = new Pen(Color.FloralWhite, 20);
+                    Brush brush = Brushes.IndianRed;
+                    man.DrawEllipse(pen, choor_x, choor_y, 20, 20);
+                    man.FillEllipse(brush, choor_x, choor_y, 20, 20);
+                }
+            } else  //Kleinbuchstabe
+            {
+                //ist es ein b?
+                if (piece == 98)
+                {
+
+                    //Man Schwarz
+                    Pen pen = new Pen(Color.Black, 15);
+                    Brush brush = Brushes.Black;
+                    man.DrawEllipse(pen, choor_x, choor_y, 20, 20);
+                    man.FillEllipse(brush, choor_x, choor_y, 20, 20);
+
+                }
+                else
+                {
+
+                    //Man weiß
+                    Pen pen = new Pen(Color.FloralWhite, 15);
+                    Brush brush = Brushes.FloralWhite;
+                    man.DrawEllipse(pen, choor_x, choor_y, 20, 20);
+                    man.FillEllipse(brush, choor_x, choor_y, 20, 20);
+                }
+            }
         }
     }
-
 }
