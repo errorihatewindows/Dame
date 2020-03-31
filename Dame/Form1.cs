@@ -120,29 +120,36 @@ namespace Dame
             
         }
 
-        private void button1_Click(object sender, EventArgs e) //erstellt Startposition für weiß und schwarz + zeichnen
+        private void Generate_Board() //erstellt Startposition für weiß und schwarz + zeichnen
         {
             Dictionary<Tuple<int, int>, char> Board = new Dictionary<Tuple<int, int>, char>();
-            
-            for (int i = 0; i < 3; i++) 
-                for (int j = 0; j < 8; j = j + 2) 
+
+            for (int i = 0; i < 3; i++)
+                for (int j = 0; j < 8; j = j + 2)
                 {
                     if (i % 2 == 1)
                     {
                         Board.Add(Tuple.Create((j + 1), i), 'b');
                         Board.Add(Tuple.Create(j, (7 - i)), 'w');
                     }
-                    else 
+                    else
                     {
                         Board.Add(Tuple.Create(j, i), 'b');
-                        Board.Add(Tuple.Create((j + 1), (7- i)), 'w');
+                        Board.Add(Tuple.Create((j + 1), (7 - i)), 'w');
                     }
-      
+
 
                 }
 
             Draw_Board(Board);
-            
+
+            return Board;
+        }
+        
+        
+        private void button1_Click(object sender, EventArgs e) 
+        {
+            Generate_Board();
         }
 
     }
