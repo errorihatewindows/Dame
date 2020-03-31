@@ -14,8 +14,12 @@ namespace Dame
     {
         public Form1()
         {
-    
             InitializeComponent();
+        }
+
+
+        private void button1_Click(object sender, EventArgs e)
+        {
 
         }
 
@@ -56,10 +60,7 @@ namespace Dame
 
         }
 
-
-
-        
-        public void Draw(int x, int y, char piece)      //Zeichnet Spielfiguren an gegebener Stelle 
+        public void Draw_Piece(int x, int y, char piece)      //Zeichnet Spielfiguren an gegebener Stelle 
         {
             Graphics man = this.CreateGraphics();
 
@@ -115,13 +116,15 @@ namespace Dame
             }
 
 
-            private void button1_Click(object sender, EventArgs e)
-            {
-                Draw(2, 1, 'w');
-                Draw(1, 8, 'b');
-            }
 
 
+        }
+
+        public void Draw_Board(Dictionary<Tuple<int, int>, char> Board) // Zeichnet einen kompletten Schachbrett-Zustand
+        {
+            foreach (KeyValuePair<Tuple<int, int>, char> kvp in Board)
+                Draw_Piece(kvp.Key.Item1, kvp.Key.Item2, kvp.Value);
+            
         }
 
     }
