@@ -19,14 +19,6 @@ namespace Dame
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            Draw(2, 1, 'w');
-            Draw(1, 8, 'b');
-        }
-
-
-
 
         private void Form1_Paint(object sender, PaintEventArgs e)   //Schachbrett zeichnen
         {
@@ -121,6 +113,16 @@ namespace Dame
                     man.FillEllipse(brush, choor_x, choor_y, 20, 20);
                 }
             }
+
+
+            private void button1_Click(object sender, EventArgs e)
+            {
+                Draw(2, 1, 'w');
+                Draw(1, 8, 'b');
+            }
+
+
         }
+
     }
 }
