@@ -15,17 +15,7 @@ namespace Dame
         public Form1()
         {
             InitializeComponent();
-
-            Dictionary<Tuple<int, int>, char> Board = new Dictionary<Tuple<int, int>, char>();
-            Board.Add(Tuple.Create(0, 0), 'B');
         }
-
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            Draw_Piece(0, 0, 'w');
-        }
-
 
         private void Form1_Paint(object sender, PaintEventArgs e)   //Schachbrett zeichnen
         {
@@ -127,6 +117,31 @@ namespace Dame
         {
             foreach (KeyValuePair<Tuple<int, int>, char> kvp in Board)
                 Draw_Piece(kvp.Key.Item1, kvp.Key.Item2, kvp.Value);
+            
+        }
+
+        private void button1_Click(object sender, EventArgs e) //erstellt Startposition für weiß und schwarz + zeichnen
+        {
+            Dictionary<Tuple<int, int>, char> Board = new Dictionary<Tuple<int, int>, char>();
+            
+            for (int i = 0; i < 3; i++) 
+                for (int j = 0; j < 8; j = j + 2) 
+                {
+                    if (i % 2 == 1)
+                    {
+                        Board.Add(Tuple.Create((j + 1), i), 'b');
+                        Board.Add(Tuple.Create(j, (7 - i)), 'w');
+                    }
+                    else 
+                    {
+                        Board.Add(Tuple.Create(j, i), 'b');
+                        Board.Add(Tuple.Create((j + 1), (7- i)), 'w');
+                    }
+      
+
+                }
+
+            Draw_Board(Board);
             
         }
 
