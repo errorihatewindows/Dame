@@ -20,7 +20,7 @@ namespace Dame
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Draw_Piece(0, 0, 'S');
+            Draw_Piece(0, 0, 'w');
         }
 
 
