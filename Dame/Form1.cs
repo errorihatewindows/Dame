@@ -17,6 +17,7 @@ namespace Dame
             InitializeComponent();
 
             Dictionary<Tuple<int, int>, char> Board = new Dictionary<Tuple<int, int>, char>();
+            Board.Add(Tuple.Create(0, 0), 'B');
         }
 
 
