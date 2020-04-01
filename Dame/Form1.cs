@@ -26,7 +26,7 @@ namespace Dame
             cpu = new CPU(this);
 
 
-            cpu.get_move(mcp.Board, 0);
+            
         }
 
         private void Form1_Shown(object sender, EventArgs e) //Zeichnet Grundzustand
@@ -260,5 +260,9 @@ namespace Dame
             return valid;
         }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            cpu.get_move(mcp.Board, 0);
+        }
     }
 }
