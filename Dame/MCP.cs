@@ -4,23 +4,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Piece = System.Tuple<int,int>;
+using Board = System.Collections.Generic.Dictionary<System.Tuple<int,int>, char>;
+
 namespace Dame
 {
     public class MCP
     {
-        public Dictionary<Tuple<int, int>, char> Board = new Dictionary<Tuple<int,int>,char>();
+        private Board board;
         private Form1 drawing;
         //Constructor
         public MCP(Form1 form)
         {
             drawing = form;
+            Generate_Board();
         }
 
-        private void Generate_Board(char bot) //erstellt Startposition für weiß und schwarz + zeichnen
+        public Board Get_Board()
         {
+            return board;
+        }
+
+        private void Generate_Board() //erstellt Startposition für weiß und schwarz + zeichnen
+        {
+            board = new Board();
             char top;
-            if (bot == 'b') { top = 'w'; }
-            else { top = 'b'; }
 
             //nur reihe 0-3 besetzt (und jeweils gespiegelt)
             for (int y = 0; y < 3; y++)
@@ -28,30 +36,39 @@ namespace Dame
                 {
                     if (y % 2 == 1)
                     {
-                        Board.Add(Tuple.Create((x + 1), y), bot);
+                        board.Add(Tuple.Create((x + 1), y), 'b');
                         //gegnerische Steine
-                        Board.Add(Tuple.Create(x, (7 - y)), top);
+                        board.Add(Tuple.Create(x, (7 - y)), 'w');
                     }
                     else
                     {
-                        Board.Add(Tuple.Create(x, y), bot);
-                        Board.Add(Tuple.Create((x + 1), (7 - y)), top);
+                        board.Add(Tuple.Create(x, y), 'b');
+                        board.Add(Tuple.Create((x + 1), (7 - y)), 'w');
                     }
                 }
+        }
 
-            //Just Testing ~ Markus
+        private List<Piece> move(Piece piece)             //Liste aller Felder auf piece ziehen kann, egal was sich dort befindet
+        {
+            List<Piece> output = new List<Piece>();
+            return output;
+        }
+        
+        private bool jump(Piece start, Piece target)      //true wenn start über target springen kann
+        {
+            return false;
+        }
 
-            //Board.Add(Tuple.Create(3, 3), 'W');
-            //Board.Add(Tuple.Create(4, 4), 'B');
-
+        private List<Piece> jumping(Piece piece)          //Liste aller Felder, die durch springen mit piece erreichbar sind
+        {
+            List<Piece> output = new List<Piece>();
+            return output;
         }
 
         public void run()
         {
-            Generate_Board('b');
-            drawing.wait(1000);
-            drawing.Draw_Board(Board);
-
+            Generate_Board();
+            drawing.Draw_Board(board);
         }
     }
 }
