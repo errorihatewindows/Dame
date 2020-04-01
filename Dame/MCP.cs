@@ -89,7 +89,8 @@ namespace Dame
             {
                 position = "";
                 position += move[i];
-                position += move[i + 1]; 
+                position += move[i + 1];
+                output.Add(drawing.StringToTuple(position));
             }
             return output;
         }
@@ -110,21 +111,39 @@ namespace Dame
             else     { return false; }
         }
 
+        private List<Piece> possible_jumps(Piece position)
+        {
+            List<Piece> output = new List<Piece>();
+            return output;
+        }
+
         private bool Check_Move(string smove, int player)               //checks if move is valid (player 0 is black)
         {
-            //check move format
+            //color of current player
+            char color;
+            if (player == 1) { color = 'w'; }
+            else             { color = 'b'; }
+            //check move syntax
             //Check if move string is of valid format
-            //convert move to list of Tuples
+            if (!drawing.check_Syntax(smove)) { return false; }
             List<Piece> move = Split(smove);
             //every position in list on a black field?
             foreach (Piece position in move)
             {
                 if (!is_black(position)) { return false; }
+            }   //moves which made it this far are syntacticly correct, next check if they comply by the rules
+            //check if its moving an own piece ( -20 converts lowercase to uppercase)
+            if (board[move[0]] == color || board[move[0]] == (color - 20)) { return false; }
+            //players MUST jump if possible
+            if (!is_jump(move[0],move[1]))
+            {
+                foreach (KeyValuePair<Piece, char> kvp in board)
+                {
+                    if (kvp.Value != color && kvp.Value != (color - 20)) { continue; }
+                    //if a jump is possible, the move should have been a jump
+                    //if (possible_jumps(kvp.Key).Length == 0) { return false; }
+                }
             }
-            //move is valid format, next check if it complies by the rules
-            //check if its moving an own piece
-            if (player == 0 && (board[move[0]] == 'w' || board[move[0]] == 'W')) { return false; }
-            if (player == 1 && (board[move[0]] == 'b' || board[move[0]] == 'B')) { return false; }
             return true;
         }
 
@@ -132,7 +151,10 @@ namespace Dame
         {
             Generate_Board();
             drawing.Draw_Board(board);
-            Check_Move("A1,B2", 0);
+            Console.WriteLine(Check_Move("A1B3", 0).ToString());
+            Console.WriteLine(Check_Move("a1,B2", 0).ToString());
+            Console.WriteLine(Check_Move("A1,B3", 0).ToString());
+            Console.WriteLine(Check_Move("A3,B4", 0).ToString());
         }
     }
 }

@@ -205,7 +205,7 @@ namespace Dame
 
         public Tuple<int, int> StringToTuple(string place)
         {
-            place.ToUpper();
+            place = place.ToUpper();
             
             int a = Convert.ToInt32(Convert.ToChar(place[0]) - 'A');
             int b = Convert.ToInt32(place[1]) - '1';
@@ -218,7 +218,7 @@ namespace Dame
         public bool check_Syntax(string move)   //Returnt TRUE wenn Syntax korrekt
         {
             bool valid = false;
-            move.ToUpper();
+            move = move.ToUpper();
 
             //Anzahl der valid Chars
             int count_valid = 0;
