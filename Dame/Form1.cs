@@ -17,6 +17,7 @@ namespace Dame
         private bool Clicked = false;
         private string move;
 
+
         public Form1()
         {
             InitializeComponent();
@@ -25,8 +26,15 @@ namespace Dame
 
         private void Form1_Shown(object sender, EventArgs e) //Zeichnet Grundzustand
         {
-            Draw_Board(new Dictionary<Tuple<int, int>, char>());
+            Draw_Board(mcp.Board);
         }
+
+        private void Form1_SizeChanged(object sender, EventArgs e)
+        {
+            Draw_Board(mcp.Board);
+        }
+
+
 
         //Wartet gewisse anzahl millisekunden
         public void wait(int milliseconds)
@@ -212,17 +220,13 @@ namespace Dame
 
             }
 
-            Console.WriteLine("YAY");
-            return move;
-            
-
-
+            return move;           
         }
-
 
         private void button1_Click(object sender, EventArgs e)
         {
             mcp.run();            
         }
+
     }
 }

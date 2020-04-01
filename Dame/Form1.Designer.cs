@@ -468,6 +468,7 @@
             this.Name = "Form1";
             this.Text = "Dame";
             this.Shown += new System.EventHandler(this.Form1_Shown);
+            this.SizeChanged += new System.EventHandler(this.Form1_SizeChanged);
             this.ResumeLayout(false);
             this.PerformLayout();
 
