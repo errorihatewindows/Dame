@@ -26,6 +26,12 @@ namespace Dame
             return board;
         }
 
+        private char color(int player)      //player 0 -> 'b'
+        {
+            if (player==1) { return 'b'; }
+            else           { return 'w'; }
+        }
+
         private void Generate_Board()       //creates the initial Board State
         {
             board = new Board();
@@ -110,18 +116,24 @@ namespace Dame
             else     { return false; }
         }
 
-        private List<Piece> possible_jumps(Piece position)
+        private List<Piece> possible_jumps(Piece position,int player)   //returns a list of possible jumps from current position (only direct jumps)
         {
             List<Piece> output = new List<Piece>();
+            List<Piece> possible = Move(position);  //fields this piece can move to
+            foreach (Piece option in possible)
+            {
+                //can only jump over enemy pieces
+                if (!(board[option] == color(1-player) || board[option] == (color(1-player)-20))) { continue; }
+                //target is where to jump to jump over "option"
+                Piece target = new Piece((2 * option.Item1) - position.Item1, (2 * option.Item2) - position.Item2);
+                //jump is valid if target is an empty field
+                if (board[target] == '.') { output.Add(target); }
+            }
             return output;
         }
 
         private bool Check_Move(string smove, int player)               //checks if move is valid (player 0 is black)
         {
-            //color of current player
-            char color;
-            if (player == 1) { color = 'w'; }
-            else             { color = 'b'; }
             //check move syntax
             //Check if move string is of valid format
             if (!drawing.check_Syntax(smove)) { return false; }
@@ -132,15 +144,15 @@ namespace Dame
                 if (!is_black(position)) { return false; }
             }   //moves which made it this far are syntacticly correct, next check if they comply by the rules
             //check if its moving an own piece ( -20 converts lowercase to uppercase)
-            if (board[move[0]] == color || board[move[0]] == (color - 20)) { return false; }
+            if (board[move[0]] == color(player) || board[move[0]] == (color(player) - 20)) { return false; }
             //players MUST jump if possible
             if (!is_jump(move[0],move[1]))
             {
                 foreach (KeyValuePair<Piece, char> kvp in board)
                 {
-                    if (kvp.Value != color && kvp.Value != (color - 20)) { continue; }
+                    if (kvp.Value != color(player) && kvp.Value != (color(player) - 20)) { continue; }
                     //if a jump is possible, the move should have been a jump
-                    //if (possible_jumps(kvp.Key).Length == 0) { return false; }
+                    if (possible_jumps(kvp.Key, player).Count == 0) { return false; }
                 }
             }
             return true;
