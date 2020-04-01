@@ -1,20 +1,24 @@
 ﻿using System;
-using Dame;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace MCP
+namespace Dame
 {
-	public class MCP
-	{
-		//Constructor
-		public MCP()
-		{
-		}
+    public class MCP
+    {
+        Dictionary<Tuple<int, int>, char> Board;
+        //Constructor
+        public MCP()
+        {
+        }
 
         private void Generate_Board(char bot) //erstellt Startposition für weiß und schwarz + zeichnen
         {
             char top;
-            if (bot == 'b') {  top = 'w';  }
-            else            {  top = 'b';  }
+            if (bot == 'b') { top = 'w'; }
+            else { top = 'b'; }
 
             //nur reihe 0-3 besetzt (und jeweils gespiegelt)
             for (int y = 0; i < 3; i++)
