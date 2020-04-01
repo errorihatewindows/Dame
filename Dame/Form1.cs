@@ -183,7 +183,7 @@ namespace Dame
                 } else 
                     MessageBox.Show("Ungültige Syntax für einen Zug");
 
-        }
+        }  
 
     }
 }

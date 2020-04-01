@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1B7D488D-CF3C-43C3-BA67-75FA52C496B1}</ProjectGuid>
+    <ProjectGuid>{E1B484BE-C94F-4B1D-B6B9-C3A9B9557689}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>Dame</RootNamespace>
     <AssemblyName>Dame</AssemblyName>
@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MCP.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
