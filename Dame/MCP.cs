@@ -152,7 +152,7 @@ namespace Dame
                 {
                     if (kvp.Value != color(player) && kvp.Value != (color(player) - 20)) { continue; }
                     //if a jump is possible, the move should have been a jump
-                    if (possible_jumps(kvp.Key, player).Count == 0) { return false; }
+                    if (possible_jumps(kvp.Key, player).Count != 0) { return false; }
                 }
             }
             return true;
