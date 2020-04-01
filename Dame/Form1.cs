@@ -21,6 +21,11 @@ namespace Dame
 
         }
 
+        private void Form1_Shown(object sender, EventArgs e) //Zeichnet Grundzustand
+        {
+            Draw_Board(new Dictionary<Tuple<int, int>, char>());
+        }
+
         //Wartet gewisse anzahl millisekunden
         public void wait(int milliseconds)
         {
@@ -139,27 +144,11 @@ namespace Dame
 
             l.Dispose();
 
-        }
+        }       
 
-        
-
-        //TODO: in 2 Funktionen teilen, button click setzt eine boolean- Membervariable, 2. funktion gibt einen formatierten Zug aus
-        
-        
+        //TODO: in 2 Funktionen teilen, button click setzt eine boolean- Membervariable, 2. funktion gibt einen formatierten Zug aus            
         private void Zug_bestätigt_Click(object sender, EventArgs e)
         {
-            Dictionary<Tuple<int, int>, char> Board = new Dictionary<Tuple<int, int>, char>();
-            Board.Add(Tuple.Create(0,0), 'b');
-
-            Draw_Board(Board);
-
-            wait(2000);
-
-            Board.Remove(Tuple.Create(0, 0));
-
-            Draw_Board(Board);
-
-
             bool valid1 = false, valid2 = false, valid3 = false;
 
             string move = Zug.Text;
@@ -199,15 +188,6 @@ namespace Dame
                 } else 
                     MessageBox.Show("Ungültige Syntax für einen Zug");
 
-        }
-
-        private void Form1_Paint(object sender, PaintEventArgs e)
-        {
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            Draw_Board(new Dictionary<Tuple<int, int>, char>());
-        }
+        }               //Überprüft Syntax der Zug-Eingabe       
     }
 }

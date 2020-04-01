@@ -263,8 +263,7 @@
             this.Location = new System.Drawing.Point(175, 50);
             this.Name = "Form1";
             this.Text = "Dame";
-            this.Load += new System.EventHandler(this.Form1_Load);
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
+            this.Shown += new System.EventHandler(this.Form1_Shown);
             this.ResumeLayout(false);
             this.PerformLayout();
 
