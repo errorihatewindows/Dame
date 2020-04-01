@@ -226,6 +226,7 @@
             this.Zug.Name = "Zug";
             this.Zug.Size = new System.Drawing.Size(222, 20);
             this.Zug.TabIndex = 81;
+            this.Zug.Text = "C3,D4";
             // 
             // label17
             // 
@@ -274,7 +275,7 @@
             this.Location = new System.Drawing.Point(175, 50);
             this.Name = "Form1";
             this.Text = "Dame";
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
+            this.Shown += new System.EventHandler(this.Form1_Shown);
             this.ResumeLayout(false);
             this.PerformLayout();
 

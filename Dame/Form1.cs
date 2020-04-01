@@ -19,6 +19,11 @@ namespace Dame
             mcp = new MCP(this);
         }
 
+        private void Form1_Shown(object sender, EventArgs e) //Zeichnet Grundzustand
+        {
+            Draw_Board(new Dictionary<Tuple<int, int>, char>());
+        }
+
         //Wartet gewisse anzahl millisekunden
         public void wait(int milliseconds)
         {
@@ -38,42 +43,6 @@ namespace Dame
             }
         }   //End of wait
 
-        private void Form1_Paint(object sender, PaintEventArgs e)   //Schachbrett zeichnen
-        {
-
-    
-
-            Graphics l = e.Graphics;
-
-            Pen pen = new Pen(Color.Sienna, 1);
-            Brush brush = Brushes.Sienna;
-               
-            l.DrawRectangle(pen, 75, 75, 400, 400);
-            l.FillRectangle(brush, 75, 75, 400, 400);
-
-
-            pen = new Pen(Color.Wheat, 1);
-            brush = Brushes.Wheat;
-
-            
-            for (int i = 75; i < 400; i = i + 100)
-                for (int j = 75; j < 400; j = j + 100)
-                {
-                    l.DrawRectangle(pen, i, j, 50, 50);
-                    l.FillRectangle(brush, i, j, 50, 50);
-                }
-
-            for (int i = 125; i <= 450; i = i + 100)
-                for (int j = 125; j <= 450; j = j + 100)
-                {
-                    l.DrawRectangle(pen, i, j, 50, 50);
-                    l.FillRectangle(brush, i, j, 50, 50);          
-                }
-
-            l.Dispose();
-
-        }
-
         public void Draw_Piece(int x, int y, char piece)      //Zeichnet Spielfiguren an gegebener Stelle 
         {
             Graphics man = this.CreateGraphics();
@@ -89,14 +58,15 @@ namespace Dame
                 // ist es ein B?
                 if (piece == 66)
                 {
-                    
+
                     //Dame Schwarz
                     Pen pen = new Pen(Color.Black, 20);
                     Brush brush = Brushes.IndianRed;
                     man.DrawEllipse(pen, choor_x, choor_y, 20, 20);
                     man.FillEllipse(brush, choor_x, choor_y, 20, 20);
 
-                } else
+                }
+                else
                 {
 
                     //Dame weiß
@@ -105,6 +75,7 @@ namespace Dame
                     man.DrawEllipse(pen, choor_x, choor_y, 20, 20);
                     man.FillEllipse(brush, choor_x, choor_y, 20, 20);
                 }
+
             } else  //Kleinbuchstabe
             {
                 //ist es ein b?
@@ -136,20 +107,50 @@ namespace Dame
 
         public void Draw_Board(Dictionary<Tuple<int, int>, char> Board) // Zeichnet einen kompletten Schachbrett-Zustand
         {
+
+            //Schachbrettmuster zeichnen
+            Graphics l = this.CreateGraphics(); ;
+
+            Pen pen = new Pen(Color.Sienna, 1);
+            Brush brush = Brushes.Sienna;
+
+            l.DrawRectangle(pen, 75, 75, 400, 400);
+            l.FillRectangle(brush, 75, 75, 400, 400);
+
+
+            pen = new Pen(Color.Wheat, 1);
+            brush = Brushes.Wheat;
+
+
+            for (int i = 75; i < 400; i = i + 100)
+                for (int j = 75; j < 400; j = j + 100)
+                {
+                    l.DrawRectangle(pen, i, j, 50, 50);
+                    l.FillRectangle(brush, i, j, 50, 50);
+                }
+
+            for (int i = 125; i <= 450; i = i + 100)
+                for (int j = 125; j <= 450; j = j + 100)
+                {
+                    l.DrawRectangle(pen, i, j, 50, 50);
+                    l.FillRectangle(brush, i, j, 50, 50);
+                }
+
+            //Steine aufs Brett zeichnen
             foreach (KeyValuePair<Tuple<int, int>, char> kvp in Board)
                 Draw_Piece(kvp.Key.Item1, kvp.Key.Item2, kvp.Value);
-            
-        }
 
-        //TODO: in 2 Funktionen teilen, button click setzt eine boolean- Membervariable, 2. funktion gibt einen formatierten Zug aus
+            l.Dispose();
+
+        }       
+
+        //TODO: in 2 Funktionen teilen, button click setzt eine boolean- Membervariable, 2. funktion gibt einen formatierten Zug aus            
         private void Zug_bestätigt_Click(object sender, EventArgs e)
         {
             bool valid1 = false, valid2 = false, valid3 = false;
 
             string move = Zug.Text;
             move.ToUpper();
-
-
 
             //Überprüfe jeden Charackter
             for (int i = 0; i < move.Length; i++)
@@ -180,11 +181,10 @@ namespace Dame
 
 
                 if (valid1 && valid2 && valid3)
-                { 
-                    // Hier aufruf der Return Funktion      
+                {
+                    //transfer(move);    
                 } else 
                     MessageBox.Show("Ungültige Syntax für einen Zug");
-
         }
 
         private void button1_Click(object sender, EventArgs e)
