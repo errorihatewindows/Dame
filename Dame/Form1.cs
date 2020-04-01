@@ -139,6 +139,7 @@ namespace Dame
             
         }
 
+        //TODO: in 2 Funktionen teilen, button click setzt eine boolean- Membervariable, 2. funktion gibt einen formatierten Zug aus
         private void Zug_bestätigt_Click(object sender, EventArgs e)
         {
             bool valid1 = false, valid2 = false, valid3 = false;
