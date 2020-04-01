@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 using Piece = System.Tuple<int,int>;
 using Board = System.Collections.Generic.Dictionary<System.Tuple<int,int>, char>;
@@ -25,7 +26,7 @@ namespace Dame
             return board;
         }
 
-        private void Generate_Board() //erstellt Startposition für weiß und schwarz + zeichnen
+        private void Generate_Board()       //creates the initial Board State
         {
             board = new Board();
 
@@ -53,7 +54,7 @@ namespace Dame
 
         }
 
-        private List<Piece> Move(Piece piece)             //Liste aller Felder auf piece ziehen kann, egal was sich dort befindet
+        private List<Piece> Move(Piece piece)               //Liste of all valid Fields, no matter wich piece is on them
         {
             //output liste
             List<Piece> output = new List<Piece>();
@@ -79,27 +80,59 @@ namespace Dame
             }
             return output;
         }
-        
-        private bool Jump(Piece start, Piece target)      //true wenn start über target springen kann
-        {
-            return false;
-        }
-
-        private List<Piece> Jumping(Piece piece)          //Liste aller Felder, die durch springen mit piece erreichbar sind
+       
+        private List<Piece> Split(string move)              //splits string to list of tuples
         {
             List<Piece> output = new List<Piece>();
+            string position = "";
+            for (int i = 0; i < move.Length; i += 3)
+            {
+                position = "";
+                position += move[i];
+                position += move[i + 1]; 
+            }
             return output;
+        }
+
+        private bool is_black(Piece position)               //returns true if the position is a black square on the board
+        {
+            //check if the given position is in the field dictionary
+            try     { char test = board[position]; }
+            catch (System.Collections.Generic.KeyNotFoundException) { return false; }
+            return true;
+        }
+
+        private bool is_jump(Piece start, Piece end)        //returns true if start -> is a jump
+        {
+            int xdistance = Math.Abs(start.Item1 - end.Item1);
+            int ydistance = Math.Abs(start.Item2 - end.Item2);
+            if (xdistance == 2 && ydistance == 2)   { return true; }
+            else     { return false; }
+        }
+
+        private bool Check_Move(string smove, int player)               //checks if move is valid (player 0 is black)
+        {
+            //check move format
+            //Check if move string is of valid format
+            //convert move to list of Tuples
+            List<Piece> move = Split(smove);
+            //every position in list on a black field?
+            foreach (Piece position in move)
+            {
+                if (!is_black(position)) { return false; }
+            }
+            //move is valid format, next check if it complies by the rules
+            //check if its moving an own piece
+            if (player == 0 && (board[move[0]] == 'w' || board[move[0]] == 'W')) { return false; }
+            if (player == 1 && (board[move[0]] == 'b' || board[move[0]] == 'B')) { return false; }
+            return true;
         }
 
         public void run()
         {
             Generate_Board();
             drawing.Draw_Board(board);
-            List<Piece> valid = Move(Tuple.Create(7,7));
-            foreach (Piece move in valid)
-            {
-                Console.WriteLine(move.ToString());
-            } 
+            Check_Move("A1,B2", 0);
         }
     }
 }
