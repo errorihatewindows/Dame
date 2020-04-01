@@ -17,6 +17,25 @@ namespace Dame
             InitializeComponent();
         }
 
+        //Wartet gewisse anzahl millisekunden
+        public void wait(int milliseconds)
+        {
+            System.Windows.Forms.Timer timer1 = new System.Windows.Forms.Timer();
+            if (milliseconds == 0 || milliseconds < 0) return;
+            timer1.Interval = milliseconds;
+            timer1.Enabled = true;
+            timer1.Start();
+            timer1.Tick += (s, e) =>
+            {
+                timer1.Enabled = false;
+                timer1.Stop();
+            };
+            while (timer1.Enabled)
+            {
+                Application.DoEvents();
+            }
+        }   //End of wait
+
         private void Form1_Paint(object sender, PaintEventArgs e)   //Schachbrett zeichnen
         {
 
@@ -167,50 +186,5 @@ namespace Dame
 
         }
 
-        /*
-        private void Generate_Board(char bot) //erstellt Startposition für weiß und schwarz + zeichnen
-        {
-            char top;
-            if (bot == 'b') {  top = 'w';  }
-            else            {  top = 'b';  }
-
-            //nur reihe 0-3 besetzt (und jeweils gespiegelt)
-            for (int y = 0; i < 3; i++)
-                for (int x = 0; x < 8; x += 2)
-                {
-                    if (i % 2 == 1)
-                    {
-                        Board.Add(Tuple.Create((x + 1), y), bot);
-                        //gegnerische Steine
-                        Board.Add(Tuple.Create(x, (7 - y)), top);
-                    }
-                    else
-                    {
-                        Board.Add(Tuple.Create(x, y), bot);
-                        Board.Add(Tuple.Create((x + 1), (7 - y)), top);
-                    }
-                }
-
-        }*/
-
-        //Wartet gewisse anzahl millisekunden
-
-        public void wait(int milliseconds)
-        {
-            System.Windows.Forms.Timer timer1 = new System.Windows.Forms.Timer();
-            if (milliseconds == 0 || milliseconds < 0) return;
-            timer1.Interval = milliseconds;
-            timer1.Enabled = true;
-            timer1.Start();
-            timer1.Tick += (s, e) =>
-            {
-                timer1.Enabled = false;
-                timer1.Stop();
-            };
-            while (timer1.Enabled)
-            {
-                Application.DoEvents();
-            }
-        }   //End of wait
     }
 }
