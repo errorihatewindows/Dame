@@ -141,48 +141,46 @@ namespace Dame
 
         private void Zug_bestätigt_Click(object sender, EventArgs e)
         {
-            bool valid1 = false, valid2 = false;
+            bool valid1 = false, valid2 = false, valid3 = false;
 
             string move = Zug.Text;
             move.ToUpper();
 
 
-            //Überprüfen auf korrekte Syntax der Zug-Eingabe
-            if ((move.Length % 3) != 2)
-                MessageBox.Show("Ungültige Syntax für einen Zug");
 
             //Überprüfe jeden Charackter
             for (int i = 0; i < move.Length; i++)
             {
                 //Überprüfe Buchstaben
-                if (((i % 3) == 0) && ((i % 3) == 1))
+                if (i % 3 == 0)
                 {
-                    char temp = move[i];
-                    if (temp < 65 && temp > 72)
-                    {
-                        MessageBox.Show("Ungültige Syntax für einen Zug");
-                        break;
-                    }
-                    else
+                    if (move[i] > 64 && move[i] < 73)                
                         valid1 = true;
+                }
+                //Überprüfe Zahl
+                if (i % 3 == 1)
+                {
+                    if (move[i] > 47 && move[i] < 57)
+                        valid2 = true;
                 }
                 //Überprüfe Komma
                 if (i % 3 == 2)
                 {
-                    char temp = move[i];
-                    if (temp != 44)
-                    {
-                        MessageBox.Show("Ungültige Syntax für einen Zug");
-                        break;
-                    }
-                    else
-                        valid2 = true;
+                    if (move[i] == 44)
+                        valid3 = true;
                 }
             }
 
-            
-            if (valid1 && valid2) { } 
-                //return move;
+            //Überprüfen auf korrekte Syntax der Zug-Eingabe
+            if ((move.Length % 3) != 2)
+                valid1 = false;
+
+
+                if (valid1 && valid2 && valid3)
+                { 
+                    // Hier aufruf der Return Funktion      
+                } else 
+                    MessageBox.Show("Ungültige Syntax für einen Zug");
 
         }
 
