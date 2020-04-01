@@ -87,14 +87,15 @@ namespace Dame
                 // ist es ein B?
                 if (piece == 66)
                 {
-                    
+
                     //Dame Schwarz
                     Pen pen = new Pen(Color.Black, 20);
                     Brush brush = Brushes.IndianRed;
                     man.DrawEllipse(pen, choor_x, choor_y, 20, 20);
                     man.FillEllipse(brush, choor_x, choor_y, 20, 20);
 
-                } else
+                }
+                else
                 {
 
                     //Dame weiß
@@ -103,6 +104,7 @@ namespace Dame
                     man.DrawEllipse(pen, choor_x, choor_y, 20, 20);
                     man.FillEllipse(brush, choor_x, choor_y, 20, 20);
                 }
+
             } else  //Kleinbuchstabe
             {
                 //ist es ein b?
@@ -147,8 +149,6 @@ namespace Dame
             string move = Zug.Text;
             move.ToUpper();
 
-
-
             //Überprüfe jeden Charackter
             for (int i = 0; i < move.Length; i++)
             {
@@ -178,12 +178,11 @@ namespace Dame
 
 
                 if (valid1 && valid2 && valid3)
-                { 
-                    // Hier aufruf der Return Funktion      
+                {
+                    //transfer(move);    
                 } else 
                     MessageBox.Show("Ungültige Syntax für einen Zug");
 
         }  
-
     }
 }

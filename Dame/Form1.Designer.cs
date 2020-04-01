@@ -225,6 +225,7 @@
             this.Zug.Name = "Zug";
             this.Zug.Size = new System.Drawing.Size(222, 20);
             this.Zug.TabIndex = 81;
+            this.Zug.Text = "C3,D4";
             // 
             // label17
             // 
