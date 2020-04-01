@@ -29,7 +29,7 @@ namespace Dame
             
             foreach (KeyValuePair <Piece,char> position in Board)
             {
-                checkposition(position, player);
+                valid = valid.Concat(checkposition(position, player)).ToList();
             }
 
             for(int i = 0; i < 10; i++) 
