@@ -84,7 +84,7 @@ namespace Dame
                 if (position.Value == 'w') { if (position.Key.Item2 + 1 == option.Item2) { continue; } }
 
                 //Feld bereits belegt
-                if (Board[option] == '.') { continue; }
+                if (Board[option] != '.') { continue; }
 
                 valid.Add(drawing.TupleToString(position.Key) + drawing.TupleToString(option));
             }
