@@ -14,7 +14,8 @@ namespace Dame
         {
             foreach (KeyValuePair<Piece, char> kvp in Board)
             {
-                
+                //Computer hat Schwarz
+                if ((player == 0) && Board[])
             }
                 
 
