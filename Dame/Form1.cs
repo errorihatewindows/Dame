@@ -35,7 +35,6 @@ namespace Dame
         }
 
 
-
         //Wartet gewisse anzahl millisekunden
         public void wait(int milliseconds)
         {
