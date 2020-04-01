@@ -266,7 +266,7 @@ namespace Dame
 
         private void button2_Click(object sender, EventArgs e)
         {
-            cpu.get_move(mcp.Board, 0);
+            cpu.get_move(mcp.Get_Board(), 0);
         }
     }
 }

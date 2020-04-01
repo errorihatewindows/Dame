@@ -108,12 +108,10 @@ namespace Dame
             return true;
         }
 
-        private bool is_jump(Piece start, Piece end)                    //returns true if start -> is a jump
+        private bool is_move(Piece start, Piece end)                    //returns true if start -> is a normal move
         {
-            int xdistance = Math.Abs(start.Item1 - end.Item1);
-            int ydistance = Math.Abs(start.Item2 - end.Item2);
-            if (xdistance == 2 && ydistance == 2)   { return true; }
-            else     { return false; }
+            List<Piece> possible = Move(start);
+            return possible.Contains(end);
         }
 
         private List<Piece> possible_jumps(Piece position,int player)   //returns a list of possible jumps from current position (only direct jumps)
@@ -145,15 +143,21 @@ namespace Dame
             }   //moves which made it this far are syntacticly correct, next check if they comply by the rules
             //check if its moving an own piece ( -20 converts lowercase to uppercase)
             if (board[move[0]] == color(player) || board[move[0]] == (color(player) - 20)) { return false; }
+            //target must be empty
+            if (board[move[1]] != '.') { return false; }
+            List<Piece> jumps = possible_jumps(move[0],player);
             //players MUST jump if possible
-            if (!is_jump(move[0],move[1]))
+            if (jumps.Count == 0)
             {
                 foreach (KeyValuePair<Piece, char> kvp in board)
                 {
-                    if (kvp.Value != color(player) && kvp.Value != (color(player) - 20)) { continue; }
+                    if (!(kvp.Value == color(player) || kvp.Value == (color(player) - 20))) { continue; }
                     //if a jump is possible, the move should have been a jump
                     if (possible_jumps(kvp.Key, player).Count != 0) { return false; }
-                }
+                } 
+                //there is no valid jump, is the move valid?
+                if (!is_move(move[0],move[1])) { return false; }
+                else                           { return true; }
             }
             return true;
         }
@@ -161,11 +165,12 @@ namespace Dame
         public void run()
         {
             Generate_Board();
+            board[Tuple.Create(3, 3)] = 'w';
             drawing.Draw_Board(board);
-            Console.WriteLine(Check_Move("A1B3", 0).ToString());
-            Console.WriteLine(Check_Move("a1,B2", 0).ToString());
-            Console.WriteLine(Check_Move("A1,B3", 0).ToString());
+            Console.WriteLine(Check_Move("C3,B4", 0).ToString());
+            Console.WriteLine(Check_Move("C3,E5", 0).ToString());
             Console.WriteLine(Check_Move("A3,B4", 0).ToString());
+            
         }
     }
 }
