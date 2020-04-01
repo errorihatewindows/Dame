@@ -8,7 +8,7 @@ namespace Dame
 {
     public class CPU
     {
-        public string get_move(Dictionary<Tuple<int, int>, char> Boardstate)
+        public string get_move(Dictionary<Tuple<int, int>, char> Board)
         {
             string rr = "";
 
