@@ -11,7 +11,6 @@ namespace Dame
     public class CPU
     {
         //Liste aller möglichen Outputs
-        List<string> possible = new List<string>();
         string final_move;
 
         
@@ -25,7 +24,7 @@ namespace Dame
 
         public string get_move(Board Board, int player)               // int = 0 => Schwarz (unten), fängt an
         {
-            possible.Clear();
+            List<string> valid = new List<string>();
 
             
             foreach (KeyValuePair <Piece,char> position in Board)
@@ -34,39 +33,38 @@ namespace Dame
             }
 
             for(int i = 0; i < 10; i++) 
-                Console.WriteLine(possible[i]);
+                Console.WriteLine(valid[i]);
 
             return final_move;
         }
 
         private List<string> checkposition(KeyValuePair<Piece, char> position, int player)
         {
+            List<Piece> possible = new List<Piece>();
             //Computer speichert alle Diagonalen der Steine seiner Farbe
             if (((player == 0) && (position.Value == 'b' || position.Value == 'B')) || ((player == 1 && position.Value == 'w' || position.Value == 'W')))
             {
                 Console.WriteLine("YAY");
                 //vorerst mögliche diagonalen
-                possible.Add(drawing.TupleToString(Tuple.Create(position.Key.Item1, position.Key.Item2)) + drawing.TupleToString(Tuple.Create(position.Key.Item1 + 1, position.Key.Item2 + 1)));
-                possible.Add(drawing.TupleToString(Tuple.Create(position.Key.Item1, position.Key.Item2)) + drawing.TupleToString(Tuple.Create(position.Key.Item1 + 1, position.Key.Item2 - 1)));
-                possible.Add(drawing.TupleToString(Tuple.Create(position.Key.Item1, position.Key.Item2)) + drawing.TupleToString(Tuple.Create(position.Key.Item1 - 1, position.Key.Item2 - 1)));
-                possible.Add(drawing.TupleToString(Tuple.Create(position.Key.Item1, position.Key.Item2)) + drawing.TupleToString(Tuple.Create(position.Key.Item1 - 1, position.Key.Item2 + 1)));
+                possible.Add(Tuple.Create(position.Key.Item1 + 1, position.Key.Item2 + 1));
+                possible.Add(Tuple.Create(position.Key.Item1 + 1, position.Key.Item2 - 1));
+                possible.Add(Tuple.Create(position.Key.Item1 - 1, position.Key.Item2 - 1));
+                possible.Add(Tuple.Create(position.Key.Item1 - 1, position.Key.Item2 + 1));
             }
 
             //Invalide moves Löschen
-            deleteInvalid(possible);
-
-
-            return possible;
+            return deleteInvalid(possible,position.Key);
         }
 
-        private List<string> deleteInvalid(List<string> possible)
+        private List<string> deleteInvalid(List<Piece> possible,Piece position)
         {
+            List<string> valid = new List<string>();
+            foreach (Piece option in possible)
+            {
+                valid.Add(drawing.TupleToString(option) + drawing.TupleToString(position));
+            }
 
-
-
-
-
-            return possible;
+            return valid;
         }
     }
 }
