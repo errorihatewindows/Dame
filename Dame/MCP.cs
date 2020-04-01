@@ -48,7 +48,7 @@ namespace Dame
 
         public void run()
         {
-            Generate_Board('w');
+            Generate_Board('b');
             drawing.wait(1000);
             drawing.Draw_Board(Board);
 
