@@ -12,9 +12,11 @@ namespace Dame
 {
     public partial class Form1 : Form
     {
+        MCP mcp;
         public Form1()
         {
             InitializeComponent();
+            mcp = new MCP(this);
         }
 
         //Wartet gewisse anzahl millisekunden
@@ -183,7 +185,11 @@ namespace Dame
                 } else 
                     MessageBox.Show("Ungültige Syntax für einen Zug");
 
-        }  
+        }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            mcp.run();
+        }
     }
 }
