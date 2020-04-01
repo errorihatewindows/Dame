@@ -59,23 +59,22 @@ namespace Dame
             //output liste
             List<Piece> output = new List<Piece>();
             List<Piece> possible = new List<Piece>();
-            //in frage kommen die 4 diagonalen
+            //4 diagonals possible
             possible.Add(Tuple.Create(piece.Item1 + 1, piece.Item2 + 1));
             possible.Add(Tuple.Create(piece.Item1 + 1, piece.Item2 - 1));
             possible.Add(Tuple.Create(piece.Item1 - 1, piece.Item2 - 1));
             possible.Add(Tuple.Create(piece.Item1 - 1, piece.Item2 + 1));
-            //wenn keine der "ungültig" conditions aktiviert werden wird option in output packt
             foreach (Piece option in possible)
             {
-                //normal Steine können nur Forwärts
+                //men only move forward
                 if (board[piece] == 'b') { if (piece.Item2 - 1 == option.Item2) { continue; } }
                 if (board[piece] == 'w') { if (piece.Item2 + 1 == option.Item2) { continue; } }
 
-                //Feld nur zwischen 0 und 7
+                //Field only in range 0-7
                 if (option.Item1 > 7 || option.Item1 < 0) { continue; }
                 if (option.Item2 > 7 || option.Item2 < 0) { continue; }
 
-                //geschafft!
+                //option is valid!
                 output.Add(option);
             }
             return output;
@@ -95,7 +94,7 @@ namespace Dame
             return output;
         }
 
-        private bool is_black(Piece position)               //returns true if the position is a black square on the board
+        private bool is_black(Piece position)                           //returns true if the position is a black square on the board
         {
             //check if the given position is in the field dictionary
             try     { char test = board[position]; }
@@ -103,7 +102,7 @@ namespace Dame
             return true;
         }
 
-        private bool is_jump(Piece start, Piece end)        //returns true if start -> is a jump
+        private bool is_jump(Piece start, Piece end)                    //returns true if start -> is a jump
         {
             int xdistance = Math.Abs(start.Item1 - end.Item1);
             int ydistance = Math.Abs(start.Item2 - end.Item2);
