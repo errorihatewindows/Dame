@@ -32,7 +32,7 @@ namespace Dame
                 valid = valid.Concat(checkposition(position, player)).ToList();
             }
 
-            for(int i = 0; i < 10; i++) 
+            for(int i = 0; i < valid.Count; i++) 
                 Console.WriteLine(valid[i]);
 
             return final_move;
