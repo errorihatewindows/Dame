@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -51,7 +52,9 @@ namespace Dame
             int choor_x = 90 + (x * 50);
             int choor_y = 90 + ((7 - y) * 50);
 
-            
+            Bitmap b = new Bitmap(AppDomain.CurrentDomain.BaseDirectory + "//b.png");
+            Bitmap s = new Bitmap(AppDomain.CurrentDomain.BaseDirectory + "//s.png");
+
             //Großbuchstabe
             if (piece < 97)
             {
@@ -62,7 +65,7 @@ namespace Dame
                     //Dame Schwarz
                     Pen pen = new Pen(Color.Black, 20);
                     Brush brush = Brushes.IndianRed;
-                    man.DrawEllipse(pen, choor_x, choor_y, 20, 20);
+                    man.DrawImage(b, choor_x - 9, choor_y - 10);
                     man.FillEllipse(brush, choor_x, choor_y, 20, 20);
 
                 }
@@ -72,21 +75,21 @@ namespace Dame
                     //Dame weiß
                     Pen pen = new Pen(Color.FloralWhite, 20);
                     Brush brush = Brushes.IndianRed;
-                    man.DrawEllipse(pen, choor_x, choor_y, 20, 20);
+                    man.DrawImage(s, choor_x - 10, choor_y - 10);
                     man.FillEllipse(brush, choor_x, choor_y, 20, 20);
+
                 }
 
             } else  //Kleinbuchstabe
             {
                 //ist es ein b?
                 if (piece == 98)
-                {
-
+                {                    
+                    
                     //Man Schwarz
                     Pen pen = new Pen(Color.Black, 15);
                     Brush brush = Brushes.Black;
-                    man.DrawEllipse(pen, choor_x, choor_y, 20, 20);
-                    man.FillEllipse(brush, choor_x, choor_y, 20, 20);
+                    man.DrawImage(b, choor_x - 9, choor_y - 10);
 
                 }
                 else
@@ -95,14 +98,10 @@ namespace Dame
                     //Man weiß
                     Pen pen = new Pen(Color.FloralWhite, 15);
                     Brush brush = Brushes.FloralWhite;
-                    man.DrawEllipse(pen, choor_x, choor_y, 20, 20);
-                    man.FillEllipse(brush, choor_x, choor_y, 20, 20);
+                    man.DrawImage(s, choor_x - 10, choor_y - 10);
+
                 }
             }
-
-
-
-
         }
 
         public void Draw_Board(Dictionary<Tuple<int, int>, char> Board) // Zeichnet einen kompletten Schachbrett-Zustand
@@ -118,8 +117,8 @@ namespace Dame
             l.FillRectangle(brush, 75, 75, 400, 400);
 
 
-            pen = new Pen(Color.Wheat, 1);
-            brush = Brushes.Wheat;
+            pen = new Pen(Color.PeachPuff, 1);
+            brush = Brushes.PeachPuff;
 
 
             for (int i = 75; i < 400; i = i + 100)
@@ -189,7 +188,7 @@ namespace Dame
 
         private void button1_Click(object sender, EventArgs e)
         {
-            mcp.run();
+            mcp.run();            
         }
     }
 }
