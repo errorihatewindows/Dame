@@ -120,37 +120,47 @@ namespace Dame
             
         }
 
-        private void Generate_Board() //erstellt Startposition für weiß und schwarz + zeichnen
+        private void Zug_bestätigt_Click(object sender, EventArgs e)
         {
-            Dictionary<Tuple<int, int>, char> Board = new Dictionary<Tuple<int, int>, char>();
+            bool valid1 = false, valid2 = false;
 
-            for (int i = 0; i < 3; i++)
-                for (int j = 0; j < 8; j = j + 2)
+            string move = Zug.Text;
+            move.ToUpper();
+
+
+            //Überprüfen auf korrekte Syntax der Zug-Eingabe
+            if ((move.Length % 3) != 2)
+                MessageBox.Show("Ungültige Syntax für einen Zug");
+
+            //Überprüfe jeden Charackter
+            for (int i = 0; i < move.Length; i++)
+            {
+                //Überprüfe Buchstaben
+                if (((i % 3) == 0) && ((i % 3) == 1))
                 {
-                    if (i % 2 == 1)
-                    {
-                        Board.Add(Tuple.Create((j + 1), i), 'b');
-                        Board.Add(Tuple.Create(j, (7 - i)), 'w');
-                    }
+                    char temp = move[i];
+                    if (temp < 65 && temp > 72)
+                        MessageBox.Show("Ungültige Syntax für einen Zug");
+                        break;
                     else
-                    {
-                        Board.Add(Tuple.Create(j, i), 'b');
-                        Board.Add(Tuple.Create((j + 1), (7 - i)), 'w');
-                    }
-
-
+                        valid1 = true;
                 }
+                //Überprüfe Komma
+                if (i % 3 == 2)
+                {
+                    char temp = move[i];
+                    if (temp != 44)
+                        MessageBox.Show("Ungültige Syntax für einen Zug");
+                        break;
+                    else
+                        valid2 = true;
+                }
+            }
 
-            Draw_Board(Board);
+            
+            if (valid1 && valid2) { } 
+                //return move;
 
-            return Board;
         }
-        
-        
-        private void button1_Click(object sender, EventArgs e) 
-        {
-            Generate_Board();
-        }
-
     }
 }
