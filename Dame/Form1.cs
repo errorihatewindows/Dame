@@ -140,8 +140,10 @@ namespace Dame
                 {
                     char temp = move[i];
                     if (temp < 65 && temp > 72)
+                    {
                         MessageBox.Show("Ungültige Syntax für einen Zug");
                         break;
+                    }
                     else
                         valid1 = true;
                 }
@@ -150,8 +152,10 @@ namespace Dame
                 {
                     char temp = move[i];
                     if (temp != 44)
+                    {
                         MessageBox.Show("Ungültige Syntax für einen Zug");
                         break;
+                    }
                     else
                         valid2 = true;
                 }
