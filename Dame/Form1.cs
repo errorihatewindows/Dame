@@ -203,7 +203,11 @@ namespace Dame
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
-            Draw_Board(Board);
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            Draw_Board(new Dictionary<Tuple<int, int>, char>());
         }
     }
 }
