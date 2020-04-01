@@ -46,7 +46,6 @@ namespace Dame
                         board.Add(Tuple.Create((x + 1), (7 - y)), 'w');
                     }
                 }
-
         }
 
         private List<Piece> move(Piece piece)             //Liste aller Felder auf piece ziehen kann, egal was sich dort befindet
@@ -70,10 +69,6 @@ namespace Dame
         {
             Generate_Board();
             drawing.Draw_Board(board);
-            drawing.wait(1000);
-            Generate_Board();
-            drawing.Draw_Board(board);
-
         }
     }
 }
