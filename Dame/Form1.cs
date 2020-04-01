@@ -14,6 +14,7 @@ namespace Dame
     public partial class Form1 : Form
     {
         MCP mcp;
+        CPU cpu;
         private bool Clicked = false;
         private string move;
 
@@ -22,6 +23,10 @@ namespace Dame
         {
             InitializeComponent();
             mcp = new MCP(this);
+            cpu = new CPU(this);
+
+
+            cpu.get_move(mcp.Board, 0);
         }
 
         private void Form1_Shown(object sender, EventArgs e) //Zeichnet Grundzustand
