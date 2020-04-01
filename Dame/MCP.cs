@@ -28,7 +28,7 @@ namespace Dame
 
         private char color(int player)      //player 0 -> 'b'
         {
-            if (player==1) { return 'b'; }
+            if (player==0) { return 'b'; }
             else           { return 'w'; }
         }
 
@@ -108,6 +108,14 @@ namespace Dame
             return true;
         }
 
+        private bool is_jump(Piece start, Piece end)                    //returns true if start -> is a jump
+        {
+            int xdistance = Math.Abs(start.Item1 - end.Item1);
+            int ydistance = Math.Abs(start.Item2 - end.Item2);
+            if (xdistance == 2 && ydistance == 2) { return true; }
+            else { return false; }
+        }
+
         private bool is_move(Piece start, Piece end)                    //returns true if start -> is a normal move
         {
             List<Piece> possible = Move(start);
@@ -142,12 +150,11 @@ namespace Dame
                 if (!is_black(position)) { return false; }
             }   //moves which made it this far are syntacticly correct, next check if they comply by the rules
             //check if its moving an own piece ( -20 converts lowercase to uppercase)
-            if (board[move[0]] == color(player) || board[move[0]] == (color(player) - 20)) { return false; }
+            if (!(board[move[0]] == color(player) || board[move[0]] == (color(player) - 20))) { return false; }
             //target must be empty
             if (board[move[1]] != '.') { return false; }
-            List<Piece> jumps = possible_jumps(move[0],player);
             //players MUST jump if possible
-            if (jumps.Count == 0)
+            if (!is_jump(move[0],move[1]))
             {
                 foreach (KeyValuePair<Piece, char> kvp in board)
                 {
@@ -156,16 +163,19 @@ namespace Dame
                     if (possible_jumps(kvp.Key, player).Count != 0) { return false; }
                 } 
                 //there is no valid jump, is the move valid?
-                if (!is_move(move[0],move[1])) { return false; }
-                else                           { return true; }
-            }
+                if (is_move(move[0],move[1])) { return true; }
+                else                           { return false; }
+            }   //move is a jump
+            //is the jump valid?
+            if (!possible_jumps(move[0],player).Contains(move[1])) { return false; }
+            //multijump chain (check for valid and wether it can be longer)
             return true;
         }
 
         public void run()
         {
             Generate_Board();
-            board[Tuple.Create(3, 3)] = 'w';
+            //board[Tuple.Create(3, 3)] = 'w';
             drawing.Draw_Board(board);
             Console.WriteLine(Check_Move("C3,B4", 0).ToString());
             Console.WriteLine(Check_Move("C3,E5", 0).ToString());
