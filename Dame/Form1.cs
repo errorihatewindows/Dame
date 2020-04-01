@@ -12,13 +12,11 @@ namespace Dame
 {
     public partial class Form1 : Form
     {
-
-
-
+        MCP mcp;
         public Form1()
         {
             InitializeComponent();
-
+            mcp = new MCP(this);
         }
 
         private void Form1_Shown(object sender, EventArgs e) //Zeichnet Grundzustand
@@ -187,7 +185,11 @@ namespace Dame
                     //transfer(move);    
                 } else 
                     MessageBox.Show("Ungültige Syntax für einen Zug");
+        }
 
-        }               //Überprüft Syntax der Zug-Eingabe       
+        private void button1_Click(object sender, EventArgs e)
+        {
+            mcp.run();
+        }
     }
 }

@@ -8,10 +8,12 @@ namespace Dame
 {
     public class MCP
     {
-        Dictionary<Tuple<int, int>, char> Board;
+        private Dictionary<Tuple<int, int>, char> Board = new Dictionary<Tuple<int,int>,char>();
+        private Form1 drawing;
         //Constructor
-        public MCP()
+        public MCP(Form1 form)
         {
+            drawing = form;
         }
 
         private void Generate_Board(char bot) //erstellt Startposition für weiß und schwarz + zeichnen
@@ -36,6 +38,14 @@ namespace Dame
                         Board.Add(Tuple.Create((x + 1), (7 - y)), top);
                     }
                 }
+
+        }
+
+        public void run()
+        {
+            Generate_Board('w');
+            drawing.wait(1000);
+            drawing.Draw_Board(Board);
 
         }
     }

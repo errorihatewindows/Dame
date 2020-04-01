@@ -47,6 +47,7 @@
             this.Zug_bestätigt = new System.Windows.Forms.Button();
             this.Zug = new System.Windows.Forms.TextBox();
             this.label17 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -236,11 +237,22 @@
             this.label17.TabIndex = 82;
             this.label17.Text = "Beispielzug: {C3,D4}";
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(973, 40);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 83;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1225, 672);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.label17);
             this.Controls.Add(this.Zug);
             this.Controls.Add(this.Zug_bestätigt);
@@ -289,6 +301,7 @@
         private System.Windows.Forms.Button Zug_bestätigt;
         private System.Windows.Forms.TextBox Zug;
         private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Button button1;
     }
 }
 
