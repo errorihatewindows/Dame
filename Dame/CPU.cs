@@ -41,8 +41,13 @@ namespace Dame
                 valid = valid.Concat(checkposition(position, player)).ToList();
             }
 
+
+            //Zufälligen Valid Move auswählen
             Random Zufall = new Random();
             final_move = valid[Zufall.Next(0, valid.Count)];
+
+            //auf korrekte Syntax bringen
+            final_move = final_move.Insert(2, ",");
 
             return final_move;
         }
