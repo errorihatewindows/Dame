@@ -9,6 +9,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using Piece = System.Tuple<int, int>;
+using Board = System.Collections.Generic.Dictionary<System.Tuple<int, int>, char>;
+
+
 namespace Dame
 {
     public partial class Form1 : Form
@@ -31,12 +35,12 @@ namespace Dame
 
         private void Form1_Shown(object sender, EventArgs e) //Zeichnet Grundzustand
         {
-            Draw_Board(mcp.Board);
+            Draw_Board(mcp.Get_Board());
         }
 
         private void Form1_SizeChanged(object sender, EventArgs e)
         {
-            Draw_Board(mcp.Board);
+            Draw_Board(mcp.Get_Board());
         }
 
 
