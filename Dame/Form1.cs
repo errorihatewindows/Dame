@@ -52,8 +52,10 @@ namespace Dame
             int choor_x = 90 + (x * 50);
             int choor_y = 90 + ((7 - y) * 50);
 
-            Bitmap b = new Bitmap(AppDomain.CurrentDomain.BaseDirectory + "//b.png");
-            Bitmap s = new Bitmap(AppDomain.CurrentDomain.BaseDirectory + "//s.png");
+            Bitmap b = new Bitmap(@"..\..\b.png");
+            Bitmap s = new Bitmap(@"..\..\s.png");
+            Bitmap BD = new Bitmap(@"..\..\BD.png");
+            Bitmap WD = new Bitmap(@"..\..\WD.png");
 
             //Großbuchstabe
             if (piece < 97)
@@ -65,8 +67,7 @@ namespace Dame
                     //Dame Schwarz
                     Pen pen = new Pen(Color.Black, 20);
                     Brush brush = Brushes.IndianRed;
-                    man.DrawImage(b, choor_x - 9, choor_y - 10);
-                    man.FillEllipse(brush, choor_x, choor_y, 20, 20);
+                    man.DrawImage(BD, choor_x - 9, choor_y - 10);
 
                 }
                 else
@@ -75,8 +76,7 @@ namespace Dame
                     //Dame weiß
                     Pen pen = new Pen(Color.FloralWhite, 20);
                     Brush brush = Brushes.IndianRed;
-                    man.DrawImage(s, choor_x - 10, choor_y - 10);
-                    man.FillEllipse(brush, choor_x, choor_y, 20, 20);
+                    man.DrawImage(WD, choor_x - 10, choor_y - 10);
 
                 }
 
