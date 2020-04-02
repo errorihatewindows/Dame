@@ -169,25 +169,34 @@ namespace Dame
 
         private List<string> recursivejump(Board Board, List<string> tempjump)
         {
-            
+
 
             // loope jeden potenziellen Sprung auf weitere
             foreach (string jump in tempjump)
             {
+                List<Piece> possiblejump = new List<Piece>();
                 //jump = jump.ToUpper();
 
                 //temporäres Board erstellen um Sprünge zu simulieren
                 Board tempBoard = Board;
 
+                string position_old = (jump[jump.Length - 4] - 'A').ToString() + (jump[jump.Length - 3] - 1).ToString();
+                string position_new = (jump[jump.Length - 2] - 'A').ToString() + (jump[jump.Length - 1] - 1).ToString();
                 //Sprung ausführen (Syntax OHNE Komma gegeben)
                 char moved_piece = tempBoard[Tuple.Create(((jump[jump.Length - 4]) - 'A'), jump[jump.Length - 3] - 1)];
+
+                //KeyValuePair
+
+
                 //Feld clear
-                tempBoard[Tuple.Create(((jump[jump.Length - 4]) - 'A'), jump[jump.Length - 3] - 1)] = '.';
+                tempBoard[Tuple.Create(Convert.ToInt32(position_old[0]), Convert.ToInt32(position_old[1]))] = '.';
                 //Neue position
-                tempBoard[Tuple.Create(((jump[jump.Length - 2]) - 'A'), jump[jump.Length - 1] - 1)] = moved_piece;
+                tempBoard[Tuple.Create(Convert.ToInt32(position_new[0]) , Convert.ToInt32(position_new[1]))] = moved_piece;
+
+                //weitere möglichen Sprünge
 
 
-
+                deleteInvalid_jump(possiblejump, position);
             }
 
 

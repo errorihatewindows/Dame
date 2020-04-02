@@ -22,7 +22,6 @@ namespace Dame
         private bool Clicked = false;
         private string move;
 
-
         public Form1()
         {
             InitializeComponent();
