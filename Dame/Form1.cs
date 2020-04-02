@@ -167,12 +167,12 @@ namespace Dame
         {
             move = Zug.Text;
             Clicked = true;
-            get_move();
         }
 
-        public string get_move()
+        public string get_move(Board boardstate, int player)
         {
             bool valid = false;
+            label34.Text = "Spieler " + player.ToString() + " am Zug";
 
             //inkorrekte Move Eingabe
             while (!valid)
@@ -195,6 +195,7 @@ namespace Dame
 
         private void button1_Click(object sender, EventArgs e)
         {
+            mcp.set_user("Markus", "Thomas");       //player vs. player
             mcp.run();            
         }
 

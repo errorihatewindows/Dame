@@ -65,6 +65,7 @@
             this.label32 = new System.Windows.Forms.Label();
             this.label33 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
+            this.label34 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -434,11 +435,21 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Location = new System.Drawing.Point(580, 198);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(41, 13);
+            this.label34.TabIndex = 102;
+            this.label34.Text = "label34";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1225, 672);
+            this.Controls.Add(this.label34);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.label26);
             this.Controls.Add(this.label27);
@@ -524,6 +535,7 @@
         private System.Windows.Forms.Label label32;
         private System.Windows.Forms.Label label33;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Label label34;
     }
 }
 
