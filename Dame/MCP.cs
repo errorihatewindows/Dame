@@ -158,7 +158,7 @@ namespace Dame
             foreach (Piece option in possible)
             {
                 //can only jump over enemy pieces
-                if (!(board[option] == color(1-player) || board[option] == (color(1-player)-20))) { continue; }
+                if (!(board[option] == color(1-player) || board[option] == Convert.ToChar(color(1-player)-32))) { continue; }
                 //target is where to jump to jump over "option"
                 Piece target = new Piece((2 * option.Item1) - position.Item1, (2 * option.Item2) - position.Item2);
                 //check if target is still in the board
@@ -190,7 +190,7 @@ namespace Dame
                 if (!is_black(position)) { return false; }
             }   //moves which made it this far are syntacticly correct, next check if they comply by the rules
             //check if its moving an own piece ( -20 converts lowercase to uppercase)
-            if (!(board[move[0]] == color(player) || board[move[0]] == (color(player) - 20))) { return false; }
+            if (!(board[move[0]] == color(player) || board[move[0]] == Convert.ToChar(color(player) - 32))) { return false; }
             //target must be empty
             if (board[move[1]] != '.') { return false; }
             //players MUST jump if possible
@@ -201,7 +201,7 @@ namespace Dame
                     if (!(kvp.Value == color(player) || kvp.Value == (color(player) - 20))) { continue; }
                     //if a jump is possible, the move should have been a jump
                     if (possible_jumps(kvp.Key, player).Count != 0) { return false; }
-                } 
+                }
                 //there is no valid jump, is the move valid?
                 if (is_move(move[0],move[1])) { return true; }
                 else                           { return false; }
@@ -252,6 +252,7 @@ namespace Dame
             string move = "";
             bool valid;
             Generate_Board();
+            drawing.Draw_Board(board);
             //make sure there are players set that are able to play
             if (Player == null) { return; }
             //main gameloop

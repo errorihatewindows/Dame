@@ -268,6 +268,8 @@ namespace Dame
 
         private void button2_Click(object sender, EventArgs e)
         {
+            Console.WriteLine('b');
+            Console.WriteLine('b' - 20);
             cpu.get_move(mcp.Get_Board(), 0);
         }
 
