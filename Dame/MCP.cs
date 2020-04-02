@@ -19,6 +19,7 @@ namespace Dame
     }
     public class MCP
     {
+        private int reversible_moves = 0;
         private Board board;
         private Form1 drawing;
         Player_Data[] Player;
@@ -234,10 +235,13 @@ namespace Dame
         private void Perform_Move(string smove, int player)                      //performs the move (doesnt check for valid)
         {
             List<Piece> move = Split(smove);
+            //reversible moves resets to 0 if moved with a uncrowned piece
+            reversible_moves++;
+            if (board[move[0]] == 'b' || board[move[0]] == 'w') { reversible_moves = 0; }
             for (int i = 0; i < (move.Count-1); i++)
             {
-                //if its a jump remove the middle piece
-                if (is_jump(move[i],move[i+1])) { board[between(move[i], move[i + 1])] = '.'; }
+                //if its a jump remove the middle piece and set reversible moves to 0
+                if (is_jump(move[i],move[i+1])) { reversible_moves = 0; board[between(move[i], move[i + 1])] = '.'; }
                 board[move[i + 1]] = board[move[i]];
                 board[move[i]] = '.';
             }
@@ -276,7 +280,7 @@ namespace Dame
             if (Player == null) { return; }
             //main gameloop
             int player = 0;
-            while (!is_lost(player))
+            while (!is_lost(player) && reversible_moves < 30)
             {
                 Console.WriteLine(Player[player].name + " am Zug");
                 valid = false;
@@ -290,7 +294,11 @@ namespace Dame
                 //next player
                 player = 1 - player;
             }
-            Console.WriteLine(Player[1 - player].name + " hat gewonnen");
+            if (reversible_moves < 30)  //game ended in a win/loss
+            {
+                Console.WriteLine(Player[1 - player].name + " hat gewonnen");
+            }
+            else    { Console.WriteLine("Unentschieden!"); }
         }
     }
 }
