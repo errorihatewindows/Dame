@@ -10,10 +10,18 @@ using Board = System.Collections.Generic.Dictionary<System.Tuple<int,int>, char>
 
 namespace Dame
 {
+    public delegate string gets_moves(Board boardstate, int player);
+    struct Player_Data
+    {
+        public gets_moves move;
+        public string name;
+        public CPU cpu;
+    }
     public class MCP
     {
         private Board board;
         private Form1 drawing;
+        Player_Data[] Player;
         //Constructor
         public MCP(Form1 form)
         {
@@ -21,18 +29,39 @@ namespace Dame
             Generate_Board();
         }
 
-        public Board Get_Board()
+        public void set_user(string player1, string player2)
+        {
+            Player = new Player_Data[2];
+            Player[0].name = player1;
+            Player[1].name = player2;
+            //set delegate (and class instance if needed) for player1
+            if (player1.StartsWith("CPU")) 
+            {
+                Player[0].cpu = new CPU(drawing);
+                Player[0].move = Player[0].cpu.get_move;
+            }
+            else { Player[0].move = drawing.get_move; }
+            //do it again for player 2 ;D
+            if (player2.StartsWith("CPU"))
+            {
+                Player[1].cpu = new CPU(drawing);
+                Player[1].move = Player[1].cpu.get_move;
+            }
+            else { Player[1].move = drawing.get_move; }
+        }   //sets name and delegate for players
+
+        public Board Get_Board()                //getter for internal board state
         {
             return board;
-        }
+        }           
 
-        private char color(int player)      //player 0 -> 'b'
+        private char color(int player)          //player 0 -> 'b'
         {
             if (player==0) { return 'b'; }
             else           { return 'w'; }
         }
 
-        private void Generate_Board()       //creates the initial Board State
+        private void Generate_Board()           //creates the initial Board State
         {
             board = new Board();
 
@@ -201,19 +230,42 @@ namespace Dame
             board = new Board(safecopy);
             return output;
         }
+
+        private void Perform_Move(string smove, int player)                      //performs the move (doesnt check for valid)
+        {
+            List<Piece> move = Split(smove);
+            for (int i = 0; i < (move.Count-1); i++)
+            {
+                //if its a jump remove the middle piece
+                if (is_jump(move[i],move[i+1])) { board[between(move[i], move[i + 1])] = '.'; }
+                board[move[i + 1]] = board[move[i]];
+                board[move[i]] = '.';
+            }
+        }
+
         public void run()
         {
+            string move = "";
+            bool valid;
             Generate_Board();
-            board[Tuple.Create(3, 3)] = 'w';
-            board[drawing.StringToTuple("G7")] = '.';
-            board[drawing.StringToTuple("D6")] = '.';
-            drawing.Draw_Board(board);
-            drawing.wait(400);
-            Console.WriteLine(Check_Move("C3,B4", 0).ToString());       //should be invalid (can jump over D4)
-            Console.WriteLine(Check_Move("C3,E5", 0).ToString());       //should be invalid (can jump to G7 afterwards) 
-            Console.WriteLine(Check_Move("C3,E5,D6", 0).ToString());    //should be invalid (normal move after jumping)
-            Console.WriteLine(Check_Move("E3,C5", 0).ToString());       //should be valid
-            Console.WriteLine(Check_Move("C3,E5,G7", 0).ToString());    //should be valid
+            //make sure there are players set that are able to play
+            if (Player == null) { return; }
+            //main gameloop
+            int player = 0;
+            while (true)
+            {
+                Console.WriteLine(Player[player].name + " am Zug");
+                valid = false;
+                while (!valid)
+                {
+                    move = Player[player].move(board, player);
+                    valid = Check_Move(move, player);
+                }
+                Perform_Move(move, player);
+                drawing.Draw_Board(board);
+                //next player
+                player = (player + 1) % 2;
+            }
         }
     }
 }
