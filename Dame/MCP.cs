@@ -247,6 +247,25 @@ namespace Dame
             if (final.Item2 == 0 && player == 1) { board[final] = 'W'; }
         }
 
+        bool is_lost(int player)                  //is current board lost for player?
+        {
+            //checks if a piece is left and if it can move
+            //assumes true, if a piece that can move is found return false
+            foreach (KeyValuePair<Piece, char> position in board)
+            {
+                //skip if not own color
+                if (!(position.Value == color(player) || position.Value == Convert.ToChar(color(player) - 32))) { continue; }
+                //can we jump from this position?
+                if (possible_jumps(position.Key,player).Count > 0) { return false; }
+                //can we do a normal move?
+                foreach (Piece option in Move(position.Key))
+                {
+                    if (board[option] == '.') { return false; }
+                }
+            }
+            return true;
+        }
+
         public void run()
         {
             string move = "";
@@ -257,7 +276,7 @@ namespace Dame
             if (Player == null) { return; }
             //main gameloop
             int player = 0;
-            while (true)
+            while (!is_lost(player))
             {
                 Console.WriteLine(Player[player].name + " am Zug");
                 valid = false;
@@ -269,8 +288,9 @@ namespace Dame
                 Perform_Move(move, player);
                 drawing.Draw_Board(board);
                 //next player
-                player = (player + 1) % 2;
+                player = 1 - player;
             }
+            Console.WriteLine(Player[1 - player].name + " hat gewonnen");
         }
     }
 }
