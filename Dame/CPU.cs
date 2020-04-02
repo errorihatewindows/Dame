@@ -166,4 +166,14 @@ namespace Dame
             return validjump;
         } // Löscht alle Invaliden Sprünge
     }
+
+
+    /*TO DO :   - wie schon übersprungene Steine entfernen?
+                - wie mehrfachsprung ?
+                -> sonst Dame im infinite Loop über einen Stein.
+
+                -> Funktion auslagern getmove()
+                neue getmove() soll alte getmove() aufrufen while jump und dann nur Jumps scannen
+    */
+
 }
