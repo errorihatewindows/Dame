@@ -18,8 +18,10 @@ namespace Dame
         private List<string> tempmove = new List<string>();
         private List<string> tempjump = new List<string>();
 
+        private bool Complete = false;
 
         private Form1 drawing;
+        
         //Konstruktor
         public CPU(Form1 form)
         {
@@ -32,14 +34,8 @@ namespace Dame
             ComputerColor = player;
             Board = current_Board;
 
-            Board.Remove(Tuple.Create(3, 3));
-            Board.Add(Tuple.Create(3, 3), 'w');
-            drawing.Draw_Board(Board);
-                
-
             //Liste aller validen Züge
             List<string> valid = new List<string>();
-
 
             //Finaler move
             string final_move = "";
@@ -59,8 +55,13 @@ namespace Dame
             if (tempjump.Count == 0)
                 valid = tempmove;
             else
+            {
+                //Überprüfe jeden einzelnen validen Sprung auf weitere
+                while (!Complete)             
+                    tempjump = recursivejump(current_Board, tempjump);
+                
                 valid = tempjump;
-
+            }
 
 
             for (int i = 0; i < valid.Count; i++)
@@ -165,15 +166,38 @@ namespace Dame
 
             return validjump;
         } // Löscht alle Invaliden Sprünge
+
+        private List<string> recursivejump(Board Board, List<string> tempjump)
+        {
+            
+
+            // loope jeden potenziellen Sprung auf weitere
+            foreach (string jump in tempjump)
+            {
+                //jump = jump.ToUpper();
+
+                //temporäres Board erstellen um Sprünge zu simulieren
+                Board tempBoard = Board;
+
+                //Sprung ausführen (Syntax OHNE Komma gegeben)
+                char moved_piece = tempBoard[Tuple.Create(((jump[jump.Length - 4]) - 'A'), jump[jump.Length - 3] - 1)];
+                //Feld clear
+                tempBoard[Tuple.Create(((jump[jump.Length - 4]) - 'A'), jump[jump.Length - 3] - 1)] = '.';
+                //Neue position
+                tempBoard[Tuple.Create(((jump[jump.Length - 2]) - 'A'), jump[jump.Length - 1] - 1)] = moved_piece;
+
+
+
+            }
+
+
+
+            return tempjump;
+        }
     }
 
 
-    /*TO DO :   - wie schon übersprungene Steine entfernen?
-                - wie mehrfachsprung ?
-                -> sonst Dame im infinite Loop über einen Stein.
 
-                -> Funktion auslagern getmove()
-                neue getmove() soll alte getmove() aufrufen while jump und dann nur Jumps scannen
-    */
+
 
 }
