@@ -160,10 +160,8 @@ namespace Dame
                 Draw_Piece(kvp.Key.Item1, kvp.Key.Item2, kvp.Value);
 
             l.Dispose();
-
         }
-
-        //TODO: in 2 Funktionen teilen, button click setzt eine boolean- Membervariable, 2. funktion gibt einen formatierten Zug aus            
+        
         private void Zug_bestätigt_Click(object sender, EventArgs e)
         {
             move = Zug.Text;
