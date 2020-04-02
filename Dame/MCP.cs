@@ -241,6 +241,10 @@ namespace Dame
                 board[move[i + 1]] = board[move[i]];
                 board[move[i]] = '.';
             }
+            //men that reach the kingsrow are crowned
+            Piece final = move[move.Count - 1];
+            if (final.Item2 == 7 && player == 0) { board[final] = 'B'; }
+            if (final.Item2 == 0 && player == 1) { board[final] = 'W'; }
         }
 
         public void run()

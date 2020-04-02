@@ -490,6 +490,7 @@
             this.Location = new System.Drawing.Point(175, 50);
             this.Name = "Form1";
             this.Text = "Dame";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Shown += new System.EventHandler(this.Form1_Shown);
             this.SizeChanged += new System.EventHandler(this.Form1_SizeChanged);
             this.ResumeLayout(false);
