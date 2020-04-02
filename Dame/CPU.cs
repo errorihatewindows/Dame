@@ -167,43 +167,31 @@ namespace Dame
             return validjump;
         } // Löscht alle Invaliden Sprünge
 
-        private List<string> recursivejump(Board Board, List<string> tempjump)
+        private List<string> jumps(Piece position)
         {
-
-
-            // loope jeden potenziellen Sprung auf weitere
-            foreach (string jump in tempjump)
+            List<string> valid = new List<string>;
+            List<string> output = new List<string>;
+            //if no valid jumps are possible, return a string with only this position
+            if (valid_jumps.Count == 0)
             {
-                List<Piece> possiblejump = new List<Piece>();
-                //jump = jump.ToUpper();
-
-                //temporäres Board erstellen um Sprünge zu simulieren
-                Board tempBoard = Board;
-
-                string position_old = (jump[jump.Length - 4] - 'A').ToString() + (jump[jump.Length - 3] - 1).ToString();
-                string position_new = (jump[jump.Length - 2] - 'A').ToString() + (jump[jump.Length - 1] - 1).ToString();
-                //Sprung ausführen (Syntax OHNE Komma gegeben)
-                char moved_piece = tempBoard[Tuple.Create(((jump[jump.Length - 4]) - 'A'), jump[jump.Length - 3] - 1)];
-
-                //KeyValuePair
-
-
-                //Feld clear
-                tempBoard[Tuple.Create(Convert.ToInt32(position_old[0]), Convert.ToInt32(position_old[1]))] = '.';
-                //Neue position
-                tempBoard[Tuple.Create(Convert.ToInt32(position_new[0]) , Convert.ToInt32(position_new[1]))] = moved_piece;
-
-                //weitere möglichen Sprünge
-
-
-                deleteInvalid_jump(possiblejump, position);
+                valid.Add(drawing.TupleToString(position));
+                return valid;
             }
-
-
-
-            return tempjump;
+            //else get the full jump of every possible option at this position
+            else
+            {
+                foreach (Piece target in valid_jumps)
+                {
+                    valid.Concat(jumps(target));
+                }
+            }
+            //add ur position 
+            foreach (string move in valid)
+            {
+                output.Add(drawing.TupleToString(position) + move);
+            }
+            return output;
         }
-    }
 
 
 
