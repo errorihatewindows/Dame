@@ -132,13 +132,24 @@ namespace Dame
                 if (!(board[option] == color(1-player) || board[option] == (color(1-player)-20))) { continue; }
                 //target is where to jump to jump over "option"
                 Piece target = new Piece((2 * option.Item1) - position.Item1, (2 * option.Item2) - position.Item2);
+                //check if target is still in the board
+                if (target.Item1 < 0 || target.Item1 > 7) { continue; }
+                if (target.Item2 < 0 || target.Item2 > 7) { continue; }
                 //jump is valid if target is an empty field
                 if (board[target] == '.') { output.Add(target); }
             }
             return output;
         }
 
-        private bool Check_Move(string smove, int player)               //checks if move is valid (player 0 is black)
+        private Piece between(Piece start, Piece end)                   //returns the char between start and target of a jump, returns (-1,-1) if its not a jump
+        {
+            if (!is_jump(start,end)) { return new Piece(-1, -1); }
+            int xdiff = end.Item1 - start.Item1;
+            int ydiff = end.Item2 - start.Item2;
+            return Tuple.Create(start.Item1 + (xdiff / 2), start.Item2 + (ydiff / 2));
+        }
+
+        private bool Check_Move_handled(string smove, int player)               //DONT CALL WITHOUT THE HANDLER, Check_Move
         {
             //check move syntax
             //Check if move string is of valid format
@@ -166,21 +177,43 @@ namespace Dame
                 if (is_move(move[0],move[1])) { return true; }
                 else                           { return false; }
             }   //move is a jump
-            //is the jump valid?
-            if (!possible_jumps(move[0],player).Contains(move[1])) { return false; }
-            //multijump chain (check for valid and wether it can be longer)
-            return true;
+            //check if every jump until the last one is valid
+            int i = 0;
+            while (i < (move.Count-1))
+            {
+                //is the jump valid?
+                if (!possible_jumps(move[i], player).Contains(move[i + 1])) { return false; }
+                //perform jump
+                board[move[i+1]] = board[move[i]];
+                board[move[i]] = '.';
+                board[between(move[i], move[i+1])] = '.';
+                i++;
+            }
+            //if the player can still jump it is invalid (player has to jump as far as his current chain allows)
+            if (possible_jumps(move[i],player).Count != 0) { return false; }
+            else { return true; }
         }
 
+        private bool Check_Move(string move, int player)                        //checks if move is valid (player 0 is black)
+        {
+            Board safecopy = new Board(board);
+            bool output = Check_Move_handled(move, player);
+            board = new Board(safecopy);
+            return output;
+        }
         public void run()
         {
             Generate_Board();
-            //board[Tuple.Create(3, 3)] = 'w';
+            board[Tuple.Create(3, 3)] = 'w';
+            board[drawing.StringToTuple("G7")] = '.';
+            board[drawing.StringToTuple("D6")] = '.';
             drawing.Draw_Board(board);
-            Console.WriteLine(Check_Move("C3,B4", 0).ToString());
-            Console.WriteLine(Check_Move("C3,E5", 0).ToString());
-            Console.WriteLine(Check_Move("A3,B4", 0).ToString());
-            
+            drawing.wait(400);
+            Console.WriteLine(Check_Move("C3,B4", 0).ToString());       //should be invalid (can jump over D4)
+            Console.WriteLine(Check_Move("C3,E5", 0).ToString());       //should be invalid (can jump to G7 afterwards) 
+            Console.WriteLine(Check_Move("C3,E5,D6", 0).ToString());    //should be invalid (normal move after jumping)
+            Console.WriteLine(Check_Move("E3,C5", 0).ToString());       //should be valid
+            Console.WriteLine(Check_Move("C3,E5,G7", 0).ToString());    //should be valid
         }
     }
 }
