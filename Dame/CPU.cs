@@ -12,8 +12,7 @@ namespace Dame
     {
 
         private Board Board;
-        private int player;
-
+        private int ComputerColor;
 
         //temporäre Listen          
         private List<string> tempmove = new List<string>();
@@ -30,6 +29,7 @@ namespace Dame
 
         public string get_move(Board current_Board, int player)               // gibt validen move und einfachen SPrung zurück
         {
+            ComputerColor = player;
             Board = current_Board;
 
             Board.Remove(Tuple.Create(3, 3));
@@ -148,6 +148,7 @@ namespace Dame
 
                 //Dazwischen kein Stein oder eigener Stein
                 //Berechne Feld das übersprungen wird
+
                 int x = (position.Key.Item1 + option.Item1) / 2;
                 int y = (position.Key.Item2 + option.Item2) / 2;
 
@@ -155,8 +156,8 @@ namespace Dame
                 if (Board[Tuple.Create(x,y)] == '.') { continue; }
                 
                 //übersprungener Stein ist eigene Farbe
-                if ((player == 0)   &&   ((Board[Tuple.Create(x, y)] == 'b') || (Board[Tuple.Create(x, y)] == 'B'))) { continue; }
-                if ((player == 1)   &&   ((Board[Tuple.Create(x, y)] == 'w') || (Board[Tuple.Create(x, y)] == 'W'))) { continue; }
+                if ((ComputerColor == 0)   &&   ((Board[Tuple.Create(x, y)] == 'b') || (Board[Tuple.Create(x, y)] == 'B'))) { continue; }
+                if ((ComputerColor == 1)   &&   ((Board[Tuple.Create(x, y)] == 'w') || (Board[Tuple.Create(x, y)] == 'W'))) { continue; }
 
 
                 validjump.Add(drawing.TupleToString(position.Key) + drawing.TupleToString(option));

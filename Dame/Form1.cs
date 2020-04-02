@@ -268,5 +268,6 @@ namespace Dame
         {
             cpu.get_move(mcp.Get_Board(), 0);
         }
+
     }
 }
