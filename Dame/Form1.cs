@@ -42,10 +42,6 @@ namespace Dame
             Draw_Board(mcp.Get_Board());
         }
 
-
-
-
-
         //Wartet gewisse anzahl millisekunden
         public void wait(int milliseconds)
         {
@@ -177,7 +173,12 @@ namespace Dame
         {
 
             if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                e.Handled = true;
                 Zug_bestätigt_Click(this, new EventArgs());
+            }
+                
         }
 
         public string get_move()
@@ -196,8 +197,11 @@ namespace Dame
              
                 valid = check_Syntax(move); //True wenn Syntax korrekt
 
-                if (!valid)                            
+                if (!valid)
+                {
                     MessageBox.Show("Ungültige Syntax für einen Zug");
+                }                          
+
             }
 
             return move;           
@@ -279,9 +283,14 @@ namespace Dame
             cpu.get_move(mcp.Get_Board(), 0);
         }
 
-        private void Form1_Paint(object sender, PaintEventArgs e)
+        private void Zug_KeyDown(object sender, KeyEventArgs e)
         {
-            Draw_Board(mcp.Get_Board());
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+                e.Handled = true;
+                Zug_bestätigt_Click(this, new EventArgs());
+            }
         }
     }
 }

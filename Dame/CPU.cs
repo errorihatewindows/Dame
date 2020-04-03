@@ -163,9 +163,9 @@ namespace Dame
             return validjump;
         } // Löscht alle Invaliden Sprünge
 
-        private List<string> jumps(Piece position)
-        {
-            List<string> valid = new List<string>;
+         //private List<string> jumps(Piece position)
+        
+           /* List<string> valid = new List<string>;
             List<string> output = new List<string>;
             //if no valid jumps are possible, return a string with only this position
             if (valid_jumps.Count == 0)
@@ -186,8 +186,8 @@ namespace Dame
             {
                 output.Add(drawing.TupleToString(position) + move);
             }
-            return output;
-        }
+            return output; */
+    }
 
 
 

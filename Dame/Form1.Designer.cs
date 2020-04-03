@@ -244,6 +244,7 @@
             this.Zug.Size = new System.Drawing.Size(222, 20);
             this.Zug.TabIndex = 81;
             this.Zug.Text = "asdasd";
+            this.Zug.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Zug_KeyDown);
             // 
             // label17
             // 
@@ -481,7 +482,6 @@
             this.Text = "Dame";
             this.Shown += new System.EventHandler(this.Form1_Shown);
             this.SizeChanged += new System.EventHandler(this.Form1_SizeChanged);
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
             this.ResumeLayout(false);
             this.PerformLayout();
 
