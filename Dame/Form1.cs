@@ -277,13 +277,5 @@ namespace Dame
             cpu.get_move(mcp.Get_Board(), 0);
         }
 
-        private void Zug_KeyPress(object sender, KeyPressEventArgs e)
-        {
-  
-
-            if (e.KeyCode == Keys.Enter)
-                Zug_bestätigt_Click(this, new EventArgs());
-
-        }
     }
 }
