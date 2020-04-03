@@ -55,11 +55,7 @@ namespace Dame
             if (tempjump.Count == 0)
                 valid = tempmove;
             else
-            {
-                //Überprüfe jeden einzelnen validen Sprung auf weitere
-                while (!Complete)             
-                    tempjump = recursivejump(current_Board, tempjump);
-                
+            {   
                 valid = tempjump;
             }
 

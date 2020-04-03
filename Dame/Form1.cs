@@ -43,6 +43,7 @@ namespace Dame
         }
 
 
+
         //Wartet gewisse anzahl millisekunden
         public void wait(int milliseconds)
         {
@@ -162,11 +163,19 @@ namespace Dame
         }       
 
         //TODO: in 2 Funktionen teilen, button click setzt eine boolean- Membervariable, 2. funktion gibt einen formatierten Zug aus            
-        private void Zug_bestätigt_Click(object sender, EventArgs e)
+        private void Zug_bestätigt_Click(object sender, EventArgs e) 
         {
             move = Zug.Text;
             Clicked = true;
             get_move();
+        }
+
+        //Bestätigen der ZU Eingabe per ENTER
+        void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+
+            if (e.KeyCode == Keys.Enter)
+                Zug_bestätigt_Click(this, new EventArgs());
         }
 
         public string get_move()
@@ -268,5 +277,13 @@ namespace Dame
             cpu.get_move(mcp.Get_Board(), 0);
         }
 
+        private void Zug_KeyPress(object sender, KeyPressEventArgs e)
+        {
+  
+
+            if (e.KeyCode == Keys.Enter)
+                Zug_bestätigt_Click(this, new EventArgs());
+
+        }
     }
 }
