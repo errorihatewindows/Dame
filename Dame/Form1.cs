@@ -44,6 +44,8 @@ namespace Dame
 
 
 
+
+
         //Wartet gewisse anzahl millisekunden
         public void wait(int milliseconds)
         {
@@ -277,5 +279,9 @@ namespace Dame
             cpu.get_move(mcp.Get_Board(), 0);
         }
 
+        private void Form1_Paint(object sender, PaintEventArgs e)
+        {
+            Draw_Board(mcp.Get_Board());
+        }
     }
 }
