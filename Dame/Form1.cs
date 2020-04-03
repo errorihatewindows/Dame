@@ -163,8 +163,9 @@ namespace Dame
         }
         
         private void Zug_bestätigt_Click(object sender, EventArgs e)
-        {
+        {            
             move = Zug.Text;
+            Zug.Text = "";
             Clicked = true;
         }
 
