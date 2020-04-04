@@ -65,6 +65,7 @@
             this.label32 = new System.Windows.Forms.Label();
             this.label33 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label36 = new System.Windows.Forms.Label();
             this.label34 = new System.Windows.Forms.Label();
             this.radioButtonKI = new System.Windows.Forms.RadioButton();
             this.radioButtonZufall = new System.Windows.Forms.RadioButton();
@@ -439,6 +440,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label36);
             this.groupBox1.Controls.Add(this.label34);
             this.groupBox1.Controls.Add(this.radioButtonKI);
             this.groupBox1.Controls.Add(this.radioButtonZufall);
@@ -450,6 +452,16 @@
             this.groupBox1.TabIndex = 100;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Spieleinstellung";
+            // 
+            // label36
+            // 
+            this.label36.AutoSize = true;
+            this.label36.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label36.Location = new System.Drawing.Point(14, 29);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(90, 15);
+            this.label36.TabIndex = 103;
+            this.label36.Text = "Spielen gegen:";
             // 
             // label34
             // 
@@ -503,7 +515,7 @@
             this.radioButtonSchwarz.AutoSize = true;
             this.radioButtonSchwarz.Checked = true;
             this.radioButtonSchwarz.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButtonSchwarz.Location = new System.Drawing.Point(14, 35);
+            this.radioButtonSchwarz.Location = new System.Drawing.Point(17, 50);
             this.radioButtonSchwarz.Name = "radioButtonSchwarz";
             this.radioButtonSchwarz.Size = new System.Drawing.Size(66, 17);
             this.radioButtonSchwarz.TabIndex = 4;
@@ -515,11 +527,10 @@
             // 
             this.radioButtonWeiß.AutoSize = true;
             this.radioButtonWeiß.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButtonWeiß.Location = new System.Drawing.Point(14, 59);
+            this.radioButtonWeiß.Location = new System.Drawing.Point(17, 74);
             this.radioButtonWeiß.Name = "radioButtonWeiß";
             this.radioButtonWeiß.Size = new System.Drawing.Size(50, 17);
             this.radioButtonWeiß.TabIndex = 5;
-            this.radioButtonWeiß.TabStop = true;
             this.radioButtonWeiß.Text = "Weiß";
             this.radioButtonWeiß.UseVisualStyleBackColor = true;
             // 
@@ -527,7 +538,7 @@
             // 
             this.label35.AutoSize = true;
             this.label35.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label35.Location = new System.Drawing.Point(14, 16);
+            this.label35.Location = new System.Drawing.Point(12, 16);
             this.label35.Name = "label35";
             this.label35.Size = new System.Drawing.Size(71, 15);
             this.label35.TabIndex = 6;
@@ -648,6 +659,7 @@
         private System.Windows.Forms.RadioButton radioButtonWeiß;
         private System.Windows.Forms.RadioButton radioButtonSchwarz;
         private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Label label36;
     }
 }
 
