@@ -199,7 +199,12 @@ namespace Dame
 
                 if (!valid)
                 {
-                    MessageBox.Show("Ungültige Syntax für einen Zug");
+                    MessageBox.Show("Ungültige Syntax für einen Zug."
+                                    + Environment.NewLine
+                                    + Environment.NewLine
+                                    + "Oder wie Google-Übersetzer sagen würde:" + "     Invalid syntax for a train."
+                                    + Environment.NewLine
+                                    + "Oder für unsere Ungarischen Freunde:" + "  Érvénytelen szintaxis a vonaton.");
                 }                          
 
             }
