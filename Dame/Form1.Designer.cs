@@ -244,7 +244,7 @@
             this.Zug.Size = new System.Drawing.Size(222, 20);
             this.Zug.TabIndex = 81;
             this.Zug.Text = "asdasd";
-            this.Zug.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Zug_KeyDown);
+            this.Zug.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Zug_KeyPress);
             // 
             // label17
             // 

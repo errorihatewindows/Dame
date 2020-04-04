@@ -174,11 +174,11 @@ namespace Dame
 
             if (e.KeyCode == Keys.Enter)
             {
-                e.SuppressKeyPress = true;
                 e.Handled = true;
+                e.SuppressKeyPress = true;
                 Zug_bestätigt_Click(this, new EventArgs());
             }
-                
+
         }
 
         public string get_move()
@@ -283,11 +283,10 @@ namespace Dame
             cpu.get_move(mcp.Get_Board(), 0);
         }
 
-        private void Zug_KeyDown(object sender, KeyEventArgs e)
+        private void Zug_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
+            if (e.KeyChar == (char)Keys.Enter)
             {
-                e.SuppressKeyPress = true;
                 e.Handled = true;
                 Zug_bestätigt_Click(this, new EventArgs());
             }
