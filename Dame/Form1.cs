@@ -204,7 +204,9 @@ namespace Dame
                                     + Environment.NewLine
                                     + "Oder wie Google-Übersetzer sagen würde:" + "     Invalid syntax for a train."
                                     + Environment.NewLine
-                                    + "Oder für unsere Ungarischen Freunde:" + "  Érvénytelen szintaxis a vonaton.");
+                                    + "Oder für unsere Ungarischen Freunde:" + "  Érvénytelen szintaxis a vonaton."
+                                    + Environment.NewLine
+                                    + "と 日本語: トレインの無効な構文");
                 }                          
 
             }
