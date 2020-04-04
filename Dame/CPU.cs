@@ -58,7 +58,7 @@ namespace Dame
             {   //Überprüft Mehrfachsprung und gibt Liste aller validen Sprünge zurück (korrekte Syntax)
                 foreach (string jump in tempjump)
                     valid = valid.Concat(jumps(drawing.StringToTuple(jump))).ToList();
-            }
+            } 
 
             //Zufälligen Valid Move auswählen
             Random Zufall = new Random();
@@ -164,7 +164,6 @@ namespace Dame
         
         private List<string> jumps(Piece position)
         {
-            Console.WriteLine(position.ToString());
             List<string> valid = new List<string>();
             List<string> output = new List<string>();
             List<Piece> possiblejumps = possible_jumps(position);
@@ -212,8 +211,6 @@ namespace Dame
             positionnew = drawing.StringToTuple(Move2);
 
             //neuen Stein setzten
-            Console.WriteLine(positionold);
-            Console.WriteLine(positionnew);
             
             Board[positionnew] = Board[positionold];
 

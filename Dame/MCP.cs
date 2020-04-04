@@ -15,6 +15,7 @@ namespace Dame
     {
         public gets_moves move;
         public string name;
+        public bool is_cpu;
         public CPU cpu;
     }
     public class MCP
@@ -40,15 +41,25 @@ namespace Dame
             {
                 Player[0].cpu = new CPU(drawing);
                 Player[0].move = Player[0].cpu.get_move;
+                Player[0].is_cpu = true;
             }
-            else { Player[0].move = drawing.get_move; }
+            else
+            { 
+                Player[0].move = drawing.get_move;
+                Player[0].is_cpu = false;
+            }
             //do it again for player 2 ;D
             if (player2.StartsWith("CPU"))
             {
                 Player[1].cpu = new CPU(drawing);
                 Player[1].move = Player[1].cpu.get_move;
+                Player[1].is_cpu = true;
             }
-            else { Player[1].move = drawing.get_move; }
+            else 
+            { 
+                Player[1].move = drawing.get_move;
+                Player[1].is_cpu = false;
+            }
         }   //sets name and delegate for players
 
         public Board Get_Board()                //getter for internal board state
@@ -285,8 +296,9 @@ namespace Dame
                 valid = false;
                 while (!valid)
                 {
-                    move = Player[player].move(board, player);
+                    move = Player[player].move(new Board(board), player);
                     valid = Check_Move(move, player);
+                    if ((Player[player].is_cpu) && (!valid)) { Console.WriteLine("CPU invalid move");  System.Environment.Exit(0); }
                 }
                 Perform_Move(move, player);
                 drawing.Draw_Board(board);
