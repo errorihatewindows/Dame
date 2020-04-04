@@ -21,11 +21,11 @@ namespace Dame
         private bool Complete = false;
 
         private Form1 drawing;
-        
+
         //Konstruktor
         public CPU(Form1 form)
         {
-           drawing = form;
+            drawing = form;
         }
 
 
@@ -41,7 +41,7 @@ namespace Dame
             string final_move = "";
 
 
-            foreach (KeyValuePair <Piece,char> position in Board)
+            foreach (KeyValuePair<Piece, char> position in Board)
             {
                 //Steinfarbe passt nicht zu Computerfarbe
                 if (((player == 0) && (position.Value != 'b' && position.Value != 'B')) || ((player == 1 && (position.Value != 'w' && position.Value != 'W'))))
@@ -55,7 +55,7 @@ namespace Dame
             if (tempjump.Count == 0)
                 valid = tempmove;
             else
-            {   
+            {
                 valid = tempjump;
             }
 
@@ -73,24 +73,30 @@ namespace Dame
             return final_move;
         }
 
+        private List<Piece> possible_jumps(Piece position)
+        {
+            List<Piece> possiblejump = new List<Piece>();
+            possiblejump.Add(Tuple.Create(position.Item1 + 2, position.Item2 + 2));
+            possiblejump.Add(Tuple.Create(position.Item1 + 2, position.Item2 - 2));
+            possiblejump.Add(Tuple.Create(position.Item1 - 2, position.Item2 - 2));
+            possiblejump.Add(Tuple.Create(position.Item1 - 2, position.Item2 + 2));
+            return possiblejump;
+        }
+
+        private List<Piece> possible_moves(Piece position)
+        {
+            List<Piece> possiblemove = new List<Piece>();
+            possiblemove.Add(Tuple.Create(position.Item1 + 1, position.Item2 + 1));
+            possiblemove.Add(Tuple.Create(position.Item1 + 1, position.Item2 - 1));
+            possiblemove.Add(Tuple.Create(position.Item1 - 1, position.Item2 - 1));
+            possiblemove.Add(Tuple.Create(position.Item1 - 1, position.Item2 + 1));
+            return possiblemove;
+        }
         private void checkposition(KeyValuePair<Piece, char> position) // Listet alle möglichen Züge + gibt nur valide Züge zurück
         {
             //Liste aller theoretisch möglichen Züge eines Spielsteins
-            List<Piece> possiblemove = new List<Piece>();
-            List<Piece> possiblejump = new List<Piece>();
-
-            //vorerst mögliche move diagonalen
-            possiblemove.Add(Tuple.Create(position.Key.Item1 + 1, position.Key.Item2 + 1));
-            possiblemove.Add(Tuple.Create(position.Key.Item1 + 1, position.Key.Item2 - 1));
-            possiblemove.Add(Tuple.Create(position.Key.Item1 - 1, position.Key.Item2 - 1));
-            possiblemove.Add(Tuple.Create(position.Key.Item1 - 1, position.Key.Item2 + 1));
-
-            //vorerst mögliche jumps
-            possiblejump.Add(Tuple.Create(position.Key.Item1 + 2, position.Key.Item2 + 2));
-            possiblejump.Add(Tuple.Create(position.Key.Item1 + 2, position.Key.Item2 - 2));
-            possiblejump.Add(Tuple.Create(position.Key.Item1 - 2, position.Key.Item2 - 2));
-            possiblejump.Add(Tuple.Create(position.Key.Item1 - 2, position.Key.Item2 + 2));
-
+            List<Piece> possiblemove = possible_moves(position.Key);
+            List<Piece> possiblejump = possible_jumps(position.Key);
 
             //Invalide Züge löschen
             tempmove = tempmove.Concat(deleteInvalid_move(possiblemove, position)).ToList();
