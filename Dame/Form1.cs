@@ -254,7 +254,7 @@ namespace Dame
             return num;
         }
 
-        public Tuple<int, int> StringToTuple(string place)
+        public Piece StringToTuple(string place)
         {
             place = place.ToUpper();
 

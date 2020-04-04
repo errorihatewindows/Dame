@@ -60,13 +60,9 @@ namespace Dame
                     valid = valid.Concat(jumps(drawing.StringToTuple(jump))).ToList();
             }
 
-            Console.WriteLine(valid.Count); 
-
             //Zufälligen Valid Move auswählen
             Random Zufall = new Random();
             final_move = valid[Zufall.Next(0 , valid.Count)];
-
-            Console.WriteLine(final_move);
 
             return final_move;
         }
