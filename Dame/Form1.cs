@@ -181,7 +181,7 @@ namespace Dame
 
         }
 
-        public string get_move()
+        public string get_move(Board boarstate, int player)
         {
             bool valid = false;
             label34.Text = "Spieler " + player.ToString() + " am Zug";
