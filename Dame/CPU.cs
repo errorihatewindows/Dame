@@ -173,7 +173,6 @@ namespace Dame
 
         private List<string> jumps(Piece position)
         {
-
             List<string> valid = new List<string>();
             List<string> output = new List<string>();
             List<Piece> possiblejumps = possible_jumps(position);
@@ -191,7 +190,7 @@ namespace Dame
             {
                 foreach (string jump in deleteInvalid_jump(possiblejumps, position))
                 {
-                    target = drawing.StringToTuple(jump[0].ToString() + jump[1].ToString());
+                    target = drawing.StringToTuple(jump[2].ToString() + jump[3].ToString());
                     valid.Concat(jumps(target));
                 }
             }
