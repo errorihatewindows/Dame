@@ -294,9 +294,6 @@ namespace Dame
                 e.Handled = true;
                 Zug_bestätigt_Click(this, new EventArgs());
             }
-            Console.WriteLine('b');
-            Console.WriteLine('b' - 20);
-            cpu.get_move(mcp.Get_Board(), 0);
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
