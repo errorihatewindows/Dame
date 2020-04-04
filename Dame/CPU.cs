@@ -102,12 +102,12 @@ namespace Dame
             List<Piece> possiblejump = possible_jumps(position.Key);
 
             //Invalide Züge löschen
-            tempmove = tempmove.Concat(deleteInvalid_move(possiblemove, position)).ToList();
-            tempjump = tempjump.Concat(deleteInvalid_jump(possiblejump, position)).ToList();
+            tempmove = tempmove.Concat(deleteInvalid_move(possiblemove, position.Key)).ToList();
+            tempjump = tempjump.Concat(deleteInvalid_jump(possiblejump, position.Key)).ToList();
             
         }
 
-        private List<string> deleteInvalid_move(List<Piece> possiblemove, KeyValuePair<Piece, char> position) //Löscht invalide Züge und gibt valide zurück
+        private List<string> deleteInvalid_move(List<Piece> possiblemove, Piece position) //Löscht invalide Züge und gibt valide zurück
         {
             List<string> validmove = new List<string>(); 
 
@@ -120,19 +120,19 @@ namespace Dame
                 if (option.Item2 > 7 || option.Item2 < 0) { continue; }
 
                 // normale Steine nur vorwärts
-                if (position.Value == 'b') { if (position.Key.Item2 - 1 == option.Item2) { continue; } }
-                if (position.Value == 'w') { if (position.Key.Item2 + 1 == option.Item2) { continue; } }
+                if (Board[position] == 'b') { if (position.Item2 - 1 == option.Item2) { continue; } }
+                if (Board[position] == 'w') { if (position.Item2 + 1 == option.Item2) { continue; } }
 
                 //Feld bereits belegt
                 if (Board[option] != '.') { continue; }
 
-                validmove.Add(drawing.TupleToString(position.Key) + drawing.TupleToString(option));
+                validmove.Add(drawing.TupleToString(position) + drawing.TupleToString(option));
             }
 
             return validmove;
         }
 
-        private List<string> deleteInvalid_jump(List<Piece> possiblejump, KeyValuePair<Piece, char> position)
+        private List<string> deleteInvalid_jump(List<Piece> possiblejump, Piece position)
         {
             List<string> validjump = new List<string>();
 
@@ -145,8 +145,8 @@ namespace Dame
                 if (option.Item2 > 7 || option.Item2 < 0) { continue; }
 
                 // normale Steine nur vorwärts
-                if (position.Value == 'b') { if (position.Key.Item2 - 2 == option.Item2) { continue; } }
-                if (position.Value == 'w') { if (position.Key.Item2 + 2 == option.Item2) { continue; } }
+                if (Board[position] == 'b') { if (position.Item2 - 2 == option.Item2) { continue; } }
+                if (Board[position] == 'w') { if (position.Item2 + 2 == option.Item2) { continue; } }
 
                 //Feld bereits belegt
                 if (Board[option] != '.') { continue; }
@@ -155,8 +155,8 @@ namespace Dame
                 //Dazwischen kein Stein oder eigener Stein
                 //Berechne Feld das übersprungen wird
 
-                int x = (position.Key.Item1 + option.Item1) / 2;
-                int y = (position.Key.Item2 + option.Item2) / 2;
+                int x = (position.Item1 + option.Item1) / 2;
+                int y = (position.Item2 + option.Item2) / 2;
 
                 //leeres Feld zum Überspringen
                 if (Board[Tuple.Create(x,y)] == '.') { continue; }
@@ -166,7 +166,7 @@ namespace Dame
                 if ((ComputerColor == 1)   &&   ((Board[Tuple.Create(x, y)] == 'w') || (Board[Tuple.Create(x, y)] == 'W'))) { continue; }
 
 
-                validjump.Add(drawing.TupleToString(position.Key) + drawing.TupleToString(option));
+                validjump.Add(drawing.TupleToString(position) + drawing.TupleToString(option));
             }
 
             return validjump;
