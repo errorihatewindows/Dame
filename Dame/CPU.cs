@@ -150,8 +150,6 @@ namespace Dame
                 //Feld bereits belegt
                 if (Board[option] != '.') { continue; }
 
-
-                //Dazwischen kein Stein oder eigener Stein
                 //Berechne Feld das übersprungen wird
 
                 int x = (position.Item1 + option.Item1) / 2;

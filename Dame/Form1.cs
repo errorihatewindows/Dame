@@ -324,5 +324,10 @@ namespace Dame
             Console.WriteLine("haha");
             System.Environment.Exit(0);
         }
+
+        private void label35_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
