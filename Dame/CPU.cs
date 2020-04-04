@@ -57,18 +57,14 @@ namespace Dame
             else
             {   //Überprüft Mehrfachsprung und gibt Liste aller validen Sprünge zurück (korrekte Syntax)
                 foreach (string jump in tempjump)
-                    valid = jumps(drawing.StringToTuple(jump));
+                    valid = valid.Concat(jumps(drawing.StringToTuple(jump))).ToList();
             }
 
-            
+            Console.WriteLine(valid.Count); 
 
             //Zufälligen Valid Move auswählen
             Random Zufall = new Random();
-            final_move = valid[Zufall.Next(0, valid.Count)];
-
-            //Auf korrekte Syntax bringen
-            if(tempjump.Count == 0)
-                final_move = final_move.Insert(2, ",");
+            final_move = valid[Zufall.Next(0 , valid.Count)];
 
             Console.WriteLine(final_move);
 
@@ -125,7 +121,7 @@ namespace Dame
                 //Feld bereits belegt
                 if (Board[option] != '.') { continue; }
 
-                validmove.Add(drawing.TupleToString(position) + drawing.TupleToString(option));
+                validmove.Add(drawing.TupleToString(position) + "," +  drawing.TupleToString(option));
             }
 
             return validmove;
@@ -194,7 +190,7 @@ namespace Dame
                 {
                     target = drawing.StringToTuple(jump[2].ToString() + jump[3].ToString());
                     update_Board(jump);
-                    valid.Concat(jumps(target)).ToList();
+                    valid = valid.Concat(jumps(target)).ToList();
                     Board = new Board(currentboard);
                 }
             }
@@ -208,6 +204,7 @@ namespace Dame
 
         }
 
+        //Führt einen gegebenen Sprung aus
         private void update_Board(string Move)
         {
             string Move1 = (Move[0].ToString() + Move[1].ToString());
@@ -232,8 +229,6 @@ namespace Dame
             Board[positionold] = '.';
             
         }
-
-
 
     }
 
