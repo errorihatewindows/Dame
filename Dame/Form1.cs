@@ -27,9 +27,6 @@ namespace Dame
             InitializeComponent();
             mcp = new MCP(this);
             cpu = new CPU(this);
-
-
-
         }
 
         private void Form1_Shown(object sender, EventArgs e) //Zeichnet Grundzustand
@@ -226,16 +223,31 @@ namespace Dame
             Zug_bestätigt.Visible = true;
             label17.Visible = true;
             
-            //Spiel ausführen
-            mcp.set_user("Thomas", "CPU");       //player vs. player
+
+            //Ausgewähltes Setup abfragen und laden
+            if (radioButtonSpieler.Checked)
+                mcp.set_user("Spieler 1", "Spieler 2"); //player vs player
+            
+            if (radioButtonZufall.Checked)
+            {
+                if (radioButtonSchwarz.Checked)
+                    mcp.set_user("Spieler 1", "CPU");   //player vs CPU
+                if (radioButtonWeiß.Checked)
+                    mcp.set_user("CPU", "Spieler 1");   //CPU vs player
+            }
+
+            if (radioButtonKI.Checked)
+                MessageBox.Show("KI noch nicht verfügbar :(");
+            
+
+            //Spiel ausführen      
             mcp.run();
         }
 
         public string TupleToString(Tuple<int, int> field)
         {
             string a = ((char)(field.Item1 + 'A')).ToString();
-            Console.WriteLine("Ähm");
-            string b = ((int)(field.Item2) + 1).ToString();
+            string b = Convert.ToString((field.Item2) + 1);
 
             string num = a + b;
 
@@ -312,6 +324,5 @@ namespace Dame
             Console.WriteLine("haha");
             System.Environment.Exit(0);
         }
-
     }
 }

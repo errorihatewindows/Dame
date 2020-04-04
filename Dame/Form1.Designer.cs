@@ -66,11 +66,11 @@
             this.label33 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label34 = new System.Windows.Forms.Label();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.radioButton4 = new System.Windows.Forms.RadioButton();
-            this.radioButton5 = new System.Windows.Forms.RadioButton();
+            this.radioButtonKI = new System.Windows.Forms.RadioButton();
+            this.radioButtonZufall = new System.Windows.Forms.RadioButton();
+            this.radioButtonSpieler = new System.Windows.Forms.RadioButton();
+            this.radioButtonSchwarz = new System.Windows.Forms.RadioButton();
+            this.radioButtonWeiß = new System.Windows.Forms.RadioButton();
             this.label35 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox1.SuspendLayout();
@@ -239,7 +239,7 @@
             // 
             // Zug_bestätigt
             // 
-            this.Zug_bestätigt.Location = new System.Drawing.Point(580, 404);
+            this.Zug_bestätigt.Location = new System.Drawing.Point(580, 468);
             this.Zug_bestätigt.Name = "Zug_bestätigt";
             this.Zug_bestätigt.Size = new System.Drawing.Size(222, 23);
             this.Zug_bestätigt.TabIndex = 80;
@@ -250,18 +250,17 @@
             // 
             // Zug
             // 
-            this.Zug.Location = new System.Drawing.Point(580, 378);
+            this.Zug.Location = new System.Drawing.Point(580, 442);
             this.Zug.Name = "Zug";
             this.Zug.Size = new System.Drawing.Size(222, 20);
             this.Zug.TabIndex = 81;
-            this.Zug.Text = "asdasd";
             this.Zug.Visible = false;
             this.Zug.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Zug_KeyPress);
             // 
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(824, 381);
+            this.label17.Location = new System.Drawing.Point(824, 445);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(104, 13);
             this.label17.TabIndex = 82;
@@ -270,7 +269,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(580, 293);
+            this.button1.Location = new System.Drawing.Point(580, 340);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(222, 23);
             this.button1.TabIndex = 83;
@@ -441,11 +440,11 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.label34);
-            this.groupBox1.Controls.Add(this.radioButton3);
-            this.groupBox1.Controls.Add(this.radioButton2);
-            this.groupBox1.Controls.Add(this.radioButton1);
+            this.groupBox1.Controls.Add(this.radioButtonKI);
+            this.groupBox1.Controls.Add(this.radioButtonZufall);
+            this.groupBox1.Controls.Add(this.radioButtonSpieler);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(580, 61);
+            this.groupBox1.Location = new System.Drawing.Point(580, 64);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(222, 127);
             this.groupBox1.TabIndex = 100;
@@ -462,65 +461,67 @@
             this.label34.TabIndex = 102;
             this.label34.Text = "label34";
             // 
-            // radioButton3
+            // radioButtonKI
             // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButton3.Location = new System.Drawing.Point(17, 101);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(35, 17);
-            this.radioButton3.TabIndex = 2;
-            this.radioButton3.TabStop = true;
-            this.radioButton3.Text = "KI";
-            this.radioButton3.UseVisualStyleBackColor = true;
+            this.radioButtonKI.AutoSize = true;
+            this.radioButtonKI.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioButtonKI.Location = new System.Drawing.Point(17, 101);
+            this.radioButtonKI.Name = "radioButtonKI";
+            this.radioButtonKI.Size = new System.Drawing.Size(35, 17);
+            this.radioButtonKI.TabIndex = 2;
+            this.radioButtonKI.TabStop = true;
+            this.radioButtonKI.Text = "KI";
+            this.radioButtonKI.UseVisualStyleBackColor = true;
             // 
-            // radioButton2
+            // radioButtonZufall
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButton2.Location = new System.Drawing.Point(17, 77);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(86, 17);
-            this.radioButton2.TabIndex = 1;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "Zufallsspieler";
-            this.radioButton2.UseVisualStyleBackColor = true;
+            this.radioButtonZufall.AutoSize = true;
+            this.radioButtonZufall.Checked = true;
+            this.radioButtonZufall.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioButtonZufall.Location = new System.Drawing.Point(17, 77);
+            this.radioButtonZufall.Name = "radioButtonZufall";
+            this.radioButtonZufall.Size = new System.Drawing.Size(86, 17);
+            this.radioButtonZufall.TabIndex = 1;
+            this.radioButtonZufall.TabStop = true;
+            this.radioButtonZufall.Text = "Zufallsspieler";
+            this.radioButtonZufall.UseVisualStyleBackColor = true;
             // 
-            // radioButton1
+            // radioButtonSpieler
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButton1.Location = new System.Drawing.Point(17, 53);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(105, 17);
-            this.radioButton1.TabIndex = 0;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Eigener Spieler 2";
-            this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButtonSpieler.AutoSize = true;
+            this.radioButtonSpieler.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioButtonSpieler.Location = new System.Drawing.Point(17, 53);
+            this.radioButtonSpieler.Name = "radioButtonSpieler";
+            this.radioButtonSpieler.Size = new System.Drawing.Size(105, 17);
+            this.radioButtonSpieler.TabIndex = 0;
+            this.radioButtonSpieler.TabStop = true;
+            this.radioButtonSpieler.Text = "Eigener Spieler 2";
+            this.radioButtonSpieler.UseVisualStyleBackColor = true;
             // 
-            // radioButton4
+            // radioButtonSchwarz
             // 
-            this.radioButton4.AutoSize = true;
-            this.radioButton4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButton4.Location = new System.Drawing.Point(14, 35);
-            this.radioButton4.Name = "radioButton4";
-            this.radioButton4.Size = new System.Drawing.Size(66, 17);
-            this.radioButton4.TabIndex = 4;
-            this.radioButton4.TabStop = true;
-            this.radioButton4.Text = "Schwarz";
-            this.radioButton4.UseVisualStyleBackColor = true;
+            this.radioButtonSchwarz.AutoSize = true;
+            this.radioButtonSchwarz.Checked = true;
+            this.radioButtonSchwarz.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioButtonSchwarz.Location = new System.Drawing.Point(14, 35);
+            this.radioButtonSchwarz.Name = "radioButtonSchwarz";
+            this.radioButtonSchwarz.Size = new System.Drawing.Size(66, 17);
+            this.radioButtonSchwarz.TabIndex = 4;
+            this.radioButtonSchwarz.TabStop = true;
+            this.radioButtonSchwarz.Text = "Schwarz";
+            this.radioButtonSchwarz.UseVisualStyleBackColor = true;
             // 
-            // radioButton5
+            // radioButtonWeiß
             // 
-            this.radioButton5.AutoSize = true;
-            this.radioButton5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButton5.Location = new System.Drawing.Point(14, 59);
-            this.radioButton5.Name = "radioButton5";
-            this.radioButton5.Size = new System.Drawing.Size(50, 17);
-            this.radioButton5.TabIndex = 5;
-            this.radioButton5.TabStop = true;
-            this.radioButton5.Text = "Weiß";
-            this.radioButton5.UseVisualStyleBackColor = true;
+            this.radioButtonWeiß.AutoSize = true;
+            this.radioButtonWeiß.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioButtonWeiß.Location = new System.Drawing.Point(14, 59);
+            this.radioButtonWeiß.Name = "radioButtonWeiß";
+            this.radioButtonWeiß.Size = new System.Drawing.Size(50, 17);
+            this.radioButtonWeiß.TabIndex = 5;
+            this.radioButtonWeiß.TabStop = true;
+            this.radioButtonWeiß.Text = "Weiß";
+            this.radioButtonWeiß.UseVisualStyleBackColor = true;
             // 
             // label35
             // 
@@ -535,11 +536,11 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.label35);
-            this.groupBox2.Controls.Add(this.radioButton4);
-            this.groupBox2.Controls.Add(this.radioButton5);
+            this.groupBox2.Controls.Add(this.radioButtonSchwarz);
+            this.groupBox2.Controls.Add(this.radioButtonWeiß);
             this.groupBox2.Location = new System.Drawing.Point(580, 187);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(222, 100);
+            this.groupBox2.Size = new System.Drawing.Size(222, 147);
             this.groupBox2.TabIndex = 101;
             this.groupBox2.TabStop = false;
             // 
@@ -640,12 +641,12 @@
         private System.Windows.Forms.Label label33;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label34;
-        private System.Windows.Forms.RadioButton radioButton3;
-        private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.RadioButton radioButtonKI;
+        private System.Windows.Forms.RadioButton radioButtonZufall;
+        private System.Windows.Forms.RadioButton radioButtonSpieler;
         private System.Windows.Forms.Label label35;
-        private System.Windows.Forms.RadioButton radioButton5;
-        private System.Windows.Forms.RadioButton radioButton4;
+        private System.Windows.Forms.RadioButton radioButtonWeiß;
+        private System.Windows.Forms.RadioButton radioButtonSchwarz;
         private System.Windows.Forms.GroupBox groupBox2;
     }
 }
