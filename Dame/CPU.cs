@@ -171,14 +171,16 @@ namespace Dame
             return validjump;
         }
 
-        // Löscht alle Invaliden Sprünge
-
+        
         private List<string> jumps(Piece position)
         {
+            Console.WriteLine(position.ToString());
             List<string> valid = new List<string>();
             List<string> output = new List<string>();
             List<Piece> possiblejumps = possible_jumps(position);
             Piece target;
+            //save this recursion levels boardstate
+            Board currentboard = new Board(Board);
 
             //Stop condition of recursion
             //if no valid jumps are possible, return a string with only this position
@@ -193,13 +195,15 @@ namespace Dame
                 foreach (string jump in deleteInvalid_jump(possiblejumps, position))
                 {
                     target = drawing.StringToTuple(jump[2].ToString() + jump[3].ToString());
-                    valid.Concat(jumps(target));
+                    update_Board(jump);
+                    valid.Concat(jumps(target)).ToList();
+                    Board = new Board(currentboard);
                 }
             }
             //add ur position 
             foreach (string move in valid)
             {
-                output.Add(drawing.TupleToString(position) + move);
+                output.Add(drawing.TupleToString(position) + "," + move);
             }
 
             return output;
