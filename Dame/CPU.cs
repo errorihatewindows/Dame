@@ -210,8 +210,8 @@ namespace Dame
 
         private void update_Board(string Move)
         {
-            string Move1 = (Move[0] + Move[1]).ToString();
-            string Move2 = (Move[2] + Move[3]).ToString();
+            string Move1 = (Move[0].ToString() + Move[1].ToString());
+            string Move2 = (Move[2].ToString() + Move[3].ToString());
 
             Piece positionold, positionnew;
             
