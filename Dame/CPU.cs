@@ -10,63 +10,207 @@ namespace Dame
 {
     public class CPU
     {
-        //Liste aller möglichen Outputs
-        List<string> possible = new List<string>();
-        string final_move;
 
-        
+        private Board Board;
+        private int ComputerColor;
+
+        //temporäre Listen          
+        private List<string> tempmove = new List<string>();
+        private List<string> tempjump = new List<string>();
+
         private Form1 drawing;
+
         //Konstruktor
         public CPU(Form1 form)
         {
-           drawing = form;
+            drawing = form;
         }
 
 
-        public string get_move(Board Board, int player)               // int = 0 => Schwarz (unten), fängt an
+        public string get_move(Board current_Board, int player)               // gibt validen move und einfachen SPrung zurück
         {
-            possible.Clear();
+            ComputerColor = player;
+            Board = current_Board;
 
-            
-            foreach (KeyValuePair <Piece,char> position in Board)
+            //Liste aller validen Züge
+            List<string> valid = new List<string>();
+
+            //Finaler move
+            string final_move = "";
+
+
+            foreach (KeyValuePair<Piece, char> position in Board)
             {
-                checkposition(position, player);
+                //Steinfarbe passt nicht zu Computerfarbe
+                if (((player == 0) && (position.Value != 'b' && position.Value != 'B')) || ((player == 1 && (position.Value != 'w' && position.Value != 'W'))))
+                    continue;
+
+                checkposition(position);
+
             }
 
-            for(int i = 0; i < 10; i++) 
-                Console.WriteLine(possible[i]);
+
+            if (tempjump.Count == 0)
+            {
+                valid = tempmove;
+
+                //auf korrekte Syntax bringen
+                final_move = final_move.Insert(2, ",");
+            }
+
+            else
+            {   //Überprüft Mehrfachsprung und gibt Liste aller validen Sprünge zurück (korrekte Syntax)
+                foreach (string jump in tempjump)
+                    valid = jumps(drawing.StringToTuple(jump));
+            }
+
+
+             /* (int i = 0; i < valid.Count; i++)
+                Console.WriteLine(valid[i]); */
+
+            //Zufälligen Valid Move auswählen
+            Random Zufall = new Random();
+            final_move = valid[Zufall.Next(0, valid.Count)];
+
 
             return final_move;
         }
 
-        private List<string> checkposition(KeyValuePair<Piece, char> position, int player)
+        private List<Piece> possible_jumps(Piece position)
         {
-            //Computer speichert alle Diagonalen der Steine seiner Farbe
-            if (((player == 0) && (position.Value == 'b' || position.Value == 'B')) || ((player == 1 && position.Value == 'w' || position.Value == 'W')))
+            List<Piece> possiblejump = new List<Piece>();
+            possiblejump.Add(Tuple.Create(position.Item1 + 2, position.Item2 + 2));
+            possiblejump.Add(Tuple.Create(position.Item1 + 2, position.Item2 - 2));
+            possiblejump.Add(Tuple.Create(position.Item1 - 2, position.Item2 - 2));
+            possiblejump.Add(Tuple.Create(position.Item1 - 2, position.Item2 + 2));
+            return possiblejump;
+        }
+
+        private List<Piece> possible_moves(Piece position)
+        {
+            List<Piece> possiblemove = new List<Piece>();
+            possiblemove.Add(Tuple.Create(position.Item1 + 1, position.Item2 + 1));
+            possiblemove.Add(Tuple.Create(position.Item1 + 1, position.Item2 - 1));
+            possiblemove.Add(Tuple.Create(position.Item1 - 1, position.Item2 - 1));
+            possiblemove.Add(Tuple.Create(position.Item1 - 1, position.Item2 + 1));
+            return possiblemove;
+        }
+        private void checkposition(KeyValuePair<Piece, char> position) // Listet alle möglichen Züge + gibt nur valide Züge zurück
+        {
+            //Liste aller theoretisch möglichen Züge eines Spielsteins
+            List<Piece> possiblemove = possible_moves(position.Key);
+            List<Piece> possiblejump = possible_jumps(position.Key);
+
+            //Invalide Züge löschen
+            tempmove = tempmove.Concat(deleteInvalid_move(possiblemove, position.Key)).ToList();
+            tempjump = tempjump.Concat(deleteInvalid_jump(possiblejump, position.Key)).ToList();
+            
+        }
+
+        private List<string> deleteInvalid_move(List<Piece> possiblemove, Piece position) //Löscht invalide Züge und gibt valide zurück
+        {
+            List<string> validmove = new List<string>(); 
+
+            foreach (Piece option in possiblemove)
             {
-                Console.WriteLine("YAY");
-                //vorerst mögliche diagonalen
-                possible.Add(drawing.TupleToString(Tuple.Create(position.Key.Item1, position.Key.Item2)) + drawing.TupleToString(Tuple.Create(position.Key.Item1 + 1, position.Key.Item2 + 1)));
-                possible.Add(drawing.TupleToString(Tuple.Create(position.Key.Item1, position.Key.Item2)) + drawing.TupleToString(Tuple.Create(position.Key.Item1 + 1, position.Key.Item2 - 1)));
-                possible.Add(drawing.TupleToString(Tuple.Create(position.Key.Item1, position.Key.Item2)) + drawing.TupleToString(Tuple.Create(position.Key.Item1 - 1, position.Key.Item2 - 1)));
-                possible.Add(drawing.TupleToString(Tuple.Create(position.Key.Item1, position.Key.Item2)) + drawing.TupleToString(Tuple.Create(position.Key.Item1 - 1, position.Key.Item2 + 1)));
+                //Move ist invalid wenn                         
+
+                //Spielzug ausßerhalb Spielfeld
+                if (option.Item1 > 7 || option.Item1 < 0) { continue; }
+                if (option.Item2 > 7 || option.Item2 < 0) { continue; }
+
+                // normale Steine nur vorwärts
+                if (Board[position] == 'b') { if (position.Item2 - 1 == option.Item2) { continue; } }
+                if (Board[position] == 'w') { if (position.Item2 + 1 == option.Item2) { continue; } }
+
+                //Feld bereits belegt
+                if (Board[option] != '.') { continue; }
+
+                validmove.Add(drawing.TupleToString(position) + drawing.TupleToString(option));
             }
 
-            //Invalide moves Löschen
-            deleteInvalid(possible);
-
-
-            return possible;
+            return validmove;
         }
 
-        private List<string> deleteInvalid(List<string> possible)
+        private List<string> deleteInvalid_jump(List<Piece> possiblejump, Piece position)
+        {
+            List<string> validjump = new List<string>();
+
+            foreach (Piece option in possiblejump)
+            {
+                //Jump ist invalid wenn                         
+
+                //Spielzug ausßerhalb Spielfeld
+                if (option.Item1 > 7 || option.Item1 < 0) { continue; }
+                if (option.Item2 > 7 || option.Item2 < 0) { continue; }
+
+                // normale Steine nur vorwärts
+                if (Board[position] == 'b') { if (position.Item2 - 2 == option.Item2) { continue; } }
+                if (Board[position] == 'w') { if (position.Item2 + 2 == option.Item2) { continue; } }
+
+                //Feld bereits belegt
+                if (Board[option] != '.') { continue; }
+
+
+                //Dazwischen kein Stein oder eigener Stein
+                //Berechne Feld das übersprungen wird
+
+                int x = (position.Item1 + option.Item1) / 2;
+                int y = (position.Item2 + option.Item2) / 2;
+
+                //leeres Feld zum Überspringen
+                if (Board[Tuple.Create(x,y)] == '.') { continue; }
+                
+                //übersprungener Stein ist eigene Farbe
+                if ((ComputerColor == 0)   &&   ((Board[Tuple.Create(x, y)] == 'b') || (Board[Tuple.Create(x, y)] == 'B'))) { continue; }
+                if ((ComputerColor == 1)   &&   ((Board[Tuple.Create(x, y)] == 'w') || (Board[Tuple.Create(x, y)] == 'W'))) { continue; }
+
+
+                validjump.Add(drawing.TupleToString(position) + drawing.TupleToString(option));
+            }
+
+            return validjump;
+        }
+
+        // Löscht alle Invaliden Sprünge
+
+        private List<string> jumps(Piece position)
         {
 
+            List<string> valid = new List<string>();
+            List<string> output = new List<string>();
+            List<Piece> possiblejumps = possible_jumps(position);
+            Piece target;
 
+            //Stop condition of recursion
+            //if no valid jumps are possible, return a string with only this position
+            if (deleteInvalid_jump(possiblejumps,position).Count == 0)
+            {
+                valid.Add(drawing.TupleToString(position));
+                return valid;
+            }
+            //else get the full jump of every possible option at this position
+            else
+            {
+                foreach (string jump in deleteInvalid_jump(possiblejumps, position))
+                {
+                    target = drawing.StringToTuple(jump[0].ToString() + jump[1].ToString());
+                    valid.Concat(jumps(target));
+                }
+            }
+            //add ur position 
+            foreach (string move in valid)
+            {
+                output.Add(drawing.TupleToString(position) + move);
+            }
 
+            return output;
 
-
-            return possible;
         }
     }
+
+
+
+
+
 }

@@ -22,7 +22,6 @@ namespace Dame
         private bool Clicked = false;
         private string move;
 
-
         public Form1()
         {
             InitializeComponent();
@@ -42,7 +41,6 @@ namespace Dame
         {
             Draw_Board(mcp.Get_Board());
         }
-
 
         //Wartet gewisse anzahl millisekunden
         public void wait(int milliseconds)
@@ -160,6 +158,7 @@ namespace Dame
                 Draw_Piece(kvp.Key.Item1, kvp.Key.Item2, kvp.Value);
 
             l.Dispose();
+
         }
         
         private void Zug_bestätigt_Click(object sender, EventArgs e)
@@ -169,7 +168,20 @@ namespace Dame
             Clicked = true;
         }
 
-        public string get_move(Board boardstate, int player)
+        //Bestätigen der ZU Eingabe per ENTER
+        void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+                Zug_bestätigt_Click(this, new EventArgs());
+            }
+
+        }
+
+        public string get_move()
         {
             bool valid = false;
             label34.Text = "Spieler " + player.ToString() + " am Zug";
@@ -187,7 +199,17 @@ namespace Dame
                 valid = check_Syntax(move); //True wenn Syntax korrekt
 
                 if (!valid)
-                    MessageBox.Show("Ungültige Syntax für einen Zug");
+                {
+                    MessageBox.Show("Ungültige Syntax für einen Zug."
+                                    + Environment.NewLine
+                                    + Environment.NewLine
+                                    + "Oder wie Google-Übersetzer sagen würde:" + "     Invalid syntax for a train."
+                                    + Environment.NewLine
+                                    + "Oder für unsere Ungarischen Freunde:" + "  Érvénytelen szintaxis a vonaton."
+                                    + Environment.NewLine
+                                    + "と 日本語: トレインの無効な構文");
+                }                          
+
             }
 
             return move;
@@ -265,8 +287,13 @@ namespace Dame
             return valid;
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void Zug_KeyPress(object sender, KeyPressEventArgs e)
         {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                e.Handled = true;
+                Zug_bestätigt_Click(this, new EventArgs());
+            }
             Console.WriteLine('b');
             Console.WriteLine('b' - 20);
             cpu.get_move(mcp.Get_Board(), 0);

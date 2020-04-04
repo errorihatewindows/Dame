@@ -87,7 +87,6 @@ namespace Dame
                         board.Add(Tuple.Create(x, (7 - y)), '.');
                     }
                 }
-
         }
 
         private List<Piece> Move(Piece piece)               //Liste of all valid Fields, no matter wich piece is on them
