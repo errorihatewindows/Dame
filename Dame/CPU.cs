@@ -203,6 +203,32 @@ namespace Dame
             return output;
 
         }
+
+        private void update_Board(string Move)
+        {
+            string Move1 = (Move[0] + Move[1]).ToString();
+            string Move2 = (Move[3] + Move[4]).ToString();
+
+            Piece positionold, positionnew;
+            
+            positionold = drawing.StringToTuple(Move2);
+            positionnew = drawing.StringToTuple(Move1);
+
+            //neuen Stein setzten
+            Board.Remove(positionnew);
+            Board.Add(positionnew, Board[positionnew]);
+
+            //Übersprungenen Stein entfernen
+            Piece positionCaptured = new Piece((positionold.Item1 + positionnew.Item1) / 2, (positionold.Item2 + positionnew.Item2) / 2);
+            Board[positionCaptured] = '.';
+
+            //Alte Position updaten
+            Board[positionold] = '.';
+            
+        }
+
+
+
     }
 
 
