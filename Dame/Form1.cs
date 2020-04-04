@@ -217,14 +217,25 @@ namespace Dame
 
         private void button1_Click(object sender, EventArgs e)
         {
-            mcp.set_user("Markus", "Thomas");       //player vs. player
+            //Spieleinstellungen während des SPieles blockieren
+            groupBox1.Enabled = false;
+            groupBox2.Enabled = false;
+
+            //Zugeingabefelder sichtbar machen
+            Zug.Visible = true;
+            Zug_bestätigt.Visible = true;
+            label17.Visible = true;
+            
+            //Spiel ausführen
+            mcp.set_user("Thomas", "CPU");       //player vs. player
             mcp.run();
         }
 
         public string TupleToString(Tuple<int, int> field)
         {
-            string a = (Convert.ToChar(field.Item1 + 'A')).ToString();
-            string b = (Convert.ToInt32(field.Item2) + 1).ToString();
+            string a = ((char)(field.Item1 + 'A')).ToString();
+            Console.WriteLine("Ähm");
+            string b = ((int)(field.Item2) + 1).ToString();
 
             string num = a + b;
 
@@ -301,5 +312,6 @@ namespace Dame
             Console.WriteLine("haha");
             System.Environment.Exit(0);
         }
+
     }
 }

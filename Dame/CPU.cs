@@ -48,30 +48,29 @@ namespace Dame
                 checkposition(position);
 
             }
-
+            
 
             if (tempjump.Count == 0)
             {
                 valid = tempmove;
-
-                //auf korrekte Syntax bringen
-                final_move = final_move.Insert(2, ",");
             }
-
             else
             {   //Überprüft Mehrfachsprung und gibt Liste aller validen Sprünge zurück (korrekte Syntax)
                 foreach (string jump in tempjump)
                     valid = jumps(drawing.StringToTuple(jump));
             }
 
-
-             /* (int i = 0; i < valid.Count; i++)
-                Console.WriteLine(valid[i]); */
+            
 
             //Zufälligen Valid Move auswählen
             Random Zufall = new Random();
             final_move = valid[Zufall.Next(0, valid.Count)];
 
+            //Auf korrekte Syntax bringen
+            if(tempjump.Count == 0)
+                final_move = final_move.Insert(2, ",");
+
+            Console.WriteLine(final_move);
 
             return final_move;
         }
