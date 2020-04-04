@@ -18,8 +18,6 @@ namespace Dame
         private List<string> tempmove = new List<string>();
         private List<string> tempjump = new List<string>();
 
-        private bool Complete = false;
-
         private Form1 drawing;
         
         //Konstruktor
@@ -53,22 +51,27 @@ namespace Dame
 
 
             if (tempjump.Count == 0)
+            {
                 valid = tempmove;
+
+                //auf korrekte Syntax bringen
+                final_move = final_move.Insert(2, ",");
+            }
+
             else
-            {   
-                valid = tempjump;
+            {   //Überprüft Mehrfachsprung und gibt Liste aller validen Sprünge zurück (korrekte Syntax)
+                foreach (string jump in tempjump)
+                    valid = jumps(drawing.StringToTuple(jump));
             }
 
 
-            for (int i = 0; i < valid.Count; i++)
-                Console.WriteLine(valid[i]);
+             /* (int i = 0; i < valid.Count; i++)
+                Console.WriteLine(valid[i]); */
 
             //Zufälligen Valid Move auswählen
             Random Zufall = new Random();
             final_move = valid[Zufall.Next(0, valid.Count)];
 
-            //auf korrekte Syntax bringen
-            final_move = final_move.Insert(2, ",");
 
             return final_move;
         }
@@ -161,12 +164,16 @@ namespace Dame
             }
 
             return validjump;
-        } // Löscht alle Invaliden Sprünge
+        }
 
-         //private List<string> jumps(Piece position)
-        
-           /* List<string> valid = new List<string>;
-            List<string> output = new List<string>;
+        // Löscht alle Invaliden Sprünge
+
+        private List<string> jumps(Piece position)
+        {
+
+            List<string> valid = new List<string>();
+            List<string> output = new List<string>();
+
             //if no valid jumps are possible, return a string with only this position
             if (valid_jumps.Count == 0)
             {
@@ -186,7 +193,10 @@ namespace Dame
             {
                 output.Add(drawing.TupleToString(position) + move);
             }
-            return output; */
+
+            return output;
+
+        }
     }
 
 
