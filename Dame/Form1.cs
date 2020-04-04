@@ -18,6 +18,7 @@ namespace Dame
     public partial class Form1 : Form
     {
         MCP mcp;
+        CPU cpu;
         private bool Clicked = false;
         private string move;
 
@@ -26,6 +27,10 @@ namespace Dame
         {
             InitializeComponent();
             mcp = new MCP(this);
+            cpu = new CPU(this);
+
+
+
         }
 
         private void Form1_Shown(object sender, EventArgs e) //Zeichnet Grundzustand
@@ -94,12 +99,13 @@ namespace Dame
 
                 }
 
-            } else  //Kleinbuchstabe
+            }
+            else  //Kleinbuchstabe
             {
                 //ist es ein b?
                 if (piece == 98)
-                {                    
-                    
+                {
+
                     //Man Schwarz
                     Pen pen = new Pen(Color.Black, 15);
                     Brush brush = Brushes.Black;
@@ -154,27 +160,23 @@ namespace Dame
                 Draw_Piece(kvp.Key.Item1, kvp.Key.Item2, kvp.Value);
 
             l.Dispose();
-
-        }       
+        }
         
         private void Zug_bestätigt_Click(object sender, EventArgs e)
-        {
+        {            
             move = Zug.Text;
+            Zug.Text = "";
             Clicked = true;
-            get_move();
         }
 
-        public string get_move()
+        public string get_move(Board boardstate, int player)
         {
             bool valid = false;
-            
-            //Anzahl der valid Chars
-            int count_valid = 0;
+            label34.Text = "Spieler " + player.ToString() + " am Zug";
 
             //inkorrekte Move Eingabe
             while (!valid)
             {
-
 
                 //Warten auf Button Eingabe
                 while (!Clicked)
@@ -182,53 +184,98 @@ namespace Dame
 
                 Clicked = false;
 
-                move.ToUpper();
+                valid = check_Syntax(move); //True wenn Syntax korrekt
 
-                //Überprüfe jeden Charackter
-                for (int i = 0; i < move.Length; i++)
-                {
-
-                    //Überprüfe Buchstaben
-                    if (i % 3 == 0)
-                    {
-                        if (move[i] > 64 && move[i] < 73)
-                            count_valid++;
-                    }
-                    //Überprüfe Zahl
-                    if (i % 3 == 1)
-                    {
-                        if (move[i] > 48 && move[i] < 57)
-                            count_valid++;
-                    }
-                    //Überprüfe Komma
-                    if (i % 3 == 2)
-                    {
-                        if (move[i] == 44)
-                            count_valid++;
-                    }
-                }
-
-                //Überprüfen auf korrekte Länge der Zug-Eingabe
-                if ((move.Length % 3) != 2)
-                    count_valid++;
-
-
-                //alles Korrekt
-                if (count_valid == move.Length)
-                    valid = true;
-                else
+                if (!valid)
                     MessageBox.Show("Ungültige Syntax für einen Zug");
-
-
             }
 
-            return move;           
+            return move;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            mcp.run();            
+            mcp.set_user("Markus", "Thomas");       //player vs. player
+            mcp.run();
         }
 
+        public string TupleToString(Tuple<int, int> field)
+        {
+            string a = (Convert.ToChar(field.Item1 + 'A')).ToString();
+            string b = (Convert.ToInt32(field.Item2) + 1).ToString();
+
+            string num = a + b;
+
+            return num;
+        }
+
+        public Tuple<int, int> StringToTuple(string place)
+        {
+            place = place.ToUpper();
+
+            int a = Convert.ToInt32(Convert.ToChar(place[0]) - 'A');
+            int b = Convert.ToInt32(place[1]) - '1';
+
+            Tuple<int, int> field = Tuple.Create(a, b);
+
+            return field;
+        }
+
+        public bool check_Syntax(string move)   //Returnt TRUE wenn Syntax korrekt
+        {
+            bool valid = false;
+            move = move.ToUpper();
+
+            //Anzahl der valid Chars
+            int count_valid = 0;
+
+            //Überprüfe jeden Charackter
+            for (int i = 0; i < move.Length; i++)
+            {
+
+                //Überprüfe Buchstaben
+                if (i % 3 == 0)
+                {
+                    if (move[i] > 64 && move[i] < 73)
+                        count_valid++;
+                }
+                //Überprüfe Zahl
+                if (i % 3 == 1)
+                {
+                    if (move[i] > 48 && move[i] < 57)
+                        count_valid++;
+                }
+                //Überprüfe Komma
+                if (i % 3 == 2)
+                {
+                    if (move[i] == 44)
+                        count_valid++;
+                }
+            }
+
+            //Überprüfen auf korrekte Länge der Zug-Eingabe
+            if ((move.Length % 3) != 2)
+                count_valid++;
+
+
+            //alles Korrekt
+            if (count_valid == move.Length)
+                valid = true;
+
+            return valid;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine('b');
+            Console.WriteLine('b' - 20);
+            cpu.get_move(mcp.Get_Board(), 0);
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Console.WriteLine("haha");
+            System.Environment.Exit(0);
+        }
     }
 }
