@@ -219,8 +219,7 @@ namespace Dame
             positionnew = drawing.StringToTuple(Move1);
 
             //neuen Stein setzten
-            Board.Remove(positionnew);
-            Board.Add(positionnew, Board[positionnew]);
+            Board[positionnew] = Board[positionold];
 
             //Übersprungenen Stein entfernen
             Piece positionCaptured = new Piece((positionold.Item1 + positionnew.Item1) / 2, (positionold.Item2 + positionnew.Item2) / 2);
