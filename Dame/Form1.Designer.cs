@@ -540,6 +540,15 @@
             this.groupBox2.TabIndex = 101;
             this.groupBox2.TabStop = false;
             // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Location = new System.Drawing.Point(580, 198);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(41, 13);
+            this.label34.TabIndex = 102;
+            this.label34.Text = "label34";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -586,6 +595,7 @@
             this.Location = new System.Drawing.Point(175, 50);
             this.Name = "Form1";
             this.Text = "Dame";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Shown += new System.EventHandler(this.Form1_Shown);
             this.SizeChanged += new System.EventHandler(this.Form1_SizeChanged);
             this.groupBox1.ResumeLayout(false);

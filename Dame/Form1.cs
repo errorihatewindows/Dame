@@ -29,7 +29,7 @@ namespace Dame
             cpu = new CPU(this);
 
 
-            
+
         }
 
         private void Form1_Shown(object sender, EventArgs e) //Zeichnet Grundzustand
@@ -97,12 +97,13 @@ namespace Dame
 
                 }
 
-            } else  //Kleinbuchstabe
+            }
+            else  //Kleinbuchstabe
             {
                 //ist es ein b?
                 if (piece == 98)
-                {                    
-                    
+                {
+
                     //Man Schwarz
                     Pen pen = new Pen(Color.Black, 15);
                     Brush brush = Brushes.Black;
@@ -158,14 +159,13 @@ namespace Dame
 
             l.Dispose();
 
-        }       
-
-        //TODO: in 2 Funktionen teilen, button click setzt eine boolean- Membervariable, 2. funktion gibt einen formatierten Zug aus            
-        private void Zug_bestätigt_Click(object sender, EventArgs e) 
-        {
+        }
+        
+        private void Zug_bestätigt_Click(object sender, EventArgs e)
+        {            
             move = Zug.Text;
+            Zug.Text = "";
             Clicked = true;
-            get_move();
         }
 
         //Bestätigen der ZU Eingabe per ENTER
@@ -184,6 +184,7 @@ namespace Dame
         public string get_move()
         {
             bool valid = false;
+            label34.Text = "Spieler " + player.ToString() + " am Zug";
 
             //inkorrekte Move Eingabe
             while (!valid)
@@ -194,7 +195,7 @@ namespace Dame
                     wait(100);
 
                 Clicked = false;
-             
+
                 valid = check_Syntax(move); //True wenn Syntax korrekt
 
                 if (!valid)
@@ -211,12 +212,13 @@ namespace Dame
 
             }
 
-            return move;           
+            return move;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            mcp.run();            
+            mcp.set_user("Markus", "Thomas");       //player vs. player
+            mcp.run();
         }
 
         public string TupleToString(Tuple<int, int> field)
@@ -232,10 +234,10 @@ namespace Dame
         public Tuple<int, int> StringToTuple(string place)
         {
             place = place.ToUpper();
-            
+
             int a = Convert.ToInt32(Convert.ToChar(place[0]) - 'A');
             int b = Convert.ToInt32(place[1]) - '1';
-            
+
             Tuple<int, int> field = Tuple.Create(a, b);
 
             return field;
@@ -285,11 +287,6 @@ namespace Dame
             return valid;
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            cpu.get_move(mcp.Get_Board(), 0);
-        }
-
         private void Zug_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Enter)
@@ -297,6 +294,15 @@ namespace Dame
                 e.Handled = true;
                 Zug_bestätigt_Click(this, new EventArgs());
             }
+            Console.WriteLine('b');
+            Console.WriteLine('b' - 20);
+            cpu.get_move(mcp.Get_Board(), 0);
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Console.WriteLine("haha");
+            System.Environment.Exit(0);
         }
     }
 }
