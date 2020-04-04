@@ -325,9 +325,5 @@ namespace Dame
             System.Environment.Exit(0);
         }
 
-        private void label35_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }
