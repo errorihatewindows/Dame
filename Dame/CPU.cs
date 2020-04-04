@@ -215,10 +215,13 @@ namespace Dame
 
             Piece positionold, positionnew;
             
-            positionold = drawing.StringToTuple(Move2);
-            positionnew = drawing.StringToTuple(Move1);
+            positionold = drawing.StringToTuple(Move1);
+            positionnew = drawing.StringToTuple(Move2);
 
             //neuen Stein setzten
+            Console.WriteLine(positionold);
+            Console.WriteLine(positionnew);
+            
             Board[positionnew] = Board[positionold];
 
             //Übersprungenen Stein entfernen
