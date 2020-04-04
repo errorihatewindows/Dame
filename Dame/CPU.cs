@@ -179,9 +179,12 @@ namespace Dame
 
             List<string> valid = new List<string>();
             List<string> output = new List<string>();
+            List<Piece> possiblejumps = possible_jumps(position);
+            Piece target;
 
+            //Stop condition of recursion
             //if no valid jumps are possible, return a string with only this position
-            if (valid_jumps.Count == 0)
+            if (deleteInvalid_jump(possiblejumps,position).Count == 0)
             {
                 valid.Add(drawing.TupleToString(position));
                 return valid;
@@ -189,8 +192,9 @@ namespace Dame
             //else get the full jump of every possible option at this position
             else
             {
-                foreach (Piece target in valid_jumps)
+                foreach (string jump in deleteInvalid_jump(possiblejumps, position))
                 {
+                    target = drawing.StringToTuple(jump[0].ToString() + jump[1].ToString());
                     valid.Concat(jumps(target));
                 }
             }
