@@ -179,7 +179,6 @@ namespace Dame
         public string get_move(Board boarstate, int player)
         {
             bool valid = false;
-            label34.Text = "Spieler " + player.ToString() + " am Zug";
 
             //inkorrekte Move Eingabe
             while (!valid)
