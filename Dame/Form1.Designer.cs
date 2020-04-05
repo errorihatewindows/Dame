@@ -75,6 +75,7 @@
             this.label35 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label37 = new System.Windows.Forms.Label();
+            this.setFocus = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -567,11 +568,23 @@
             this.label37.Text = "label37";
             this.label37.Visible = false;
             // 
+            // setFocus
+            // 
+            this.setFocus.Location = new System.Drawing.Point(13, 605);
+            this.setFocus.Name = "setFocus";
+            this.setFocus.Size = new System.Drawing.Size(75, 23);
+            this.setFocus.TabIndex = 103;
+            this.setFocus.UseMnemonic = false;
+            this.setFocus.UseVisualStyleBackColor = true;
+            this.setFocus.Visible = false;
+            this.setFocus.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.setFocus_KeyPress);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(982, 672);
+            this.Controls.Add(this.setFocus);
             this.Controls.Add(this.label37);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -611,12 +624,13 @@
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Location = new System.Drawing.Point(175, 50);
+            this.Location = new System.Drawing.Point(50, 50);
             this.Name = "Form1";
             this.Text = "Dame";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Shown += new System.EventHandler(this.Form1_Shown);
             this.SizeChanged += new System.EventHandler(this.Form1_SizeChanged);
+            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseClick_1);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -674,6 +688,7 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label36;
         private System.Windows.Forms.Label label37;
+        private System.Windows.Forms.Button setFocus;
     }
 }
 
