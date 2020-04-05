@@ -297,12 +297,12 @@ namespace Dame
             }
 
             //Überprüfen auf korrekte Länge der Zug-Eingabe
-            if (((move.Length % 3) != 2) && move.Length > 4)
+            if (((move.Length % 3) == 2) && move.Length > 4)
                 count_valid++;
 
 
             //alles Korrekt
-            if (count_valid == move.Length)
+            if (count_valid == move.Length + 1)
                 valid = true;
 
             return valid;
