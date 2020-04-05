@@ -18,8 +18,8 @@ namespace Dame
     public partial class Form1 : Form
     {
         MCP mcp;
-        private bool Clicked = false;
-        private string move;
+        private bool Clicked = false, ENTER = false;
+        private string move = "";
 
         public Form1()
         {
@@ -157,8 +157,8 @@ namespace Dame
         }
         
         private void Zug_bestätigt_Click(object sender, EventArgs e)
-        {            
-            move = Zug.Text;
+        {
+            ENTER = true;
             Zug.Text = "";
             Clicked = true;
         }
@@ -179,7 +179,6 @@ namespace Dame
         public string get_move(Board boarstate, int player)
         {
             bool valid = false;
-            label34.Text = "Spieler " + player.ToString() + " am Zug";
 
             //inkorrekte Move Eingabe
             while (!valid)
@@ -203,15 +202,18 @@ namespace Dame
                                     + "Oder für unsere Ungarischen Freunde:" + "  Érvénytelen szintaxis a vonaton."
                                     + Environment.NewLine
                                     + "と 日本語: トレインの無効な構文");
-                }                          
-
+                }
             }
-
-            return move;
+            return move;           
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            //legt Fokus auf Form1 um MausEingabe zu ermöglichen
+            this.Activate();
+            this.button1.Enabled = false;
+            this.button1.Enabled = true;
+
             //Ausgewähltes Setup abfragen und laden
             if (radioButtonSpieler.Checked)
                 mcp.set_user("Spieler 1", "Spieler 2"); //player vs player
@@ -344,6 +346,7 @@ namespace Dame
         {
             if (e.KeyChar == (char)Keys.Enter)
             {
+                ENTER = true;
                 e.Handled = true;
                 Zug_bestätigt_Click(this, new EventArgs());
             }
@@ -361,12 +364,39 @@ namespace Dame
             label37.Text = Text;
         }
 
-        private void Form1_MouseDown(object sender, MouseEventArgs e)
+        private void Form1_MouseClick(object sender, MouseEventArgs e)
         {
-            while (e.KeyCode != (char)Keys.Enter)
+            if (!ENTER)
             {
+                Rectangle screenRectangle = this.RectangleToScreen(this.ClientRectangle);
 
+                //Relative Koordinaten zur oberen, linken Schachbrettkante
+                int x = MousePosition.X - screenRectangle.X - 75;
+                int y = MousePosition.Y - screenRectangle.Y - 75;
+
+                if (x > 400 || x < 75 || y < 75 || y > 400)
+                {
+                    Console.WriteLine("out of border");
+                }
+                else
+                    move = move + get_and_Highlight_Tile(x, y);
+
+                
             }
         }
+
+        private string get_and_Highlight_Tile(int x, int y)
+        {
+            string position;
+
+            int Tile_x = Convert.ToInt32(Math.Ceiling((double)(x / 50)));
+            int Tile_y = Convert.ToInt32(Math.Abs(Math.Ceiling((double)(y / 50)) - 7));
+
+            position = TupleToString(Tuple.Create(Tile_x, Tile_y));
+
+            return position;
+        }
+
+
     }
 }

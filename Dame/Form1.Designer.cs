@@ -611,13 +611,12 @@
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Location = new System.Drawing.Point(175, 50);
+            this.Location = new System.Drawing.Point(50, 50);
             this.Name = "Form1";
             this.Text = "Dame";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Shown += new System.EventHandler(this.Form1_Shown);
             this.SizeChanged += new System.EventHandler(this.Form1_SizeChanged);
-            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
