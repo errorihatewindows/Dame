@@ -209,7 +209,7 @@ namespace Dame
             {
                 foreach (KeyValuePair<Piece, char> kvp in board)
                 {
-                    if (!(kvp.Value == color(player) || kvp.Value == (color(player) - 20))) { continue; }
+                    if (!(kvp.Value == color(player) || kvp.Value == (color(player) - 32))) { continue; }
                     //if a jump is possible, the move should have been a jump
                     if (possible_jumps(kvp.Key, player).Count != 0) { return false; }
                 }

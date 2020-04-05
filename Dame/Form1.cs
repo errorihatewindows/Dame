@@ -251,13 +251,13 @@ namespace Dame
             if (Winner == -1)
                 MessageBox.Show("Ein Unentschieden!");
             if (Winner == 0 && radioButtonSchwarz.Checked && radioButtonZufall.Checked)
-                MessageBox.Show("Schwarz, also Du hast Gewonnen. Gratulation! Du hast besser gespielt als der Zufall :)");
+                MessageBox.Show("Schwarz, also Du, hast Gewonnen. Gratulation! Du hast besser gespielt als der Zufall :)");
             if (Winner == 0 && radioButtonSchwarz.Checked && radioButtonKI.Checked)
-                MessageBox.Show("Schwarz, also Du hast Gewonnen. Gratulation! Du hast besser gespielt als die KI :)");
+                MessageBox.Show("Schwarz, also Du, hast Gewonnen. Gratulation! Du hast besser gespielt als die KI :)");
             if (Winner == 1 && radioButtonWeiß.Checked && radioButtonZufall.Checked)
-                MessageBox.Show("Weiß, also Du hast Gewonnen. Gratulation! Du hast besser gespielt als der Zufall :)");
+                MessageBox.Show("Weiß, also Du hast, Gewonnen. Gratulation! Du hast besser gespielt als der Zufall :)");
             if (Winner == 1 && radioButtonWeiß.Checked && radioButtonKI.Checked)
-                MessageBox.Show("Weiß, also Du hast Gewonnen. Gratulation! Du hast besser gespielt als die KI :)");
+                MessageBox.Show("Weiß, also Du hast, Gewonnen. Gratulation! Du hast besser gespielt als die KI :)");
             if (Winner == 0 && radioButtonWeiß.Checked && radioButtonZufall.Checked)
                 MessageBox.Show("Schwarz, hat Gewonnen. Pech für dich! Du bist schlechter als der Zufall :)");
             if (Winner == 0 && radioButtonWeiß.Checked && radioButtonKI.Checked)
@@ -360,6 +360,8 @@ namespace Dame
             label37.Visible = true;
             label37.Text = Text;
         }
+
+
 
     }
 }
