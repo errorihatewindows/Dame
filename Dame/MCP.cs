@@ -300,6 +300,7 @@ namespace Dame
                     valid = Check_Move(move, player);
                     if ((Player[player].is_cpu) && (!valid)) { Console.WriteLine("CPU invalid move");  System.Environment.Exit(0); }
                 }
+                if (Player[player].is_cpu) { drawing.wait(300); }
                 Perform_Move(move, player);
                 drawing.Draw_Board(board);
                 //next player

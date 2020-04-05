@@ -30,7 +30,7 @@ namespace Dame
         public string get_move(Board current_Board, int player)               // gibt validen move und einfachen SPrung zurück
         {
             ComputerColor = player;
-            Board = current_Board;
+            Board = new Board(current_Board);
 
             //Liste aller validen Züge
             List<string> valid = new List<string>();
