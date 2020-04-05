@@ -20,6 +20,7 @@ namespace Dame
         MCP mcp;
         private bool Clicked = false, ENTER = false;
         private string move = "", tempmove = "";
+        private Board lastBoard;
 
         public Form1()
         {
@@ -287,6 +288,7 @@ namespace Dame
             label37.Visible = false;
 
             //Spiel ausführen      
+            lastBoard = mcp.Get_Board();           
             int Winner = mcp.run(true);
 
 
@@ -438,6 +440,25 @@ namespace Dame
             return position;
         }
 
+        public void update_Board()
+        {
+            Board newBoard = mcp.Get_Board();
 
+            foreach (KeyValuePair <Piece,char> kvp in newBoard)
+            {
+                if (kvp.Value == lastBoard[kvp.Key])
+                    continue;
+
+                Graphics ground = this.CreateGraphics();
+                Pen pen = new Pen(Color.Sienna);
+
+                int choor_x = 75 + (kvp.Key.Item1 * 50);
+                int choor_y = 75 + ((7 - kvp.Key.Item2) * 50);
+
+                ground.DrawRectangle(pen, choor_x, choor_y, 50, 50);
+                Draw_Piece(kvp.Key.Item1, kvp.Key.Item2, kvp.Value);
+            }
+
+        }
     }
 }

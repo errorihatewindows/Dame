@@ -59,6 +59,9 @@ namespace Dame
                     Player[i].is_cpu = false;
                 }
             }
+
+            Generate_Board();
+
         }   
 
         public Board Get_Board()                //getter for internal board state
