@@ -244,7 +244,7 @@ namespace Dame
             label37.Visible = false;
 
             //Spiel ausführen      
-            int Winner = mcp.run();
+            int Winner = mcp.run(true);
 
 
             if (Winner == -1)

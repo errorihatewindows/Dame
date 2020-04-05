@@ -280,20 +280,22 @@ namespace Dame
             return true;
         }
 
-        public int run()
+        public int run(bool output)
         {
+            //only wait or draw boards if output is set to true
             string move = "";
             bool valid;
             Generate_Board();
-            drawing.Draw_Board(board);
-            //make sure there are players set that are able to play
-            if (Player == null) { return -2; }
+            if (output) { drawing.Draw_Board(board); }
             //main gameloop
             int player = 0;
             while (!is_lost(player) && reversible_moves < 30)
             {
-                Console.WriteLine(Player[player].name + " am Zug");
-                drawing.labelText(Player[player].name + " am Zug");
+                if (output)
+                {
+                    Console.WriteLine(Player[player].name + " am Zug");
+                    drawing.labelText(Player[player].name + " am Zug");
+                }
                 valid = false;
                 while (!valid)
                 {
@@ -302,27 +304,52 @@ namespace Dame
                     if ((Player[player].is_cpu) && (!valid)) 
                     { 
                         Console.WriteLine("CPU invalid move");
-                        System.Environment.Exit(0); 
+                        return -2; 
                     }
                 }
-                if (Player[player].is_cpu) { drawing.wait(500); }
+                if (Player[player].is_cpu && output) { drawing.wait(500); }
                 Perform_Move(move, player);
-                drawing.Draw_Board(board);
+                if (output) { drawing.Draw_Board(board); }
                 //next player
                 player = 1 - player;
             }
             if (reversible_moves < 30)  //game ended in a win/loss
             {
-                Console.WriteLine(Player[1 - player].name + " hat gewonnen");
-                drawing.labelText(Player[1 - player].name + " hat gewonnen");
+                if (output)
+                {
+                    Console.WriteLine(Player[1 - player].name + " hat gewonnen");
+                    drawing.labelText(Player[1 - player].name + " hat gewonnen");
+                }
                 return (1 - player);
             }
             else    
             {
-                Console.WriteLine("Unentschieden!");
-                drawing.labelText("Unentschieden");
+                if (output)
+                {
+                    Console.WriteLine("Unentschieden!");
+                    drawing.labelText("Unentschieden");
+                }
                 return -1;
             }
+        }
+
+        public void simulate(int repeats)
+        {
+            Dictionary<int, int> results = new Dictionary<int, int>();
+            results[1] = 0;     //weiß    gewinnt
+            results[0] = 0;     //schwarz gewinnt
+            results[-1] = 0;    //unentschieden
+            results[-2] = 0;    //ungültiger Zug
+            string output;
+            for (int i = 0; i < repeats; i++)
+            {
+                results[run(false)]++;
+            }
+            output = "schwarz: " + results[0].ToString() +
+                     "\nweiß: " + results[1].ToString() +
+                     "\nunentschieden: " + results[-1].ToString();
+            if (results[-2] != 0) { output += "\n invalide: " + results[-2].ToString(); }
+            drawing.labelText(output);
         }
     }
 }
