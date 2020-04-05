@@ -18,7 +18,7 @@ namespace Dame
     public partial class Form1 : Form
     {
         MCP mcp;
-        private bool Clicked = false, ENTER = false;
+        private bool ENTER = false, gamestarted = false;
         private string move = "", tempmove = "";
         private Board lastBoard;
 
@@ -144,7 +144,6 @@ namespace Dame
             move = Zug.Text;
             ENTER = true;
             Zug.Text = "";
-            Clicked = true;
         }
 
         //Bestätigen der ZU Eingabe per ENTER
@@ -189,11 +188,9 @@ namespace Dame
                 tempmove = "";
 
                 //Warten auf Button Eingabe
-                while (!Clicked && !ENTER)
+                while (!ENTER)
                     wait(100);
 
-
-                Clicked = false;
                 ENTER = false;
 
                 valid = check_Syntax(move); //True wenn Syntax korrekt
@@ -222,70 +219,8 @@ namespace Dame
         //Spiel Starten
         private void button1_Click(object sender, EventArgs e)
         {
-            string Schwarz = "", Weiß = "";
-
-
-
-            //Ausgewähltes Setup abfragen und laden
-            if (radioButtonSpielerSchwarz.Checked)
-                Schwarz = "Spieler1"; //player vs player
-            if (radioButtonZufallSchwarz.Checked)
-                Schwarz = "RAND 1";
-            if (radioButtonKISchwarz.Checked)
-                Schwarz = "CPU 1";
-
-            if (radioButtonSpielerWeiß.Checked)
-                Weiß = "Spieler2"; //player vs player
-            if (radioButtonZufallWeiß.Checked)
-                Weiß = "RAND 2";
-            if (radioButtonKIWeiß.Checked)
-                Weiß = "CPU 2";
-
-            mcp.set_user(Schwarz, Weiß);
-
-           
-            //Spieleinstellungen während des SPieles blockieren
-            groupBox1.Enabled = false;
-            groupBox2.Enabled = false;
-
-            //Zugeingabefelder sichtbar machen
-
-            Zug.Visible = true;
-            Zug_bestätigt.Visible = true;
-            label17.Visible = true;
-            
-            //Status Label verbergen
-            label37.Visible = false;
-
-            //Spiel ausführen      
-            lastBoard = mcp.Get_Board();           
-            int Winner = mcp.run(true);
-
-
-            if (Winner == -1)
-                MessageBox.Show("Ein Unentschieden!");
-            if (Winner == 0 && radioButtonSpielerWeiß.Checked && radioButtonZufallSchwarz.Checked)
-                MessageBox.Show("Schwarz, also Du, hast Gewonnen. Gratulation! Du hast besser gespielt als der Zufall :)");
-            if (Winner == 0 && radioButtonSpielerWeiß.Checked && radioButtonKISchwarz.Checked)
-                MessageBox.Show("Schwarz, also Du, hast Gewonnen. Gratulation! Du hast besser gespielt als die KI :)");
-            if (Winner == 1 && radioButtonZufallWeiß.Checked && radioButtonZufallSchwarz.Checked)
-                MessageBox.Show("Weiß, also Du hast, Gewonnen. Gratulation! Du hast besser gespielt als der Zufall :)");
-            if (Winner == 1 && radioButtonZufallWeiß.Checked && radioButtonKISchwarz.Checked)
-                MessageBox.Show("Weiß, also Du hast, Gewonnen. Gratulation! Du hast besser gespielt als die KI :)");
-            if (Winner == 0 && radioButtonZufallWeiß.Checked && radioButtonZufallSchwarz.Checked)
-                MessageBox.Show("Schwarz, hat Gewonnen. Pech für dich! Du bist schlechter als der Zufall :)");
-            if (Winner == 0 && radioButtonZufallWeiß.Checked && radioButtonKISchwarz.Checked)
-                MessageBox.Show("Schwarz,  hat Gewonnen. Pech für dich! Du bist schlechter als die KI :)");
-            if (Winner == 1 && radioButtonSpielerWeiß.Checked && radioButtonZufallSchwarz.Checked)
-                MessageBox.Show("Weiß, hat Gewonnen. Pech für dich! Du bist schlechter als der Zufall :)");
-            if (Winner == 1 && radioButtonSpielerWeiß.Checked && radioButtonKISchwarz.Checked)
-                MessageBox.Show("Weiß, hat Gewonnen. Pech für dich! Du bist schlechter als die KI :)");
-
-            //Spieleinstellungen nach des SPieles wieder freigeben
-            groupBox1.Enabled = true;
-            groupBox2.Enabled = true;
-
-
+            gamestarted = true;
+            startgame();
         }
 
 
@@ -365,8 +300,8 @@ namespace Dame
 
         private void Form1_MouseClick_1(object sender, MouseEventArgs e)
         {
-
-            if (!ENTER)
+            //Wenn noch nicht mit ENTER bestätigt oder Spiel gestartet
+            if (!ENTER && gamestarted)
             {
                 Rectangle screenRectangle = this.RectangleToScreen(this.ClientRectangle);
 
@@ -374,6 +309,7 @@ namespace Dame
                 int x = MousePosition.X - screenRectangle.X - 75;
                 int y = MousePosition.Y - screenRectangle.Y - 75;
 
+                //Mouse Click außerhalb des Spielfeldes
                 if (x > 400 || x < 0 || y < 0 || y > 400)
                 {
                     Console.WriteLine("out of border");
@@ -388,6 +324,11 @@ namespace Dame
                     Zug.Text = tempmove;
                 }
             }
+        }
+
+        private void button1_MouseUp(object sender, MouseEventArgs e)
+        {
+            Zug_bestätigt.Focus();
         }
 
         private string get_and_Highlight_Tile(int x, int y)
@@ -429,6 +370,70 @@ namespace Dame
                 Draw_Piece(kvp.Key.Item1, kvp.Key.Item2, kvp.Value);
             }
 
+        }
+
+        private void startgame()
+        {
+            string Schwarz = "", Weiß = "";
+
+            //Ausgewähltes Setup abfragen und laden
+            if (radioButtonSpielerSchwarz.Checked)
+                Schwarz = "Spieler1"; //player vs player
+            if (radioButtonZufallSchwarz.Checked)
+                Schwarz = "RAND 1";
+            if (radioButtonKISchwarz.Checked)
+                Schwarz = "CPU 1";
+
+            if (radioButtonSpielerWeiß.Checked)
+                Weiß = "Spieler2"; //player vs player
+            if (radioButtonZufallWeiß.Checked)
+                Weiß = "RAND 2";
+            if (radioButtonKIWeiß.Checked)
+                Weiß = "CPU 2";
+
+            mcp.set_user(Schwarz, Weiß);
+
+
+            //Spieleinstellungen während des SPieles blockieren
+            groupBox1.Enabled = false;
+            groupBox2.Enabled = false;
+
+            //Zugeingabefelder sichtbar machen
+
+            Zug.Visible = true;
+            Zug_bestätigt.Visible = true;
+            label17.Visible = true;
+
+            //Status Label verbergen
+            label37.Visible = false;
+
+            //Spiel ausführen      
+            lastBoard = mcp.Get_Board();
+            int Winner = mcp.run(true);
+
+
+            if (Winner == -1)
+                MessageBox.Show("Ein Unentschieden!");
+            if (Winner == 0 && radioButtonSpielerWeiß.Checked && radioButtonZufallSchwarz.Checked)
+                MessageBox.Show("Schwarz, also Du, hast Gewonnen. Gratulation! Du hast besser gespielt als der Zufall :)");
+            if (Winner == 0 && radioButtonSpielerWeiß.Checked && radioButtonKISchwarz.Checked)
+                MessageBox.Show("Schwarz, also Du, hast Gewonnen. Gratulation! Du hast besser gespielt als die KI :)");
+            if (Winner == 1 && radioButtonZufallWeiß.Checked && radioButtonZufallSchwarz.Checked)
+                MessageBox.Show("Weiß, also Du hast, Gewonnen. Gratulation! Du hast besser gespielt als der Zufall :)");
+            if (Winner == 1 && radioButtonZufallWeiß.Checked && radioButtonKISchwarz.Checked)
+                MessageBox.Show("Weiß, also Du hast, Gewonnen. Gratulation! Du hast besser gespielt als die KI :)");
+            if (Winner == 0 && radioButtonZufallWeiß.Checked && radioButtonZufallSchwarz.Checked)
+                MessageBox.Show("Schwarz, hat Gewonnen. Pech für dich! Du bist schlechter als der Zufall :)");
+            if (Winner == 0 && radioButtonZufallWeiß.Checked && radioButtonKISchwarz.Checked)
+                MessageBox.Show("Schwarz,  hat Gewonnen. Pech für dich! Du bist schlechter als die KI :)");
+            if (Winner == 1 && radioButtonSpielerWeiß.Checked && radioButtonZufallSchwarz.Checked)
+                MessageBox.Show("Weiß, hat Gewonnen. Pech für dich! Du bist schlechter als der Zufall :)");
+            if (Winner == 1 && radioButtonSpielerWeiß.Checked && radioButtonKISchwarz.Checked)
+                MessageBox.Show("Weiß, hat Gewonnen. Pech für dich! Du bist schlechter als die KI :)");
+
+            //Spieleinstellungen nach des SPieles wieder freigeben
+            groupBox1.Enabled = true;
+            groupBox2.Enabled = true;
         }
     }
 }

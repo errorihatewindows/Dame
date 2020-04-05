@@ -74,9 +74,9 @@
             this.radioButtonZufallWeiß = new System.Windows.Forms.RadioButton();
             this.label35 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.radioButtonKIWeiß = new System.Windows.Forms.RadioButton();
             this.label37 = new System.Windows.Forms.Label();
             this.setFocus = new System.Windows.Forms.Button();
-            this.radioButtonKIWeiß = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -280,6 +280,7 @@
             this.button1.Text = "Spiel Starten";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.button1_MouseUp);
             // 
             // label18
             // 
@@ -556,6 +557,18 @@
             this.groupBox2.TabIndex = 101;
             this.groupBox2.TabStop = false;
             // 
+            // radioButtonKIWeiß
+            // 
+            this.radioButtonKIWeiß.AutoSize = true;
+            this.radioButtonKIWeiß.Checked = true;
+            this.radioButtonKIWeiß.Location = new System.Drawing.Point(17, 98);
+            this.radioButtonKIWeiß.Name = "radioButtonKIWeiß";
+            this.radioButtonKIWeiß.Size = new System.Drawing.Size(35, 17);
+            this.radioButtonKIWeiß.TabIndex = 7;
+            this.radioButtonKIWeiß.TabStop = true;
+            this.radioButtonKIWeiß.Text = "KI";
+            this.radioButtonKIWeiß.UseVisualStyleBackColor = true;
+            // 
             // label37
             // 
             this.label37.AutoSize = true;
@@ -577,18 +590,6 @@
             this.setFocus.UseVisualStyleBackColor = true;
             this.setFocus.Visible = false;
             this.setFocus.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.setFocus_KeyPress);
-            // 
-            // radioButtonKIWeiß
-            // 
-            this.radioButtonKIWeiß.AutoSize = true;
-            this.radioButtonKIWeiß.Checked = true;
-            this.radioButtonKIWeiß.Location = new System.Drawing.Point(17, 98);
-            this.radioButtonKIWeiß.Name = "radioButtonKIWeiß";
-            this.radioButtonKIWeiß.Size = new System.Drawing.Size(35, 17);
-            this.radioButtonKIWeiß.TabIndex = 7;
-            this.radioButtonKIWeiß.TabStop = true;
-            this.radioButtonKIWeiß.Text = "KI";
-            this.radioButtonKIWeiß.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
