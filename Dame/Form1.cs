@@ -302,7 +302,7 @@ namespace Dame
 
 
             //alles Korrekt
-            if (count_valid == move.Length)
+            if (count_valid == move.Length + 1)
                 valid = true;
 
             return valid;
