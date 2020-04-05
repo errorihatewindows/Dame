@@ -22,6 +22,11 @@ namespace Dame
         private string move = "", tempmove = "";
         private Board lastBoard;
 
+        Bitmap b = new Bitmap(@"..\..\b.png");
+        Bitmap s = new Bitmap(@"..\..\s.png");
+        Bitmap BD = new Bitmap(@"..\..\BD.png");
+        Bitmap WD = new Bitmap(@"..\..\WD.png");
+
         public Form1()
         {
             InitializeComponent();
@@ -75,57 +80,29 @@ namespace Dame
             int choor_x = 90 + (x * 50);
             int choor_y = 90 + ((7 - y) * 50);
 
-            Bitmap b = new Bitmap(@"..\..\b.png");
-            Bitmap s = new Bitmap(@"..\..\s.png");
-            Bitmap BD = new Bitmap(@"..\..\BD.png");
-            Bitmap WD = new Bitmap(@"..\..\WD.png");
-
             //Großbuchstabe
             if (piece < 97)
             {
                 // ist es ein B?
-                if (piece == 66)
-                {
-
-                    //Dame Schwarz
-                    Pen pen = new Pen(Color.Black, 20);
-                    Brush brush = Brushes.IndianRed;
-                    man.DrawImage(BD, choor_x - 9, choor_y - 10);
-
-                }
-                else if (piece == 87)
-                {
-
-                    //Dame weiß
-                    Pen pen = new Pen(Color.FloralWhite, 20);
-                    Brush brush = Brushes.IndianRed;
-                    man.DrawImage(WD, choor_x - 10, choor_y - 10);
-
-                }
-
+                if (piece == 66)                
+                    man.DrawImage(BD, choor_x - 9, choor_y - 10);   //Dame Schwarz
+                //ist es ein W?
+                else if (piece == 87)                    
+                    man.DrawImage(WD, choor_x - 10, choor_y - 10);  //Dame weiß
             }
-            else  //Kleinbuchstabe
+            //Kleinbuchstabe
+            else
             {
                 //ist es ein b?
-                if (piece == 98)
-                {
-
-                    //Man Schwarz
-                    Pen pen = new Pen(Color.Black, 15);
-                    Brush brush = Brushes.Black;
-                    man.DrawImage(b, choor_x - 9, choor_y - 10);
-
-                }
+                if (piece == 98)                   
+                    man.DrawImage(b, choor_x - 9, choor_y - 10);    //Man Schwarz
+                //ist es ein w?
                 else if (piece == 119)
-                {
-
-                    //Man weiß
-                    Pen pen = new Pen(Color.FloralWhite, 15);
-                    Brush brush = Brushes.FloralWhite;
-                    man.DrawImage(s, choor_x - 10, choor_y - 10);
-
-                }
+                    man.DrawImage(s, choor_x - 10, choor_y - 10);   //Man weiß           
             }
+
+            man.Dispose();
+
         }
 
         public void Draw_Board(Dictionary<Tuple<int, int>, char> Board) // Zeichnet einen kompletten Schachbrett-Zustand
@@ -137,27 +114,18 @@ namespace Dame
             Pen pen = new Pen(Color.Sienna, 1);
             Brush brush = Brushes.Sienna;
 
-            l.DrawRectangle(pen, 75, 75, 400, 400);
+            //l.DrawRectangle(pen, 75, 75, 400, 400);
             l.FillRectangle(brush, 75, 75, 400, 400);
 
-
-            pen = new Pen(Color.PeachPuff, 1);
             brush = Brushes.PeachPuff;
 
-
-            for (int i = 75; i < 400; i = i + 100)
-                for (int j = 75; j < 400; j = j + 100)
-                {
-                    l.DrawRectangle(pen, i, j, 50, 50);
+            for (int i = 75; i < 400; i += 100)
+                for (int j = 75; j < 400; j += 100)
                     l.FillRectangle(brush, i, j, 50, 50);
-                }
 
-            for (int i = 125; i <= 450; i = i + 100)
-                for (int j = 125; j <= 450; j = j + 100)
-                {
-                    l.DrawRectangle(pen, i, j, 50, 50);
+            for (int i = 125; i <= 450; i += 100)
+                for (int j = 125; j <= 450; j += 100)
                     l.FillRectangle(brush, i, j, 50, 50);
-                }
 
             //Steine aufs Brett zeichnen
             foreach (KeyValuePair<Tuple<int, int>, char> kvp in Board)
