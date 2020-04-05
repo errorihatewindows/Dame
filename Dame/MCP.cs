@@ -305,7 +305,7 @@ namespace Dame
                         System.Environment.Exit(0); 
                     }
                 }
-                if (Player[player].is_cpu) { drawing.wait(300); }
+                if (Player[player].is_cpu) { drawing.wait(500); }
                 Perform_Move(move, player);
                 drawing.Draw_Board(board);
                 //next player
