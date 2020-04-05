@@ -126,7 +126,7 @@ namespace Dame
         {
 
             //Schachbrettmuster zeichnen
-            Graphics l = this.CreateGraphics(); ;
+            Graphics l = this.CreateGraphics(); 
 
             Pen pen = new Pen(Color.Sienna, 1);
             Brush brush = Brushes.Sienna;
@@ -181,10 +181,9 @@ namespace Dame
 
         }
 
-        public string get_move()
+        public string get_move(Board Board, int player)
         {
             bool valid = false;
-            label34.Text = "Spieler " + player.ToString() + " am Zug";
 
             //inkorrekte Move Eingabe
             while (!valid)
@@ -303,6 +302,20 @@ namespace Dame
         {
             Console.WriteLine("haha");
             System.Environment.Exit(0);
+        }
+
+
+
+
+
+
+
+        private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
+        {
+            Graphics l = this.CreateGraphics();
+            ControlPaint.DrawBorder(l, pictureBox1.ClientRectangle, Color.Red, ButtonBorderStyle.Solid);
+
+
         }
     }
 }
