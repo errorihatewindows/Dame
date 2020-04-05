@@ -286,6 +286,7 @@ namespace Dame
             string move = "";
             bool valid;
             Generate_Board();
+            reversible_moves = 0;
             if (output) { drawing.Draw_Board(board); }
             //main gameloop
             int player = 0;
