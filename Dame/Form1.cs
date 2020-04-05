@@ -19,12 +19,19 @@ namespace Dame
     {
         MCP mcp;
         private bool Clicked = false, ENTER = false;
-        private string move = "";
+        private string move = "", tempmove = "";
 
         public Form1()
         {
             InitializeComponent();
             mcp = new MCP(this);
+        }
+
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Console.WriteLine("haha");
+            System.Environment.Exit(0);
         }
 
         private void Form1_Shown(object sender, EventArgs e) //Zeichnet Grundzustand
@@ -36,6 +43,7 @@ namespace Dame
         {
             Draw_Board(mcp.Get_Board());
         }
+
 
         //Wartet gewisse anzahl millisekunden
         public void wait(int milliseconds)
@@ -55,6 +63,8 @@ namespace Dame
                 Application.DoEvents();
             }
         }   //End of wait
+
+
 
         public void Draw_Piece(int x, int y, char piece)      //Zeichnet Spielfiguren an gegebener Stelle 
         {
@@ -156,25 +166,45 @@ namespace Dame
 
         }
         
+
+
         private void Zug_bestätigt_Click(object sender, EventArgs e)
         {
+            move = Zug.Text;
             ENTER = true;
             Zug.Text = "";
             Clicked = true;
         }
 
         //Bestätigen der ZU Eingabe per ENTER
+        private void Zug_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                Zug_bestätigt_Click(this, new EventArgs());
+                e.Handled = true;
+
+            }
+        }
         void Form1_KeyDown(object sender, KeyEventArgs e)
         {
-
             if (e.KeyCode == Keys.Enter)
             {
-                e.Handled = true;
-                e.SuppressKeyPress = true;
                 Zug_bestätigt_Click(this, new EventArgs());
+                e.Handled = true;
+
             }
 
         }
+        private void setFocus_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                e.Handled = true;
+                Zug_bestätigt_Click(this, new EventArgs());
+            }
+        }
+
 
         public string get_move(Board boarstate, int player)
         {
@@ -184,16 +214,23 @@ namespace Dame
             while (!valid)
             {
 
+                move = "";
+                tempmove = "";
+
                 //Warten auf Button Eingabe
-                while (!Clicked)
+                while (!Clicked && !ENTER)
                     wait(100);
 
+
                 Clicked = false;
+                ENTER = false;
 
                 valid = check_Syntax(move); //True wenn Syntax korrekt
 
                 if (!valid)
                 {
+                    
+
                     MessageBox.Show("Ungültige Syntax für einen Zug."
                                     + Environment.NewLine
                                     + Environment.NewLine
@@ -202,17 +239,19 @@ namespace Dame
                                     + "Oder für unsere Ungarischen Freunde:" + "  Érvénytelen szintaxis a vonaton."
                                     + Environment.NewLine
                                     + "と 日本語: トレインの無効な構文");
+
+                    
                 }
             }
+
+            Draw_Board(mcp.Get_Board());
             return move;           
         }
 
+        //Spiel Starten
         private void button1_Click(object sender, EventArgs e)
         {
-            //legt Fokus auf Form1 um MausEingabe zu ermöglichen
-            this.Activate();
-            this.button1.Enabled = false;
-            this.button1.Enabled = true;
+
 
             //Ausgewähltes Setup abfragen und laden
             if (radioButtonSpieler.Checked)
@@ -275,6 +314,7 @@ namespace Dame
 
 
         }
+
 
         public string TupleToString(Tuple<int, int> field)
         {
@@ -342,21 +382,6 @@ namespace Dame
             return valid;
         }
 
-        private void Zug_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == (char)Keys.Enter)
-            {
-                ENTER = true;
-                e.Handled = true;
-                Zug_bestätigt_Click(this, new EventArgs());
-            }
-        }
-
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            Console.WriteLine("haha");
-            System.Environment.Exit(0);
-        }
 
         public void labelText(string Text)
         {
@@ -364,8 +389,10 @@ namespace Dame
             label37.Text = Text;
         }
 
-        private void Form1_MouseClick(object sender, MouseEventArgs e)
+
+        private void Form1_MouseClick_1(object sender, MouseEventArgs e)
         {
+
             if (!ENTER)
             {
                 Rectangle screenRectangle = this.RectangleToScreen(this.ClientRectangle);
@@ -374,14 +401,19 @@ namespace Dame
                 int x = MousePosition.X - screenRectangle.X - 75;
                 int y = MousePosition.Y - screenRectangle.Y - 75;
 
-                if (x > 400 || x < 75 || y < 75 || y > 400)
+                if (x > 400 || x < 0 || y < 0 || y > 400)
                 {
                     Console.WriteLine("out of border");
                 }
                 else
-                    move = move + get_and_Highlight_Tile(x, y);
+                {
+                    if (tempmove == "")
+                        tempmove = get_and_Highlight_Tile(x, y);
+                    else
+                        tempmove = tempmove + "," + get_and_Highlight_Tile(x, y);
 
-                
+                    Zug.Text = tempmove;
+                }
             }
         }
 
@@ -394,6 +426,14 @@ namespace Dame
 
             position = TupleToString(Tuple.Create(Tile_x, Tile_y));
 
+            Graphics l = CreateGraphics();
+
+            Pen pen = new Pen(Color.Red, 3);
+
+            l.DrawRectangle(pen, (Tile_x * 50) + 75, (Math.Abs(Tile_y - 7) * 50) + 75, 50 ,50);
+
+            l.Dispose();
+            
             return position;
         }
 
