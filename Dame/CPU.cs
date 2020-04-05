@@ -31,6 +31,8 @@ namespace Dame
         {
             ComputerColor = player;
             Board = new Board(current_Board);
+            tempmove = new List<string>();
+            tempjump = new List<string>();
 
             //Liste aller validen Züge
             List<string> valid = new List<string>();
