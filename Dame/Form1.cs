@@ -229,7 +229,7 @@ namespace Dame
 
                 if (!valid)
                 {
-                    
+                    Draw_Board(mcp.Get_Board());
 
                     MessageBox.Show("Ungültige Syntax für einen Zug."
                                     + Environment.NewLine
@@ -244,32 +244,33 @@ namespace Dame
                 }
             }
 
-            Draw_Board(mcp.Get_Board());
+            
             return move;           
         }
 
         //Spiel Starten
         private void button1_Click(object sender, EventArgs e)
         {
+            string Schwarz = "", Weiß = "";
+
 
 
             //Ausgewähltes Setup abfragen und laden
-            if (radioButtonSpieler.Checked)
-                mcp.set_user("Spieler 1", "Spieler 2"); //player vs player
+            if (radioButtonSpielerSchwarz.Checked)
+                Schwarz = "Spieler1"; //player vs player
+            if (radioButtonZufallSchwarz.Checked)
+                Schwarz = "RAND 1";
+            if (radioButtonKISchwarz.Checked)
+                Schwarz = "CPU 1";
 
-            if (radioButtonZufall.Checked)
-            {
-                if (radioButtonSchwarz.Checked)
-                    mcp.set_user("Spieler 1", "CPU");   //player vs CPU
-                if (radioButtonWeiß.Checked)
-                    mcp.set_user("CPU", "Spieler 1");   //CPU vs player
-            }
+            if (radioButtonSpielerWeiß.Checked)
+                Weiß = "Spieler2"; //player vs player
+            if (radioButtonZufallWeiß.Checked)
+                Weiß = "RAND 2";
+            if (radioButtonKIWeiß.Checked)
+                Weiß = "CPU 2";
 
-            if (radioButtonKI.Checked)
-            {
-                MessageBox.Show("KI noch nicht verfügbar :(");
-                return;
-            }
+            mcp.set_user(Schwarz, Weiß);
 
            
             //Spieleinstellungen während des SPieles blockieren
@@ -291,21 +292,21 @@ namespace Dame
 
             if (Winner == -1)
                 MessageBox.Show("Ein Unentschieden!");
-            if (Winner == 0 && radioButtonSchwarz.Checked && radioButtonZufall.Checked)
+            if (Winner == 0 && radioButtonSpielerWeiß.Checked && radioButtonZufallSchwarz.Checked)
                 MessageBox.Show("Schwarz, also Du, hast Gewonnen. Gratulation! Du hast besser gespielt als der Zufall :)");
-            if (Winner == 0 && radioButtonSchwarz.Checked && radioButtonKI.Checked)
+            if (Winner == 0 && radioButtonSpielerWeiß.Checked && radioButtonKISchwarz.Checked)
                 MessageBox.Show("Schwarz, also Du, hast Gewonnen. Gratulation! Du hast besser gespielt als die KI :)");
-            if (Winner == 1 && radioButtonWeiß.Checked && radioButtonZufall.Checked)
+            if (Winner == 1 && radioButtonZufallWeiß.Checked && radioButtonZufallSchwarz.Checked)
                 MessageBox.Show("Weiß, also Du hast, Gewonnen. Gratulation! Du hast besser gespielt als der Zufall :)");
-            if (Winner == 1 && radioButtonWeiß.Checked && radioButtonKI.Checked)
+            if (Winner == 1 && radioButtonZufallWeiß.Checked && radioButtonKISchwarz.Checked)
                 MessageBox.Show("Weiß, also Du hast, Gewonnen. Gratulation! Du hast besser gespielt als die KI :)");
-            if (Winner == 0 && radioButtonWeiß.Checked && radioButtonZufall.Checked)
+            if (Winner == 0 && radioButtonZufallWeiß.Checked && radioButtonZufallSchwarz.Checked)
                 MessageBox.Show("Schwarz, hat Gewonnen. Pech für dich! Du bist schlechter als der Zufall :)");
-            if (Winner == 0 && radioButtonWeiß.Checked && radioButtonKI.Checked)
+            if (Winner == 0 && radioButtonZufallWeiß.Checked && radioButtonKISchwarz.Checked)
                 MessageBox.Show("Schwarz,  hat Gewonnen. Pech für dich! Du bist schlechter als die KI :)");
-            if (Winner == 1 && radioButtonSchwarz.Checked && radioButtonZufall.Checked)
+            if (Winner == 1 && radioButtonSpielerWeiß.Checked && radioButtonZufallSchwarz.Checked)
                 MessageBox.Show("Weiß, hat Gewonnen. Pech für dich! Du bist schlechter als der Zufall :)");
-            if (Winner == 1 && radioButtonSchwarz.Checked && radioButtonKI.Checked)
+            if (Winner == 1 && radioButtonSpielerWeiß.Checked && radioButtonKISchwarz.Checked)
                 MessageBox.Show("Weiß, hat Gewonnen. Pech für dich! Du bist schlechter als die KI :)");
 
             //Spieleinstellungen nach des SPieles wieder freigeben
