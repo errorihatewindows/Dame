@@ -361,7 +361,12 @@ namespace Dame
             label37.Text = Text;
         }
 
+        private void Form1_MouseDown(object sender, MouseEventArgs e)
+        {
+            while (e.KeyCode != (char)Keys.Enter)
+            {
 
-
+            }
+        }
     }
 }
