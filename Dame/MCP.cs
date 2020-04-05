@@ -17,6 +17,7 @@ namespace Dame
         public string name;
         public bool is_cpu;
         public CPU cpu;
+        public random_player rando;
     }
     public class MCP
     {
@@ -31,36 +32,34 @@ namespace Dame
             Generate_Board();
         }
 
-        public void set_user(string player1, string player2)
+        public void set_user(string player1, string player2)    //sets name and delegate for players
         {
             Player = new Player_Data[2];
-            Player[0].name = player1;
-            Player[1].name = player2;
-            //set delegate (and class instance if needed) for player1
-            if (player1.StartsWith("CPU")) 
+            string[] player = { player1, player2 };
+            Player[0].name = player[0];
+            Player[1].name = player[1];
+            for (int i = 0; i < 2; i++) 
             {
-                Player[0].cpu = new CPU(drawing);
-                Player[0].move = Player[0].cpu.get_move;
-                Player[0].is_cpu = true;
+                //set delegate (and class instance if needed) for player1
+                if (player[i].StartsWith("CPU"))
+                {
+                    Player[i].cpu = new CPU(drawing);
+                    Player[i].move = Player[i].cpu.get_move;
+                    Player[i].is_cpu = true;
+                }
+                else if (player[i].StartsWith("RAND"))
+                {
+                    Player[i].rando = new random_player(drawing);
+                    Player[i].move = Player[i].cpu.get_move;
+                    Player[i].is_cpu = true;
+                }
+                else
+                {
+                    Player[i].move = drawing.get_move;
+                    Player[i].is_cpu = false;
+                }
             }
-            else
-            { 
-                Player[0].move = drawing.get_move;
-                Player[0].is_cpu = false;
-            }
-            //do it again for player 2 ;D
-            if (player2.StartsWith("CPU"))
-            {
-                Player[1].cpu = new CPU(drawing);
-                Player[1].move = Player[1].cpu.get_move;
-                Player[1].is_cpu = true;
-            }
-            else 
-            { 
-                Player[1].move = drawing.get_move;
-                Player[1].is_cpu = false;
-            }
-        }   //sets name and delegate for players
+        }   
 
         public Board Get_Board()                //getter for internal board state
         {
@@ -280,20 +279,23 @@ namespace Dame
             return true;
         }
 
-        public int run()
+        public int run(bool output)
         {
+            //only wait or draw boards if output is set to true
             string move = "";
             bool valid;
             Generate_Board();
-            drawing.Draw_Board(board);
-            //make sure there are players set that are able to play
-            if (Player == null) { return -2; }
+            reversible_moves = 0;
+            if (output) { drawing.Draw_Board(board); }
             //main gameloop
             int player = 0;
             while (!is_lost(player) && reversible_moves < 30)
             {
-                Console.WriteLine(Player[player].name + " am Zug");
-                drawing.labelText(Player[player].name + " am Zug");
+                if (output)
+                {
+                    Console.WriteLine(Player[player].name + " am Zug");
+                    drawing.labelText(Player[player].name + " am Zug");
+                }
                 valid = false;
                 while (!valid)
                 {
@@ -302,27 +304,52 @@ namespace Dame
                     if ((Player[player].is_cpu) && (!valid)) 
                     { 
                         Console.WriteLine("CPU invalid move");
-                        System.Environment.Exit(0); 
+                        return -2; 
                     }
                 }
-                if (Player[player].is_cpu) { drawing.wait(500); }
+                if (Player[player].is_cpu && output) { drawing.wait(500); }
                 Perform_Move(move, player);
-                drawing.Draw_Board(board);
+                if (output) { drawing.Draw_Board(board); }
                 //next player
                 player = 1 - player;
             }
             if (reversible_moves < 30)  //game ended in a win/loss
             {
-                Console.WriteLine(Player[1 - player].name + " hat gewonnen");
-                drawing.labelText(Player[1 - player].name + " hat gewonnen");
+                if (output)
+                {
+                    Console.WriteLine(Player[1 - player].name + " hat gewonnen");
+                    drawing.labelText(Player[1 - player].name + " hat gewonnen");
+                }
                 return (1 - player);
             }
             else    
             {
-                Console.WriteLine("Unentschieden!");
-                drawing.labelText("Unentschieden");
+                if (output)
+                {
+                    Console.WriteLine("Unentschieden!");
+                    drawing.labelText("Unentschieden");
+                }
                 return -1;
             }
+        }
+
+        public void simulate(int repeats)
+        {
+            Dictionary<int, int> results = new Dictionary<int, int>();
+            results[1] = 0;     //weiß    gewinnt
+            results[0] = 0;     //schwarz gewinnt
+            results[-1] = 0;    //unentschieden
+            results[-2] = 0;    //ungültiger Zug
+            string output;
+            for (int i = 0; i < repeats; i++)
+            {
+                results[run(false)]++;
+            }
+            output = "schwarz: " + results[0].ToString() +
+                     "\nweiß: " + results[1].ToString() +
+                     "\nunentschieden: " + results[-1].ToString();
+            if (results[-2] != 0) { output += "\n invalide: " + results[-2].ToString(); }
+            drawing.labelText(output);
         }
     }
 }

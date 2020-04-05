@@ -8,7 +8,7 @@ using Board = System.Collections.Generic.Dictionary<System.Tuple<int, int>, char
 
 namespace Dame
 {
-    public class CPU
+    public class random_player
     {
 
         private Board Board;
@@ -21,7 +21,7 @@ namespace Dame
         private Form1 drawing;
 
         //Konstruktor
-        public CPU(Form1 form)
+        public random_player(Form1 form)
         {
             drawing = form;
         }
@@ -50,7 +50,7 @@ namespace Dame
                 checkposition(position);
 
             }
-            
+
 
             if (tempjump.Count == 0)
             {
@@ -60,11 +60,11 @@ namespace Dame
             {   //Überprüft Mehrfachsprung und gibt Liste aller validen Sprünge zurück (korrekte Syntax)
                 foreach (string jump in tempjump)
                     valid = valid.Concat(jumps(drawing.StringToTuple(jump))).ToList();
-            } 
+            }
 
             //Zufälligen Valid Move auswählen
             Random Zufall = new Random();
-            final_move = valid[Zufall.Next(0 , valid.Count)];
+            final_move = valid[Zufall.Next(0, valid.Count)];
 
             return final_move;
         }
@@ -97,12 +97,12 @@ namespace Dame
             //Invalide Züge löschen
             tempmove = tempmove.Concat(deleteInvalid_move(possiblemove, position.Key)).ToList();
             tempjump = tempjump.Concat(deleteInvalid_jump(possiblejump, position.Key)).ToList();
-            
+
         }
 
         private List<string> deleteInvalid_move(List<Piece> possiblemove, Piece position) //Löscht invalide Züge und gibt valide zurück
         {
-            List<string> validmove = new List<string>(); 
+            List<string> validmove = new List<string>();
 
             foreach (Piece option in possiblemove)
             {
@@ -119,7 +119,7 @@ namespace Dame
                 //Feld bereits belegt
                 if (Board[option] != '.') { continue; }
 
-                validmove.Add(drawing.TupleToString(position) + "," +  drawing.TupleToString(option));
+                validmove.Add(drawing.TupleToString(position) + "," + drawing.TupleToString(option));
             }
 
             return validmove;
@@ -150,11 +150,11 @@ namespace Dame
                 int y = (position.Item2 + option.Item2) / 2;
 
                 //leeres Feld zum Überspringen
-                if (Board[Tuple.Create(x,y)] == '.') { continue; }
-                
+                if (Board[Tuple.Create(x, y)] == '.') { continue; }
+
                 //übersprungener Stein ist eigene Farbe
-                if ((ComputerColor == 0)   &&   ((Board[Tuple.Create(x, y)] == 'b') || (Board[Tuple.Create(x, y)] == 'B'))) { continue; }
-                if ((ComputerColor == 1)   &&   ((Board[Tuple.Create(x, y)] == 'w') || (Board[Tuple.Create(x, y)] == 'W'))) { continue; }
+                if ((ComputerColor == 0) && ((Board[Tuple.Create(x, y)] == 'b') || (Board[Tuple.Create(x, y)] == 'B'))) { continue; }
+                if ((ComputerColor == 1) && ((Board[Tuple.Create(x, y)] == 'w') || (Board[Tuple.Create(x, y)] == 'W'))) { continue; }
 
 
                 validjump.Add(drawing.TupleToString(position) + drawing.TupleToString(option));
@@ -163,7 +163,7 @@ namespace Dame
             return validjump;
         }
 
-        
+
         private List<string> jumps(Piece position)
         {
             List<string> valid = new List<string>();
@@ -175,7 +175,7 @@ namespace Dame
 
             //Stop condition of recursion
             //if no valid jumps are possible, return a string with only this position
-            if (deleteInvalid_jump(possiblejumps,position).Count == 0)
+            if (deleteInvalid_jump(possiblejumps, position).Count == 0)
             {
                 valid.Add(drawing.TupleToString(position));
                 return valid;
@@ -208,12 +208,12 @@ namespace Dame
             string Move2 = (Move[2].ToString() + Move[3].ToString());
 
             Piece positionold, positionnew;
-            
+
             positionold = drawing.StringToTuple(Move1);
             positionnew = drawing.StringToTuple(Move2);
 
             //neuen Stein setzten
-            
+
             Board[positionnew] = Board[positionold];
 
             //Übersprungenen Stein entfernen
@@ -222,7 +222,7 @@ namespace Dame
 
             //Alte Position updaten
             Board[positionold] = '.';
-            
+
         }
 
     }
