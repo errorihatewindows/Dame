@@ -297,7 +297,6 @@ namespace Dame
             label37.Text = Text;
         }
 
-
         private void Form1_MouseClick_1(object sender, MouseEventArgs e)
         {
             //Wenn noch nicht mit ENTER bestätigt oder Spiel gestartet
