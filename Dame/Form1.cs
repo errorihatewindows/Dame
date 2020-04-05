@@ -18,7 +18,6 @@ namespace Dame
     public partial class Form1 : Form
     {
         MCP mcp;
-        CPU cpu;
         private bool Clicked = false;
         private string move;
 
@@ -26,10 +25,6 @@ namespace Dame
         {
             InitializeComponent();
             mcp = new MCP(this);
-            cpu = new CPU(this);
-
-
-
         }
 
         private void Form1_Shown(object sender, EventArgs e) //Zeichnet Grundzustand
@@ -181,9 +176,10 @@ namespace Dame
 
         }
 
-        public string get_move(Board Board, int player)
+        public string get_move(Board boarstate, int player)
         {
             bool valid = false;
+            label34.Text = "Spieler " + player.ToString() + " am Zug";
 
             //inkorrekte Move Eingabe
             while (!valid)
@@ -216,21 +212,79 @@ namespace Dame
 
         private void button1_Click(object sender, EventArgs e)
         {
-            mcp.set_user("Markus", "Thomas");       //player vs. player
-            mcp.run();
+            //Ausgewähltes Setup abfragen und laden
+            if (radioButtonSpieler.Checked)
+                mcp.set_user("Spieler 1", "Spieler 2"); //player vs player
+
+            if (radioButtonZufall.Checked)
+            {
+                if (radioButtonSchwarz.Checked)
+                    mcp.set_user("Spieler 1", "CPU");   //player vs CPU
+                if (radioButtonWeiß.Checked)
+                    mcp.set_user("CPU", "Spieler 1");   //CPU vs player
+            }
+
+            if (radioButtonKI.Checked)
+            {
+                MessageBox.Show("KI noch nicht verfügbar :(");
+                return;
+            }
+
+           
+            //Spieleinstellungen während des SPieles blockieren
+            groupBox1.Enabled = false;
+            groupBox2.Enabled = false;
+
+            //Zugeingabefelder sichtbar machen
+
+            Zug.Visible = true;
+            Zug_bestätigt.Visible = true;
+            label17.Visible = true;
+            
+            //Status Label verbergen
+            label37.Visible = false;
+
+            //Spiel ausführen      
+            int Winner = mcp.run();
+
+
+            if (Winner == -1)
+                MessageBox.Show("Ein Unentschieden!");
+            if (Winner == 0 && radioButtonSchwarz.Checked && radioButtonZufall.Checked)
+                MessageBox.Show("Schwarz, also Du hast Gewonnen. Gratulation! Du hast besser gespielt als der Zufall :)");
+            if (Winner == 0 && radioButtonSchwarz.Checked && radioButtonKI.Checked)
+                MessageBox.Show("Schwarz, also Du hast Gewonnen. Gratulation! Du hast besser gespielt als die KI :)");
+            if (Winner == 1 && radioButtonWeiß.Checked && radioButtonZufall.Checked)
+                MessageBox.Show("Weiß, also Du hast Gewonnen. Gratulation! Du hast besser gespielt als der Zufall :)");
+            if (Winner == 1 && radioButtonWeiß.Checked && radioButtonKI.Checked)
+                MessageBox.Show("Weiß, also Du hast Gewonnen. Gratulation! Du hast besser gespielt als die KI :)");
+            if (Winner == 0 && radioButtonWeiß.Checked && radioButtonZufall.Checked)
+                MessageBox.Show("Schwarz, hat Gewonnen. Pech für dich! Du bist schlechter als der Zufall :)");
+            if (Winner == 0 && radioButtonWeiß.Checked && radioButtonKI.Checked)
+                MessageBox.Show("Schwarz,  hat Gewonnen. Pech für dich! Du bist schlechter als die KI :)");
+            if (Winner == 1 && radioButtonSchwarz.Checked && radioButtonZufall.Checked)
+                MessageBox.Show("Weiß, hat Gewonnen. Pech für dich! Du bist schlechter als der Zufall :)");
+            if (Winner == 1 && radioButtonSchwarz.Checked && radioButtonKI.Checked)
+                MessageBox.Show("Weiß, hat Gewonnen. Pech für dich! Du bist schlechter als die KI :)");
+
+            //Spieleinstellungen nach des SPieles wieder freigeben
+            groupBox1.Enabled = true;
+            groupBox2.Enabled = true;
+
+
         }
 
         public string TupleToString(Tuple<int, int> field)
         {
-            string a = (Convert.ToChar(field.Item1 + 'A')).ToString();
-            string b = (Convert.ToInt32(field.Item2) + 1).ToString();
+            string a = ((char)(field.Item1 + 'A')).ToString();
+            string b = Convert.ToString((field.Item2) + 1);
 
             string num = a + b;
 
             return num;
         }
 
-        public Tuple<int, int> StringToTuple(string place)
+        public Piece StringToTuple(string place)
         {
             place = place.ToUpper();
 
@@ -275,12 +329,12 @@ namespace Dame
             }
 
             //Überprüfen auf korrekte Länge der Zug-Eingabe
-            if ((move.Length % 3) != 2)
+            if (((move.Length % 3) == 2) && move.Length > 4)
                 count_valid++;
 
 
             //alles Korrekt
-            if (count_valid == move.Length)
+            if (count_valid == move.Length + 1)
                 valid = true;
 
             return valid;
@@ -293,9 +347,6 @@ namespace Dame
                 e.Handled = true;
                 Zug_bestätigt_Click(this, new EventArgs());
             }
-            Console.WriteLine('b');
-            Console.WriteLine('b' - 20);
-            cpu.get_move(mcp.Get_Board(), 0);
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -304,18 +355,11 @@ namespace Dame
             System.Environment.Exit(0);
         }
 
-
-
-
-
-
-
-        private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
+        public void labelText(string Text)
         {
-            Graphics l = this.CreateGraphics();
-            ControlPaint.DrawBorder(l, pictureBox1.ClientRectangle, Color.Red, ButtonBorderStyle.Solid);
-
-
+            label37.Visible = true;
+            label37.Text = Text;
         }
+
     }
 }
