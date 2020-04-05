@@ -64,8 +64,6 @@ namespace Dame
             Random Zufall = new Random();
             final_move = valid[Zufall.Next(0 , valid.Count)];
 
-            Console.WriteLine(final_move);
-
             return final_move;
         }
 

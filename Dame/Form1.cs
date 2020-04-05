@@ -18,7 +18,6 @@ namespace Dame
     public partial class Form1 : Form
     {
         MCP mcp;
-        CPU cpu;
         private bool Clicked = false;
         private string move;
 
@@ -26,7 +25,6 @@ namespace Dame
         {
             InitializeComponent();
             mcp = new MCP(this);
-            cpu = new CPU(this);
         }
 
         private void Form1_Shown(object sender, EventArgs e) //Zeichnet Grundzustand
@@ -254,7 +252,7 @@ namespace Dame
             return num;
         }
 
-        public Tuple<int, int> StringToTuple(string place)
+        public Piece StringToTuple(string place)
         {
             place = place.ToUpper();
 
@@ -299,7 +297,7 @@ namespace Dame
             }
 
             //Überprüfen auf korrekte Länge der Zug-Eingabe
-            if ((move.Length % 3) != 2)
+            if (((move.Length % 3) != 2) && move.Length > 4)
                 count_valid++;
 
 
