@@ -17,6 +17,7 @@ namespace Dame
         public string name;
         public bool is_cpu;
         public CPU cpu;
+        public random_player rando;
     }
     public class MCP
     {
@@ -48,7 +49,7 @@ namespace Dame
                 }
                 else if (player[i].StartsWith("RAND"))
                 {
-                    Player[i].cpu = new random_player(drawing);
+                    Player[i].rando = new random_player(drawing);
                     Player[i].move = Player[i].cpu.get_move;
                     Player[i].is_cpu = true;
                 }
