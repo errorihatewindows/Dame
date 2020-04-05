@@ -50,7 +50,7 @@ namespace Dame
                 else if (player[i].StartsWith("RAND"))
                 {
                     Player[i].rando = new random_player(drawing);
-                    Player[i].move = Player[i].cpu.get_move;
+                    Player[i].move = Player[i].rando.get_move;
                     Player[i].is_cpu = true;
                 }
                 else
@@ -310,7 +310,7 @@ namespace Dame
                         return -2; 
                     }
                 }
-                if (Player[player].is_cpu && output) { drawing.wait(500); }
+                if (Player[player].is_cpu && output) { drawing.wait(800); }
                 Perform_Move(move, player);
                 //next player
                 player = 1 - player;
