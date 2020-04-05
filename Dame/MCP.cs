@@ -31,36 +31,34 @@ namespace Dame
             Generate_Board();
         }
 
-        public void set_user(string player1, string player2)
+        public void set_user(string player1, string player2)    //sets name and delegate for players
         {
             Player = new Player_Data[2];
-            Player[0].name = player1;
-            Player[1].name = player2;
-            //set delegate (and class instance if needed) for player1
-            if (player1.StartsWith("CPU")) 
+            string[] player = { player1, player2 };
+            Player[0].name = player[0];
+            Player[1].name = player[1];
+            for (int i = 0; i < 2; i++) 
             {
-                Player[0].cpu = new CPU(drawing);
-                Player[0].move = Player[0].cpu.get_move;
-                Player[0].is_cpu = true;
+                //set delegate (and class instance if needed) for player1
+                if (player[i].StartsWith("CPU"))
+                {
+                    Player[i].cpu = new CPU(drawing);
+                    Player[i].move = Player[i].cpu.get_move;
+                    Player[i].is_cpu = true;
+                }
+                else if (player[i].StartsWith("RAND"))
+                {
+                    Player[i].cpu = new random_player(drawing);
+                    Player[i].move = Player[i].cpu.get_move;
+                    Player[i].is_cpu = true;
+                }
+                else
+                {
+                    Player[i].move = drawing.get_move;
+                    Player[i].is_cpu = false;
+                }
             }
-            else
-            { 
-                Player[0].move = drawing.get_move;
-                Player[0].is_cpu = false;
-            }
-            //do it again for player 2 ;D
-            if (player2.StartsWith("CPU"))
-            {
-                Player[1].cpu = new CPU(drawing);
-                Player[1].move = Player[1].cpu.get_move;
-                Player[1].is_cpu = true;
-            }
-            else 
-            { 
-                Player[1].move = drawing.get_move;
-                Player[1].is_cpu = false;
-            }
-        }   //sets name and delegate for players
+        }   
 
         public Board Get_Board()                //getter for internal board state
         {
