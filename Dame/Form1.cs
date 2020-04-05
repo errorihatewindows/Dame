@@ -217,10 +217,13 @@ namespace Dame
             groupBox2.Enabled = false;
 
             //Zugeingabefelder sichtbar machen
+
             Zug.Visible = true;
             Zug_bestätigt.Visible = true;
             label17.Visible = true;
             
+            //Status Label verbergen
+            label37.Visible = false;
 
             //Ausgewähltes Setup abfragen und laden
             if (radioButtonSpieler.Checked)
@@ -239,7 +242,28 @@ namespace Dame
             
 
             //Spiel ausführen      
-            mcp.run();
+            int Winner = mcp.run();
+
+            if (Winner == -1)
+                MessageBox.Show("Ein Unentschieden!");
+            if (Winner == 0 && radioButtonSchwarz.Checked && radioButtonZufall.Checked)
+                MessageBox.Show("Schwarz, also Du hast Gewonnen. Gratulation! Du hast besser gespielt als der Zufall :)");
+            if (Winner == 0 && radioButtonSchwarz.Checked && radioButtonKI.Checked)
+                MessageBox.Show("Schwarz, also Du hast Gewonnen. Gratulation! Du hast besser gespielt als die KI :)");
+            if (Winner == 1 && radioButtonWeiß.Checked && radioButtonZufall.Checked)
+                MessageBox.Show("Weiß, also Du hast Gewonnen. Gratulation! Du hast besser gespielt als der Zufall :)");
+            if (Winner == 1 && radioButtonWeiß.Checked && radioButtonKI.Checked)
+                MessageBox.Show("Weiß, also Du hast Gewonnen. Gratulation! Du hast besser gespielt als die KI :)");
+            if (Winner == 0 && radioButtonWeiß.Checked && radioButtonZufall.Checked)
+                MessageBox.Show("Weiß, hat Gewonnen. Pech für dich! Du bist schlechter als der Zufall :)");
+            if (Winner == 0 && radioButtonWeiß.Checked && radioButtonKI.Checked)
+                MessageBox.Show("Weiß,  hat Gewonnen. Pech für dich! Du bist schlechter als die KI :)");
+            if (Winner == 1 && radioButtonSchwarz.Checked && radioButtonZufall.Checked)
+                MessageBox.Show("Schwarz, hat Gewonnen. Pech für dich! Du bist schlechter als der Zufall :)");
+            if (Winner == 1 && radioButtonSchwarz.Checked && radioButtonKI.Checked)
+                MessageBox.Show("Schwarz, hat Gewonnen. Pech für dich! Du bist schlechter als die KI :)");
+
+
         }
 
         public string TupleToString(Tuple<int, int> field)
@@ -321,6 +345,12 @@ namespace Dame
         {
             Console.WriteLine("haha");
             System.Environment.Exit(0);
+        }
+
+        public void labelText(string Text)
+        {
+            label37.Visible = true;
+            label37.Text = Text;
         }
 
     }

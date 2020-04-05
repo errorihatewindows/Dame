@@ -74,6 +74,7 @@
             this.radioButtonWeiß = new System.Windows.Forms.RadioButton();
             this.label35 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label37 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -555,11 +556,23 @@
             this.groupBox2.TabIndex = 101;
             this.groupBox2.TabStop = false;
             // 
+            // label37
+            // 
+            this.label37.AutoSize = true;
+            this.label37.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label37.Location = new System.Drawing.Point(576, 527);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(60, 20);
+            this.label37.TabIndex = 102;
+            this.label37.Text = "label37";
+            this.label37.Visible = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(982, 672);
+            this.Controls.Add(this.label37);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label26);
@@ -660,6 +673,7 @@
         private System.Windows.Forms.RadioButton radioButtonSchwarz;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label36;
+        private System.Windows.Forms.Label label37;
     }
 }
 

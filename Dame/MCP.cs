@@ -280,25 +280,30 @@ namespace Dame
             return true;
         }
 
-        public void run()
+        public int run()
         {
             string move = "";
             bool valid;
             Generate_Board();
             drawing.Draw_Board(board);
             //make sure there are players set that are able to play
-            if (Player == null) { return; }
+            if (Player == null) { return -2; }
             //main gameloop
             int player = 0;
             while (!is_lost(player) && reversible_moves < 30)
             {
                 Console.WriteLine(Player[player].name + " am Zug");
+                drawing.labelText(Player[player].name + " am Zug");
                 valid = false;
                 while (!valid)
                 {
                     move = Player[player].move(new Board(board), player);
                     valid = Check_Move(move, player);
-                    if ((Player[player].is_cpu) && (!valid)) { Console.WriteLine("CPU invalid move");  System.Environment.Exit(0); }
+                    if ((Player[player].is_cpu) && (!valid)) 
+                    { 
+                        Console.WriteLine("CPU invalid move");
+                        System.Environment.Exit(0); 
+                    }
                 }
                 if (Player[player].is_cpu) { drawing.wait(300); }
                 Perform_Move(move, player);
@@ -309,8 +314,15 @@ namespace Dame
             if (reversible_moves < 30)  //game ended in a win/loss
             {
                 Console.WriteLine(Player[1 - player].name + " hat gewonnen");
+                drawing.labelText(Player[1 - player].name + " hat gewonnen");
+                return (1 - player);
             }
-            else    { Console.WriteLine("Unentschieden!"); }
+            else    
+            {
+                Console.WriteLine("Unentschieden!");
+                drawing.labelText("Unentschieden");
+                return -1;
+            }
         }
     }
 }
