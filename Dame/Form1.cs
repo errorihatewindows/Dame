@@ -106,15 +106,17 @@ namespace Dame
         }
 
         public void Draw_Board(Dictionary<Tuple<int, int>, char> Board) // Zeichnet einen kompletten Schachbrett-Zustand
-        {
+        {         
+            Graphics l = this.CreateGraphics();
+            
+            //zeichne Rand
+            Pen pen = new Pen(Color.Black, 3);
+            l.DrawRectangle(pen, 74, 74, 401, 401);
 
             //Schachbrettmuster zeichnen
-            Graphics l = this.CreateGraphics(); 
-
-            Pen pen = new Pen(Color.Sienna, 1);
+            pen = new Pen(Color.Sienna, 1);
             Brush brush = Brushes.Sienna;
 
-            //l.DrawRectangle(pen, 75, 75, 400, 400);
             l.FillRectangle(brush, 75, 75, 400, 400);
 
             brush = Brushes.PeachPuff;
