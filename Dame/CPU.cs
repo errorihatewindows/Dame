@@ -62,16 +62,17 @@ namespace Dame
             }
 
 
-           
             //ermittle den Move der den höchsten Board Value liefert.
             List<string> best_moves = new List<string>();
             int highest_Value = 0, current_Value = 0;
 
+            Board tempBoard = Board;
+
             foreach  (string move in valid)
             {   
                 //temporäres board updaten
-                update_Board(move);
-                current_Value = calcuteBoard_Value(Board, player);
+                tempBoard = update_Board(move, Board);
+                current_Value = calcuteBoard_Value(tempBoard);
 
                 if (current_Value == highest_Value || best_moves.Count == 0)
                 {
@@ -85,6 +86,8 @@ namespace Dame
                     best_moves.Add(move);
                     highest_Value = current_Value;
                 }
+
+
 
             }
 
@@ -191,7 +194,7 @@ namespace Dame
                 if ((ComputerColor == 1)   &&   ((Board[Tuple.Create(x, y)] == 'w') || (Board[Tuple.Create(x, y)] == 'W'))) { continue; }
 
 
-                validjump.Add(drawing.TupleToString(position) + drawing.TupleToString(option));
+                validjump.Add(drawing.TupleToString(position) + "," +  drawing.TupleToString(option));
             }
 
             return validjump;
@@ -218,7 +221,8 @@ namespace Dame
             {
                 foreach (string jump in deleteInvalid_jump(possiblejumps, position))
                 {
-                    target = drawing.StringToTuple(jump[2].ToString() + jump[3].ToString());
+                    Console.WriteLine(jump);
+                    target = drawing.StringToTuple(jump[3].ToString() + jump[4].ToString());
                     update_Board(jump);
                     valid = valid.Concat(jumps(target)).ToList(); 
                     Board = new Board(currentboard);
@@ -244,7 +248,7 @@ namespace Dame
             if (Move[1] + 1 == Move[Move.Length - 1] || Move[1] -1 == Move[Move.Length - 1])
             {
                 positionold = drawing.StringToTuple(Move[0].ToString() + Move[1].ToString());
-                positionnew = drawing.StringToTuple(Move[2].ToString() + Move[3].ToString());
+                positionnew = drawing.StringToTuple(Move[3].ToString() + Move[4].ToString());
 
                 //neuen Stein setzten
                 Board[positionnew] = Board[positionold];
@@ -253,13 +257,14 @@ namespace Dame
 
             } 
             
-            //Wenn das update einen Sprung der Länge x enthält 
+            //Wenn das update einen Sprung der Länge x enthält
             else
-            {   //für Anzahl an Updates 
-                for (int i = 0; i < ((Move.Length + 1) % 3) - 1; i++)
+            {          
+                //für Anzahl an Updates 
+                for (int i = 0; i < ((Move.Length + 1) / 3) - 1; i++)
                 {
                     positionold = drawing.StringToTuple((Move[(i * 3)].ToString() + Move[(i * 3) + 1].ToString()));
-                    positionnew = drawing.StringToTuple((Move[(i * 3) + 2].ToString() + Move[(i * 3) + 3].ToString()));
+                    positionnew = drawing.StringToTuple((Move[(i * 3) + 3].ToString() + Move[(i * 3) + 4].ToString()));
 
                     //neuen Stein setzten
                     Board[positionnew] = Board[positionold];
@@ -273,17 +278,6 @@ namespace Dame
 
                 }
             }
-
-            //Damen setzten wenn Move auf Königsreihe führt
-            if (positionnew.Item2 == 0 || positionnew.Item2 == 7)
-            {
-                if (ComputerColor == 0) { Board[positionnew] = 'B'; }
-                if (ComputerColor == 1) { Board[positionnew] = 'W'; }
-            }
-
-
-
-
         }
 
         //Führt einen gegebenen Move oder Sprung auf TEMPBOARD aus und gibt diese zurück
@@ -299,7 +293,7 @@ namespace Dame
             if (Move[1] + 1 == Move[Move.Length - 1] || Move[1] - 1 == Move[Move.Length - 1])
             {
                 positionold = drawing.StringToTuple(Move[0].ToString() + Move[1].ToString());
-                positionnew = drawing.StringToTuple(Move[2].ToString() + Move[3].ToString());
+                positionnew = drawing.StringToTuple(Move[3].ToString() + Move[4].ToString());
 
                 //neuen Stein setzten
                 tempBoard[positionnew] = tempBoard[positionold];
@@ -310,11 +304,12 @@ namespace Dame
 
             //Wenn das update einen Sprung der Länge x enthält 
             else
-            {   //für Anzahl an Updates 
+            {
+                //für Anzahl an Updates 
                 for (int i = 0; i < ((Move.Length + 1) % 3) - 1; i++)
                 {
                     positionold = drawing.StringToTuple((Move[(i * 3)].ToString() + Move[(i * 3) + 1].ToString()));
-                    positionnew = drawing.StringToTuple((Move[(i * 3) + 2].ToString() + Move[(i * 3) + 3].ToString()));
+                    positionnew = drawing.StringToTuple((Move[(i * 3) + 3].ToString() + Move[(i * 3) + 4].ToString()));
 
                     //neuen Stein setzten
 
@@ -342,25 +337,25 @@ namespace Dame
         }
 
         //berwertet Boards für schwarz und weiß
-        private int calcuteBoard_Value(Board board, int Color)
+        private int calcuteBoard_Value(Board board)
         {
             int Value = 0;
 
             foreach (KeyValuePair<Piece, char> kvp in board)
             {
                 //CPU ist Schwarz
-                if (Color == 0)
+                if (ComputerColor == 0)
                 {
                     if (kvp.Value == 'b') { Value += 50; }                       
-                    if (kvp.Value == 'B') { Value += 1000; }                        
+                    if (kvp.Value == 'B') { Value += 75; }                        
                     if (kvp.Value == 'w') { Value -= 50; }                       
                     if (kvp.Value == 'W') { Value -= 75; }                 
                 } 
                 // CPU ist weiß
-                else if (Color == 1)
+                else if (ComputerColor == 1)
                 {
                     if (kvp.Value == 'b') { Value -= 50; }
-                    if (kvp.Value == 'B') { Value -= 1000; }                        
+                    if (kvp.Value == 'B') { Value -= 75; }                        
                     if (kvp.Value == 'w') { Value += 50; }                        
                     if (kvp.Value == 'W') { Value += 75; }                        
                 }
