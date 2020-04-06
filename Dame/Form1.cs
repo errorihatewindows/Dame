@@ -284,6 +284,7 @@ namespace Dame
         {            
             label37.Text = "";
             label37.Text = Text;
+            wait(10);
         }
 
         private void Form1_MouseClick_1(object sender, MouseEventArgs e)
