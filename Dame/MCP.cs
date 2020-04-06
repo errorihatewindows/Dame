@@ -206,9 +206,11 @@ namespace Dame
             if (!(board[move[0]] == color(player) || board[move[0]] == Convert.ToChar(color(player) - 32))) { return false; }
             //target must be empty
             if (board[move[1]] != '.') { return false; }
-            //players MUST jump if possible
-            if (!is_jump(move[0],move[1]))
+            //move is a normal move
+            if (!is_jump(move[0], move[1]))
             {
+                //moves are always 5 chars long
+                if (smove.Length != 5) { return false; }
                 foreach (KeyValuePair<Piece, char> kvp in board)
                 {
                     if (!(kvp.Value == color(player) || kvp.Value == (color(player) - 32))) { continue; }
