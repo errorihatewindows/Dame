@@ -187,7 +187,7 @@ namespace Dame
                 {
                     target = drawing.StringToTuple(jump[2].ToString() + jump[3].ToString());
                     update_Board(jump);
-                    valid = valid.Concat(jumps(target)).ToList();
+                    valid = valid.Concat(jumps(target)).ToList(); 
                     Board = new Board(currentboard);
                 }
             }
@@ -223,6 +223,35 @@ namespace Dame
             //Alte Position updaten
             Board[positionold] = '.';
             
+        }
+
+        //Führt einen gegebenen Sprung aus
+        private Board update_Board(string Move, Board board)
+        {
+            //temporäres Board auf currentBoard state setzen
+            Board tempBoard = new Board(Board);
+
+            string Move1 = (Move[0].ToString() + Move[1].ToString());
+            string Move2 = (Move[2].ToString() + Move[3].ToString());
+
+            Piece positionold, positionnew;
+
+            positionold = drawing.StringToTuple(Move1);
+            positionnew = drawing.StringToTuple(Move2);
+
+            //neuen Stein setzten
+
+            tempBoard[positionnew] = tempBoard[positionold];
+
+            //Übersprungenen Stein entfernen
+            Piece positionCaptured = new Piece((positionold.Item1 + positionnew.Item1) / 2, (positionold.Item2 + positionnew.Item2) / 2);
+            tempBoard[positionCaptured] = '.';
+
+            //Alte Position updaten
+            tempBoard[positionold] = '.';
+
+            return tempBoard;
+
         }
 
     }
