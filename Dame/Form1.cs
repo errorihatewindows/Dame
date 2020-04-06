@@ -166,15 +166,6 @@ namespace Dame
             }
 
         }
-        private void setFocus_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == (char)Keys.Enter)
-            {
-                e.Handled = true;
-                Zug_bestätigt_Click(this, new EventArgs());
-            }
-        }
-
 
         public string get_move(Board boarstate, int player)
         {
@@ -350,6 +341,25 @@ namespace Dame
             return position;
         }
 
+        private void simulate_Click(object sender, EventArgs e)
+        {
+            Tuple<string, string> Input = getInput();
+
+            int count = Convert.ToInt32(intSimulate.Text);
+
+
+            if (radioButtonSpielerSchwarz.Checked || radioButtonSpielerWeiß.Checked)
+                MessageBox.Show("Simulieren nicht bei eigenen Spielern möglich.");
+            else
+            {
+                mcp.set_user(Input.Item1, Input.Item2);
+                //Zeichnet die Spielfelder nicht, nur simulation
+                mcp.simulate(count);
+            }
+
+
+        }
+
         public void update_Board()
         {
             Board newBoard = mcp.Get_Board();
@@ -373,25 +383,9 @@ namespace Dame
 
         private void startgame()
         {
-            string Schwarz = "", Weiß = "";
+            Tuple<string, string> Input = getInput();
 
-            //Ausgewähltes Setup abfragen und laden
-            if (radioButtonSpielerSchwarz.Checked)
-                Schwarz = "Spieler1"; //player vs player
-            if (radioButtonZufallSchwarz.Checked)
-                Schwarz = "RAND 1";
-            if (radioButtonKISchwarz.Checked)
-                Schwarz = "CPU 1";
-
-            if (radioButtonSpielerWeiß.Checked)
-                Weiß = "Spieler2"; //player vs player
-            if (radioButtonZufallWeiß.Checked)
-                Weiß = "RAND 2";
-            if (radioButtonKIWeiß.Checked)
-                Weiß = "CPU 2";
-
-            mcp.set_user(Schwarz, Weiß);
-
+            mcp.set_user(Input.Item1, Input.Item2);
 
             //Spieleinstellungen während des SPieles blockieren
             groupBox1.Enabled = false;
@@ -434,5 +428,29 @@ namespace Dame
             groupBox1.Enabled = true;
             groupBox2.Enabled = true;
         }
+
+        private Tuple<string, string> getInput()
+        {
+            string Schwarz = "", Weiß = "";
+
+            //Ausgewähltes Setup abfragen und laden
+            if (radioButtonSpielerSchwarz.Checked)
+                Schwarz = "Spieler1"; //player vs player
+            if (radioButtonZufallSchwarz.Checked)
+                Schwarz = "RAND 1";
+            if (radioButtonKISchwarz.Checked)
+                Schwarz = "CPU 1";
+
+            if (radioButtonSpielerWeiß.Checked)
+                Weiß = "Spieler2"; //player vs player
+            if (radioButtonZufallWeiß.Checked)
+                Weiß = "RAND 2";
+            if (radioButtonKIWeiß.Checked)
+                Weiß = "CPU 2";
+
+            Tuple<string, string> choose = Tuple.Create(Schwarz, Weiß);
+
+            return choose;
+        }   //Abfrage der RadioButton auswahl, gibt Tuple zurück
     }
 }

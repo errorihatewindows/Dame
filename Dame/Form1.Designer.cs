@@ -77,7 +77,9 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.radioButtonKIWeiß = new System.Windows.Forms.RadioButton();
             this.label37 = new System.Windows.Forms.Label();
-            this.setFocus = new System.Windows.Forms.Button();
+            this.simulate = new System.Windows.Forms.Button();
+            this.intSimulate = new System.Windows.Forms.TextBox();
+            this.label38 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -244,7 +246,7 @@
             // 
             // Zug_bestätigt
             // 
-            this.Zug_bestätigt.Location = new System.Drawing.Point(580, 468);
+            this.Zug_bestätigt.Location = new System.Drawing.Point(77, 576);
             this.Zug_bestätigt.Name = "Zug_bestätigt";
             this.Zug_bestätigt.Size = new System.Drawing.Size(222, 23);
             this.Zug_bestätigt.TabIndex = 80;
@@ -255,7 +257,7 @@
             // 
             // Zug
             // 
-            this.Zug.Location = new System.Drawing.Point(580, 442);
+            this.Zug.Location = new System.Drawing.Point(77, 550);
             this.Zug.Name = "Zug";
             this.Zug.Size = new System.Drawing.Size(222, 20);
             this.Zug.TabIndex = 81;
@@ -265,7 +267,7 @@
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(824, 445);
+            this.label17.Location = new System.Drawing.Point(321, 553);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(104, 13);
             this.label17.TabIndex = 82;
@@ -574,30 +576,49 @@
             // 
             this.label37.AutoSize = true;
             this.label37.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label37.Location = new System.Drawing.Point(576, 527);
+            this.label37.Location = new System.Drawing.Point(819, 402);
             this.label37.Name = "label37";
             this.label37.Size = new System.Drawing.Size(60, 20);
             this.label37.TabIndex = 102;
             this.label37.Text = "label37";
             this.label37.Visible = false;
             // 
-            // setFocus
+            // simulate
             // 
-            this.setFocus.Location = new System.Drawing.Point(13, 605);
-            this.setFocus.Name = "setFocus";
-            this.setFocus.Size = new System.Drawing.Size(75, 23);
-            this.setFocus.TabIndex = 103;
-            this.setFocus.UseMnemonic = false;
-            this.setFocus.UseVisualStyleBackColor = true;
-            this.setFocus.Visible = false;
-            this.setFocus.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.setFocus_KeyPress);
+            this.simulate.Location = new System.Drawing.Point(642, 402);
+            this.simulate.Name = "simulate";
+            this.simulate.Size = new System.Drawing.Size(160, 23);
+            this.simulate.TabIndex = 104;
+            this.simulate.Text = "Spiele simulieren";
+            this.simulate.UseVisualStyleBackColor = true;
+            this.simulate.Click += new System.EventHandler(this.simulate_Click);
+            // 
+            // intSimulate
+            // 
+            this.intSimulate.Location = new System.Drawing.Point(580, 404);
+            this.intSimulate.Name = "intSimulate";
+            this.intSimulate.Size = new System.Drawing.Size(56, 20);
+            this.intSimulate.TabIndex = 105;
+            this.intSimulate.Text = "1000";
+            this.intSimulate.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label38
+            // 
+            this.label38.AutoSize = true;
+            this.label38.Location = new System.Drawing.Point(577, 377);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(28, 13);
+            this.label38.TabIndex = 106;
+            this.label38.Text = "oder";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(982, 672);
-            this.Controls.Add(this.setFocus);
+            this.ClientSize = new System.Drawing.Size(1268, 672);
+            this.Controls.Add(this.label38);
+            this.Controls.Add(this.intSimulate);
+            this.Controls.Add(this.simulate);
             this.Controls.Add(this.label37);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -702,8 +723,10 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label36;
         private System.Windows.Forms.Label label37;
-        private System.Windows.Forms.Button setFocus;
         private System.Windows.Forms.RadioButton radioButtonKIWeiß;
+        private System.Windows.Forms.Button simulate;
+        private System.Windows.Forms.TextBox intSimulate;
+        private System.Windows.Forms.Label label38;
     }
 }
 
