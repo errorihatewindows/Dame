@@ -296,5 +296,33 @@ namespace Dame
 
         }
 
+        //berwertet Boards für schwarz und weiß
+        private int calcuteBoard_Value(Board board, int Color)
+        {
+            int Value = 0;
+
+            foreach (KeyValuePair<Piece, char> kvp in board)
+            {
+                //CPU ist Schwarz
+                if (Color == 0)
+                {
+                    if (kvp.Value == 'b') { Value += 50; }                       
+                    if (kvp.Value == 'B') { Value += 75; }                        
+                    if (kvp.Value == 'w') { Value -= 50; }                       
+                    if (kvp.Value == 'W') { Value -= 75; }                 
+                } 
+                // CPU ist weiß
+                else if (Color == 1)
+                {
+                    if (kvp.Value == 'b') { Value -= 50; }
+                    if (kvp.Value == 'B') { Value -= 75; }                        
+                    if (kvp.Value == 'w') { Value += 50; }                        
+                    if (kvp.Value == 'W') { Value += 75; }                        
+                }
+            }
+            
+            return Value;
+        }
+
     }
 }
