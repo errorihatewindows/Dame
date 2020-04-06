@@ -574,14 +574,13 @@
             // 
             // label37
             // 
+            this.label37.AccessibleRole = System.Windows.Forms.AccessibleRole.MenuBar;
             this.label37.AutoSize = true;
             this.label37.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label37.Location = new System.Drawing.Point(819, 402);
             this.label37.Name = "label37";
-            this.label37.Size = new System.Drawing.Size(60, 20);
+            this.label37.Size = new System.Drawing.Size(0, 20);
             this.label37.TabIndex = 102;
-            this.label37.Text = "label37";
-            this.label37.Visible = false;
             // 
             // simulate
             // 

@@ -281,8 +281,8 @@ namespace Dame
 
 
         public void labelText(string Text)
-        {
-            label37.Visible = true;
+        {            
+            label37.Text = "";
             label37.Text = Text;
         }
 
@@ -345,7 +345,6 @@ namespace Dame
 
             int count = Convert.ToInt32(intSimulate.Text);
 
-
             if (radioButtonSpielerSchwarz.Checked || radioButtonSpielerWeiß.Checked)
                 MessageBox.Show("Simulieren nicht bei eigenen Spielern möglich.");
             else
@@ -394,9 +393,6 @@ namespace Dame
             Zug.Visible = true;
             Zug_bestätigt.Visible = true;
             label17.Visible = true;
-
-            //Status Label verbergen
-            label37.Visible = false;
 
             //Spiel ausführen      
             lastBoard = mcp.Get_Board();
