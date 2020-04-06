@@ -38,7 +38,7 @@ namespace Dame
             List<string> valid = new List<string>();
 
             //Finaler move
-            string final_move = "";
+            string final_move;
 
 
             foreach (KeyValuePair<Piece, char> position in Board)
@@ -48,7 +48,6 @@ namespace Dame
                     continue;
 
                 checkposition(position);
-
             }
             
 
@@ -241,8 +240,6 @@ namespace Dame
             Piece positionold = new Piece(0, 0);
             Piece positionnew = new Piece(0,0);
 
-            Console.WriteLine(Move);
-
             //wenn das Update einen normalen Move enthält
             if (Move[1] + 1 == Move[Move.Length - 1] || Move[1] -1 == Move[Move.Length - 1])
             {
@@ -265,7 +262,6 @@ namespace Dame
                     positionnew = drawing.StringToTuple((Move[(i * 3) + 2].ToString() + Move[(i * 3) + 3].ToString()));
 
                     //neuen Stein setzten
-
                     Board[positionnew] = Board[positionold];
 
                     //Übersprungenen Stein entfernen
@@ -278,10 +274,16 @@ namespace Dame
                 }
             }
 
-           
-          
-            
-            
+            //Damen setzten wenn Move auf Königsreihe führt
+            if (positionnew.Item2 == 0 || positionnew.Item2 == 7)
+            {
+                if (ComputerColor == 0) { Board[positionnew] = 'B'; }
+                if (ComputerColor == 1) { Board[positionnew] = 'W'; }
+            }
+
+
+
+
         }
 
         //Führt einen gegebenen Move oder Sprung auf TEMPBOARD aus und gibt diese zurück
@@ -328,6 +330,13 @@ namespace Dame
                 }
             }
 
+            //Damen setzten wenn Move auf Königsreihe führt
+            if (positionnew.Item2 == 0 || positionnew.Item2 == 7)
+            {
+                if (ComputerColor == 0) { Board[positionnew] = 'B'; }
+                if (ComputerColor == 1) { Board[positionnew] = 'W'; }
+            }
+
             return tempBoard;
 
         }
@@ -343,7 +352,7 @@ namespace Dame
                 if (Color == 0)
                 {
                     if (kvp.Value == 'b') { Value += 50; }                       
-                    if (kvp.Value == 'B') { Value += 75; }                        
+                    if (kvp.Value == 'B') { Value += 1000; }                        
                     if (kvp.Value == 'w') { Value -= 50; }                       
                     if (kvp.Value == 'W') { Value -= 75; }                 
                 } 
@@ -351,7 +360,7 @@ namespace Dame
                 else if (Color == 1)
                 {
                     if (kvp.Value == 'b') { Value -= 50; }
-                    if (kvp.Value == 'B') { Value -= 75; }                        
+                    if (kvp.Value == 'B') { Value -= 1000; }                        
                     if (kvp.Value == 'w') { Value += 50; }                        
                     if (kvp.Value == 'W') { Value += 75; }                        
                 }
