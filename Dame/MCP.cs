@@ -289,7 +289,6 @@ namespace Dame
             bool valid;
             Generate_Board();
             reversible_moves = 0;
-            drawing.Draw_Board(board);
             //main gameloop
             int player = 0;
             while (!is_lost(player) && reversible_moves < 30)
@@ -302,7 +301,7 @@ namespace Dame
                 valid = false;
                 while (!valid)
                 {
-                    //if (output) { drawing.Draw_Board(board); }
+                    if (output) { drawing.Draw_Board(board); }
                     move = Player[player].move(new Board(board), player);
                     valid = Check_Move(move, player);
                     if ((Player[player].is_cpu) && (!valid)) 
@@ -313,7 +312,6 @@ namespace Dame
                 }
                 if (Player[player].is_cpu && output) { drawing.wait(1000); }
                 Perform_Move(move, player);
-                drawing.Draw_Board(board);
                 //next player
                 player = 1 - player;
             }
