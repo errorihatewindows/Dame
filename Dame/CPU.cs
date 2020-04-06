@@ -221,7 +221,6 @@ namespace Dame
             {
                 foreach (string jump in deleteInvalid_jump(possiblejumps, position))
                 {
-                    Console.WriteLine(jump);
                     target = drawing.StringToTuple(jump[3].ToString() + jump[4].ToString());
                     update_Board(jump);
                     valid = valid.Concat(jumps(target)).ToList(); 
@@ -328,8 +327,8 @@ namespace Dame
             //Damen setzten wenn Move auf Königsreihe führt
             if (positionnew.Item2 == 0 || positionnew.Item2 == 7)
             {
-                if (ComputerColor == 0) { Board[positionnew] = 'B'; }
-                if (ComputerColor == 1) { Board[positionnew] = 'W'; }
+                if (ComputerColor == 0) { tempBoard[positionnew] = 'B'; }
+                if (ComputerColor == 1) { tempBoard[positionnew] = 'W'; }
             }
 
             return tempBoard;

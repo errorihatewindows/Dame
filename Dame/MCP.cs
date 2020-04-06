@@ -339,7 +339,7 @@ namespace Dame
 
         public void simulate(int repeats)
         {
-            drawing.labelText("Simulating");
+            drawing.labelText("Simulating...");
             Dictionary<int, int> results = new Dictionary<int, int>();
             results[1] = 0;     //weiß    gewinnt
             results[0] = 0;     //schwarz gewinnt
