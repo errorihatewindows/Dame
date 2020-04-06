@@ -210,10 +210,8 @@ namespace Dame
         //Spiel Starten
         private void button1_Click(object sender, EventArgs e)
         {
-            gamestarted = true;
             startgame();
         }
-
 
         public string TupleToString(Tuple<int, int> field)
         {
@@ -435,14 +433,24 @@ namespace Dame
 
             //Ausgewähltes Setup abfragen und laden
             if (radioButtonSpielerSchwarz.Checked)
+            {
                 Schwarz = "Spieler1"; //player vs player
+                //Merkieren der Felder mit Maus erlaubt
+                gamestarted = true;
+            }
+
             if (radioButtonZufallSchwarz.Checked)
                 Schwarz = "RAND 1";
             if (radioButtonKISchwarz.Checked)
                 Schwarz = "CPU 1";
 
-            if (radioButtonSpielerWeiß.Checked)
+            if (radioButtonSpielerWeiß.Checked) 
+            {
                 Weiß = "Spieler2"; //player vs player
+                //Merkieren der Felder mit Maus erlaubt
+                gamestarted = true;
+            }
+                
             if (radioButtonZufallWeiß.Checked)
                 Weiß = "RAND 2";
             if (radioButtonKIWeiß.Checked)
