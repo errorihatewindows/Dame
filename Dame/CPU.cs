@@ -225,8 +225,8 @@ namespace Dame
             {   //für Anzahl an Updates 
                 for (int i = 0; i < ((Move.Length + 1) % 3) - 1; i++)
                 {
-                    positionold = drawing.StringToTuple((Move[i].ToString() + Move[i + 1].ToString()));
-                    positionnew = drawing.StringToTuple((Move[i + 2].ToString() + Move[i + 3].ToString()));
+                    positionold = drawing.StringToTuple((Move[(i * 3)].ToString() + Move[(i * 3) + 1].ToString()));
+                    positionnew = drawing.StringToTuple((Move[(i * 3) + 2].ToString() + Move[(i * 3) + 3].ToString()));
 
                     //neuen Stein setzten
 
@@ -275,8 +275,8 @@ namespace Dame
             {   //für Anzahl an Updates 
                 for (int i = 0; i < ((Move.Length + 1) % 3) - 1; i++)
                 {
-                    positionold = drawing.StringToTuple((Move[i].ToString() + Move[i + 1].ToString()));
-                    positionnew = drawing.StringToTuple((Move[i + 2].ToString() + Move[i + 3].ToString()));
+                    positionold = drawing.StringToTuple((Move[(i * 3)].ToString() + Move[(i * 3) + 1].ToString()));
+                    positionnew = drawing.StringToTuple((Move[(i * 3) + 2].ToString() + Move[(i * 3) + 3].ToString()));
 
                     //neuen Stein setzten
 
