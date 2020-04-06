@@ -311,7 +311,7 @@ namespace Dame
                         return -2; 
                     }
                 }
-                if (Player[player].is_cpu && output) { drawing.wait(500); }
+                if (Player[player].is_cpu && output) { drawing.wait(1000); }
                 Perform_Move(move, player);
                 drawing.Draw_Board(board);
                 //next player
