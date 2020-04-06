@@ -63,21 +63,34 @@ namespace Dame
             }
 
 
-            
-            
+           
             //ermittle den Move der den höchsten Board Value liefert.
-            List<int> Values = new List<int>();
+            List<string> best_moves = new List<string>();
+            int highest_Value = 0, current_Value = 0;
 
             foreach  (string move in valid)
             {   
                 //temporäres board updaten
                 update_Board(move);
-                Values.Add(calcuteBoard_Value(Board, player));
+                current_Value = calcuteBoard_Value(Board, player);
+
+                if (current_Value == highest_Value || best_moves.Count == 0)
+                {
+                    highest_Value = current_Value;
+                    best_moves.Add(move);
+                }
+
+                if (current_Value > highest_Value)
+                {
+                    best_moves.Clear();
+                    best_moves.Add(move);
+                    highest_Value = current_Value;
+                }
+
             }
 
-            int Index = Values.IndexOf(Values.Max());
-
-            final_move = valid[Index];
+            Random Zufall = new Random();
+            final_move = best_moves[Zufall.Next(best_moves.Count)];
 
 
             return final_move;
