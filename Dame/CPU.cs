@@ -60,14 +60,36 @@ namespace Dame
             {   //Überprüft Mehrfachsprung und gibt Liste aller validen Sprünge zurück (korrekte Syntax)
                 foreach (string jump in tempjump)
                     valid = valid.Concat(jumps(drawing.StringToTuple(jump))).ToList();
-            } 
+            }
 
-            //Zufälligen Valid Move auswählen
-            Random Zufall = new Random();
-            final_move = valid[Zufall.Next(0 , valid.Count)];
+
+            
+            
+            //ermittle den Move der den höchsten Board Value liefert.
+            List<int> Values = new List<int>();
+
+            foreach  (string move in valid)
+            {   
+                //temporäres board updaten
+                update_Board(move);
+                Values.Add(calcuteBoard_Value(Board, player));
+            }
+
+            int Index = Values.IndexOf(Values.Max());
+
+            final_move = valid[Index];
+
 
             return final_move;
         }
+
+
+
+
+
+
+
+
 
         private List<Piece> possible_jumps(Piece position)
         {
@@ -162,7 +184,6 @@ namespace Dame
 
             return validjump;
         }
-
         
         private List<string> jumps(Piece position)
         {
@@ -207,8 +228,10 @@ namespace Dame
             Piece positionold = new Piece(0, 0);
             Piece positionnew = new Piece(0,0);
 
+            Console.WriteLine(Move);
+
             //wenn das Update einen normalen Move enthält
-            if (Move[1] + 1 == Move[4] || Move[1] -1 == Move[4])
+            if (Move[1] + 1 == Move[Move.Length - 1] || Move[1] -1 == Move[Move.Length - 1])
             {
                 positionold = drawing.StringToTuple(Move[0].ToString() + Move[1].ToString());
                 positionnew = drawing.StringToTuple(Move[2].ToString() + Move[3].ToString());
@@ -258,7 +281,7 @@ namespace Dame
             Piece positionnew = new Piece(0, 0);
 
             //wenn das Update einen normalen Move enthält
-            if (Move[1] + 1 == Move[4] || Move[1] - 1 == Move[4])
+            if (Move[1] + 1 == Move[Move.Length - 1] || Move[1] - 1 == Move[Move.Length - 1])
             {
                 positionold = drawing.StringToTuple(Move[0].ToString() + Move[1].ToString());
                 positionnew = drawing.StringToTuple(Move[2].ToString() + Move[3].ToString());
