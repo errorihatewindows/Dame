@@ -201,54 +201,96 @@ namespace Dame
 
         }
 
-        //Führt einen gegebenen Sprung aus
+        //Führt einen gegebenen Move oder Sprung aus 
         private void update_Board(string Move)
         {
-            string Move1 = (Move[0].ToString() + Move[1].ToString());
-            string Move2 = (Move[2].ToString() + Move[3].ToString());
+            Piece positionold = new Piece(0, 0);
+            Piece positionnew = new Piece(0,0);
 
-            Piece positionold, positionnew;
+            //wenn das Update einen normalen Move enthält
+            if (Move[1] + 1 == Move[4] || Move[1] -1 == Move[4])
+            {
+                positionold = drawing.StringToTuple(Move[0].ToString() + Move[1].ToString());
+                positionnew = drawing.StringToTuple(Move[2].ToString() + Move[3].ToString());
+
+                //neuen Stein setzten
+                Board[positionnew] = Board[positionold];
+                //alten Stein entfernen
+                Board[positionold] = '.';
+
+            } 
             
-            positionold = drawing.StringToTuple(Move1);
-            positionnew = drawing.StringToTuple(Move2);
+            //Wenn das update einen Sprung der Länge x enthält 
+            else
+            {   //für Anzahl an Updates 
+                for (int i = 0; i < ((Move.Length + 1) % 3) - 1; i++)
+                {
+                    positionold = drawing.StringToTuple((Move[i].ToString() + Move[i + 1].ToString()));
+                    positionnew = drawing.StringToTuple((Move[i + 2].ToString() + Move[i + 3].ToString()));
 
-            //neuen Stein setzten
+                    //neuen Stein setzten
+
+                    Board[positionnew] = Board[positionold];
+
+                    //Übersprungenen Stein entfernen
+                    Piece positionCaptured = new Piece((positionold.Item1 + positionnew.Item1) / 2, (positionold.Item2 + positionnew.Item2) / 2);
+                    Board[positionCaptured] = '.';
+
+                    //Alte Position updaten
+                    Board[positionold] = '.';
+
+                }
+            }
+
+           
+          
             
-            Board[positionnew] = Board[positionold];
-
-            //Übersprungenen Stein entfernen
-            Piece positionCaptured = new Piece((positionold.Item1 + positionnew.Item1) / 2, (positionold.Item2 + positionnew.Item2) / 2);
-            Board[positionCaptured] = '.';
-
-            //Alte Position updaten
-            Board[positionold] = '.';
             
         }
 
-        //Führt einen gegebenen Sprung aus
+        //Führt einen gegebenen Move oder Sprung auf TEMPBOARD aus und gibt diese zurück
         private Board update_Board(string Move, Board board)
         {
             //temporäres Board auf currentBoard state setzen
             Board tempBoard = new Board(Board);
 
-            string Move1 = (Move[0].ToString() + Move[1].ToString());
-            string Move2 = (Move[2].ToString() + Move[3].ToString());
+            Piece positionold = new Piece(0, 0);
+            Piece positionnew = new Piece(0, 0);
 
-            Piece positionold, positionnew;
+            //wenn das Update einen normalen Move enthält
+            if (Move[1] + 1 == Move[4] || Move[1] - 1 == Move[4])
+            {
+                positionold = drawing.StringToTuple(Move[0].ToString() + Move[1].ToString());
+                positionnew = drawing.StringToTuple(Move[2].ToString() + Move[3].ToString());
 
-            positionold = drawing.StringToTuple(Move1);
-            positionnew = drawing.StringToTuple(Move2);
+                //neuen Stein setzten
+                tempBoard[positionnew] = tempBoard[positionold];
+                //alten Stein entfernen
+                tempBoard[positionold] = '.';
 
-            //neuen Stein setzten
+            }
 
-            tempBoard[positionnew] = tempBoard[positionold];
+            //Wenn das update einen Sprung der Länge x enthält 
+            else
+            {   //für Anzahl an Updates 
+                for (int i = 0; i < ((Move.Length + 1) % 3) - 1; i++)
+                {
+                    positionold = drawing.StringToTuple((Move[i].ToString() + Move[i + 1].ToString()));
+                    positionnew = drawing.StringToTuple((Move[i + 2].ToString() + Move[i + 3].ToString()));
 
-            //Übersprungenen Stein entfernen
-            Piece positionCaptured = new Piece((positionold.Item1 + positionnew.Item1) / 2, (positionold.Item2 + positionnew.Item2) / 2);
-            tempBoard[positionCaptured] = '.';
+                    //neuen Stein setzten
 
-            //Alte Position updaten
-            tempBoard[positionold] = '.';
+                    tempBoard[positionnew] = tempBoard[positionold];
+
+                    //Übersprungenen Stein entfernen
+                    Piece positionCaptured = new Piece((positionold.Item1 + positionnew.Item1) / 2, (positionold.Item2 + positionnew.Item2) / 2);
+                    tempBoard[positionCaptured] = '.';
+
+                    //Alte Position updaten
+                    tempBoard[positionold] = '.';
+
+                }
+            }
 
             return tempBoard;
 
