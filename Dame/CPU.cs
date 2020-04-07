@@ -60,7 +60,7 @@ namespace Dame
             }
 
             //wählt den besten move aus
-            final_move = get_best_move(valid, Board);
+            final_move = get_best_move(valid, current_Board);
 
 
             return final_move;
@@ -318,24 +318,25 @@ namespace Dame
                 if (ComputerColor == 0)
                 {
                     if (kvp.Value == 'b') { Value += 50; }                       
-                    if (kvp.Value == 'B') { Value += 80; }                        
-                    if (kvp.Value == 'w') { Value -= 50; }                       
+                    if (kvp.Value == 'B') { Value += 100; }                        
+                    if (kvp.Value == 'w') { Value -= 20; }                       
                     if (kvp.Value == 'W') { Value -= 80; }                 
                 } 
                 // CPU ist weiß
                 else if (ComputerColor == 1)
                 {
-                    if (kvp.Value == 'b') { Value -= 50; }
+                    if (kvp.Value == 'b') { Value -= 20; }
                     if (kvp.Value == 'B') { Value -= 80; }                        
                     if (kvp.Value == 'w') { Value += 50; }                        
-                    if (kvp.Value == 'W') { Value += 80; }                        
+                    if (kvp.Value == 'W') { Value += 100; }                        
                 }
             }
 
             //Anzahl gegnerischer Sprünge bewerten
-            Value += (opponentjumpsbefore - opponentjumpsafter) * 250;
+            Value += (opponentjumpsbefore - opponentjumpsafter) * 100;
 
-
+            Console.Write(" = " + Value);
+            Console.WriteLine();
   
 
             return Value;
@@ -353,20 +354,19 @@ namespace Dame
                 //Stein hat Gegnerfarbe
                 //Anzahl der möglichen Sprungrichtungen eines Steines
                 if ((ComputerColor == 0 && (position.Value == 'b' || position.Value == 'B')) || (ComputerColor == 1 && (position.Value == 'w' || position.Value == 'W')))
-                    tempjumps = deleteInvalid_jump(possible_jumps(position.Key), position.Key, board);
+                    tempjumps = tempjumps.Concat(deleteInvalid_jump(possible_jumps(position.Key), position.Key, board)).ToList();
                 
             }
 
             //Rücktausch
             ComputerColor = 1 - ComputerColor;
 
-
-
             return tempjumps.Count;
         }
 
         private string get_best_move(List<string> valid, Board board)
         {
+            Console.WriteLine();
             //ermittle den Move der den höchsten Board Value liefert.
             List<string> best_moves = new List<string>();
             int highest_Value = 0, current_Value;
@@ -385,6 +385,9 @@ namespace Dame
                 //Gegner Sprünge nach update zählen
                 int opponentjumpsafter = count_opponent_jumps(tempBoard);
 
+                
+                Console.Write(move);
+
                 current_Value = calcuteBoard_Value(tempBoard, opponentjumpsbefore, opponentjumpsafter);
 
                 if ((current_Value == highest_Value) || best_moves.Count == 0)
@@ -400,6 +403,9 @@ namespace Dame
                     highest_Value = current_Value;
                 }
             }
+
+            Console.WriteLine();
+            Console.WriteLine("------" + highest_Value + "------");
 
             Random Zufall = new Random();
             return best_moves[Zufall.Next(best_moves.Count)];
