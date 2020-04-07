@@ -33,10 +33,8 @@ namespace Dame
             Board = new Board(current_Board);
             tempmove = new List<string>();
             tempjump = new List<string>();
-
             //Liste aller validen Züge
             List<string> valid = new List<string>();
-
             //Finaler move
             string final_move;
 
@@ -61,64 +59,11 @@ namespace Dame
                     valid = valid.Concat(jumps(drawing.StringToTuple(jump))).ToList();
             }
 
+            //Zählt Anzahl der möglichen Gegnersteine, die Springen können
+            int opponentjumps = count_opponent_jumps(Board);
 
-
-            //ermittle die Anzahl der gegnerischen möglichen Sprünge
-            List<string> jump_oponent = new List<string>();
-            List<string> tempjumps = new List<string>();
-            //temporärer Farbentausch
-            if (ComputerColor == 0) { ComputerColor = 1; }
-            else if (ComputerColor == 1) { ComputerColor = 0; }
-            
-            foreach (KeyValuePair<Piece, char> position in current_Board)
-            {
-                //Stein hat Gegnerfarbe
-                if ((ComputerColor == 0 && (position.Value == 'b' || position.Value == 'B')) || (ComputerColor == 1 && (position.Value == 'w' || position.Value == 'W')))
-                    tempjumps = deleteInvalid_jump(possible_jumps(position.Key), position.Key);
-
-                if (tempjumps.Count == 0)
-                    continue;
-                else
-                    jump_oponent = jump_oponent.Concat(jumps(position.Key)).ToList();
-
-            }
-
-           
-            if (ComputerColor == 0) { ComputerColor = 1; }
-            else if (ComputerColor == 1) { ComputerColor = 0; }
-
-
-            //ermittle den Move der den höchsten Board Value liefert.
-            List<string> best_moves = new List<string>();
-            int highest_Value = 0, current_Value = 0;
-
-            Board tempBoard = Board;
-
-            foreach  (string move in valid)
-            {   
-                //temporäres board updaten
-                tempBoard = update_Board(move, Board);
-                current_Value = calcuteBoard_Value(tempBoard);
-
-                if (current_Value == highest_Value || best_moves.Count == 0)
-                {
-                    highest_Value = current_Value;
-                    best_moves.Add(move);
-                }
-
-                if (current_Value > highest_Value)
-                {
-                    best_moves.Clear();
-                    best_moves.Add(move);
-                    highest_Value = current_Value;
-                }
-
-
-
-            }
-
-            Random Zufall = new Random();
-            final_move = best_moves[Zufall.Next(best_moves.Count)];
+            //wählt den besten move aus
+            final_move = get_best_move(valid, opponentjumps, Board);
 
 
             return final_move;
@@ -365,10 +310,9 @@ namespace Dame
         }
 
         //berwertet Boards für schwarz und weiß
-        private int calcuteBoard_Value(Board board)
+        private int calcuteBoard_Value(Board board, int opponentjumpsbefore, int opponentjumpsafter)
         {
             int Value = 0;
-
 
             //ANzahl der Steine - Bewertung
             foreach (KeyValuePair<Piece, char> kvp in board)
@@ -390,14 +334,81 @@ namespace Dame
                     if (kvp.Value == 'W') { Value += 75; }                        
                 }
             }
-            
 
             //Anzahl gegnerischer Sprünge bewerten
+            Value += (opponentjumpsbefore - opponentjumpsafter) * 100;
 
-
+  
 
             return Value;
         }
 
+        private int count_opponent_jumps(Board board)
+        {
+            //ermittle die Anzahl der gegnerischen möglichen Sprünge
+            List<string> tempjumps = new List<string>();
+            //temporärer Farbentausch
+            if (ComputerColor == 0) { ComputerColor = 1; }
+            else if (ComputerColor == 1) { ComputerColor = 0; }
+
+            foreach (KeyValuePair<Piece, char> position in board)
+            {
+                //Stein hat Gegnerfarbe
+                //Anzahl der möglichen Sprungrichtungen eines Steines
+                if ((ComputerColor == 0 && (position.Value == 'b' || position.Value == 'B')) || (ComputerColor == 1 && (position.Value == 'w' || position.Value == 'W')))
+                    tempjumps = deleteInvalid_jump(possible_jumps(position.Key), position.Key);
+                
+            }
+
+            //Rücktausch
+            if (ComputerColor == 0) { ComputerColor = 1; }
+            else if (ComputerColor == 1) { ComputerColor = 0; }
+
+            
+
+            return tempjumps.Count;
+        }
+
+        private string get_best_move(List<string> valid, int opponentjumpsbefore, Board board)
+        {
+            //ermittle den Move der den höchsten Board Value liefert.
+            List<string> best_moves = new List<string>();
+            int highest_Value = 0, current_Value;
+
+            //temporäres Board zum ausführen der Züge
+            Board tempBoard = board;
+
+            foreach (string move in valid)
+            {
+                //temporäres board updaten
+                tempBoard = update_Board(move, board);
+
+                //Gegner Sprünge nach update zählen
+                int opponentjumpsafter = count_opponent_jumps(tempBoard);
+
+                current_Value = calcuteBoard_Value(tempBoard, opponentjumpsbefore, opponentjumpsafter);
+
+                if (current_Value == highest_Value || best_moves.Count == 0)
+                {
+                    highest_Value = current_Value;
+                    best_moves.Add(move);
+                }
+
+                if (current_Value > highest_Value)
+                {
+                    best_moves.Clear();
+                    best_moves.Add(move);
+                    highest_Value = current_Value;
+                }
+
+
+
+            }
+
+            Console.WriteLine(highest_Value);
+
+            Random Zufall = new Random();
+            return best_moves[Zufall.Next(best_moves.Count)];
+        }
     }
 }
