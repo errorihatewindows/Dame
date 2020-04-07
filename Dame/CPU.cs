@@ -333,7 +333,7 @@ namespace Dame
             }
 
             //Anzahl gegnerischer Sprünge bewerten
-            Value += (opponentjumpsbefore - opponentjumpsafter) * 100;
+            Value += (opponentjumpsbefore - opponentjumpsafter) * 40;
 
 
             Console.Write(" = " + Value);
