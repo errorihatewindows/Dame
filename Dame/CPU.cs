@@ -45,7 +45,7 @@ namespace Dame
                 if (((player == 0) && (position.Value != 'b' && position.Value != 'B')) || ((player == 1 && (position.Value != 'w' && position.Value != 'W'))))
                     continue;
 
-                checkposition(position);
+                checkposition(position, Board);
             }
             
 
@@ -78,7 +78,7 @@ namespace Dame
 
 
         // Listet alle möglichen Züge + gibt nur valide Züge zurück
-        private void checkposition(KeyValuePair<Piece, char> position) 
+        private void checkposition(KeyValuePair<Piece, char> position, Board board) 
         {
             //Liste aller theoretisch möglichen Züge eines Spielsteins
             List<Piece> possiblemove = possible_moves(position.Key);
@@ -86,7 +86,7 @@ namespace Dame
 
             //Invalide Züge löschen
             tempmove = tempmove.Concat(deleteInvalid_move(possiblemove, position.Key)).ToList();
-            tempjump = tempjump.Concat(deleteInvalid_jump(possiblejump, position.Key)).ToList();
+            tempjump = tempjump.Concat(deleteInvalid_jump(possiblejump, position.Key, board)).ToList();
             
         }
 
@@ -135,7 +135,7 @@ namespace Dame
             return validmove;
         }
 
-        private List<string> deleteInvalid_jump(List<Piece> possiblejump, Piece position)
+        private List<string> deleteInvalid_jump(List<Piece> possiblejump, Piece position, Board board)
         {
             List<string> validjump = new List<string>();
 
@@ -148,11 +148,11 @@ namespace Dame
                 if (option.Item2 > 7 || option.Item2 < 0) { continue; }
 
                 // normale Steine nur vorwärts
-                if (Board[position] == 'b') { if (position.Item2 - 2 == option.Item2) { continue; } }
-                if (Board[position] == 'w') { if (position.Item2 + 2 == option.Item2) { continue; } }
+                if (board[position] == 'b') { if (position.Item2 - 2 == option.Item2) { continue; } }
+                if (board[position] == 'w') { if (position.Item2 + 2 == option.Item2) { continue; } }
 
                 //Feld bereits belegt
-                if (Board[option] != '.') { continue; }
+                if (board[option] != '.') { continue; }
 
                 //Berechne Feld das übersprungen wird
 
@@ -160,11 +160,11 @@ namespace Dame
                 int y = (position.Item2 + option.Item2) / 2;
 
                 //leeres Feld zum Überspringen
-                if (Board[Tuple.Create(x,y)] == '.') { continue; }
+                if (board[Tuple.Create(x,y)] == '.') { continue; }
                 
                 //übersprungener Stein ist eigene Farbe
-                if ((ComputerColor == 0)   &&   ((Board[Tuple.Create(x, y)] == 'b') || (Board[Tuple.Create(x, y)] == 'B'))) { continue; }
-                if ((ComputerColor == 1)   &&   ((Board[Tuple.Create(x, y)] == 'w') || (Board[Tuple.Create(x, y)] == 'W'))) { continue; }
+                if ((ComputerColor == 0)   &&   ((board[Tuple.Create(x, y)] == 'b') || (board[Tuple.Create(x, y)] == 'B'))) { continue; }
+                if ((ComputerColor == 1)   &&   ((board[Tuple.Create(x, y)] == 'w') || (board[Tuple.Create(x, y)] == 'W'))) { continue; }
 
 
                 validjump.Add(drawing.TupleToString(position) + "," +  drawing.TupleToString(option));
@@ -185,7 +185,7 @@ namespace Dame
 
             //Stop condition of recursion
             //if no valid jumps are possible, return a string with only this position
-            if (deleteInvalid_jump(possiblejumps,position).Count == 0)
+            if (deleteInvalid_jump(possiblejumps,position, currentboard).Count == 0)
             {
                 valid.Add(drawing.TupleToString(position));
                 return valid;
@@ -193,7 +193,7 @@ namespace Dame
             //else get the full jump of every possible option at this position
             else
             {
-                foreach (string jump in deleteInvalid_jump(possiblejumps, position))
+                foreach (string jump in deleteInvalid_jump(possiblejumps, position, currentboard))
                 {
                     target = drawing.StringToTuple(jump[3].ToString() + jump[4].ToString());
                     update_Board(jump);
@@ -336,7 +336,7 @@ namespace Dame
             }
 
             //Anzahl gegnerischer Sprünge bewerten
-            Value += (opponentjumpsbefore - opponentjumpsafter) * 100;
+            Value += (opponentjumpsbefore - opponentjumpsafter) * 1000;
 
   
 
@@ -348,23 +348,19 @@ namespace Dame
             //ermittle die Anzahl der gegnerischen möglichen Sprünge
             List<string> tempjumps = new List<string>();
             //temporärer Farbentausch
-            if (ComputerColor == 0) { ComputerColor = 1; }
-            else if (ComputerColor == 1) { ComputerColor = 0; }
+            ComputerColor = 1 - ComputerColor;
 
             foreach (KeyValuePair<Piece, char> position in board)
             {
                 //Stein hat Gegnerfarbe
                 //Anzahl der möglichen Sprungrichtungen eines Steines
                 if ((ComputerColor == 0 && (position.Value == 'b' || position.Value == 'B')) || (ComputerColor == 1 && (position.Value == 'w' || position.Value == 'W')))
-                    tempjumps = deleteInvalid_jump(possible_jumps(position.Key), position.Key);
+                    tempjumps = deleteInvalid_jump(possible_jumps(position.Key), position.Key, board);
                 
             }
 
             //Rücktausch
-            if (ComputerColor == 0) { ComputerColor = 1; }
-            else if (ComputerColor == 1) { ComputerColor = 0; }
-
-            
+            ComputerColor = 1 - ComputerColor;
 
             return tempjumps.Count;
         }
@@ -404,8 +400,6 @@ namespace Dame
 
 
             }
-
-            Console.WriteLine(highest_Value);
 
             Random Zufall = new Random();
             return best_moves[Zufall.Next(best_moves.Count)];
