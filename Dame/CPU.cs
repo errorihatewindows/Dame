@@ -65,31 +65,25 @@ namespace Dame
 
             //ermittle die Anzahl der gegnerischen möglichen Sprünge
             List<string> jump_oponent = new List<string>();
+            List<string> tempjumps = new List<string>();
             //temporärer Farbentausch
             if (ComputerColor == 0) { ComputerColor = 1; }
             else if (ComputerColor == 1) { ComputerColor = 0; }
             
             foreach (KeyValuePair<Piece, char> position in current_Board)
             {
-                
+                //Stein hat Gegnerfarbe
                 if ((ComputerColor == 0 && (position.Value == 'b' || position.Value == 'B')) || (ComputerColor == 1 && (position.Value == 'w' || position.Value == 'W')))
-                    jump_oponent = deleteInvalid_jump(possible_jumps(position.Key), position.Key);
-                
-                if (jump_oponent.Count == 0)
+                    tempjumps = deleteInvalid_jump(possible_jumps(position.Key), position.Key);
+
+                if (tempjumps.Count == 0)
                     continue;
-
-                jump_oponent.Clear();
-
-                if (ComputerColor == 0 && (position.Value == 'b' || position.Value == 'B'))
-                    jump_oponent = jump_oponent.Concat(jumps(position.Key)).ToList();
-                    
-                if (ComputerColor == 1 && (position.Value == 'w' || position.Value == 'W'))
+                else
                     jump_oponent = jump_oponent.Concat(jumps(position.Key)).ToList();
 
             }
 
-            Console.WriteLine(jump_oponent.Count);
-
+           
             if (ComputerColor == 0) { ComputerColor = 1; }
             else if (ComputerColor == 1) { ComputerColor = 0; }
 
