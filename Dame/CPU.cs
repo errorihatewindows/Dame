@@ -59,11 +59,8 @@ namespace Dame
                     valid = valid.Concat(jumps(drawing.StringToTuple(jump))).ToList();
             }
 
-            //Zählt Anzahl der möglichen Gegnersteine, die Springen können
-            int opponentjumps = count_opponent_jumps(Board);
-
             //wählt den besten move aus
-            final_move = get_best_move(valid, opponentjumps, Board);
+            final_move = get_best_move(valid, Board);
 
 
             return final_move;
@@ -321,22 +318,23 @@ namespace Dame
                 if (ComputerColor == 0)
                 {
                     if (kvp.Value == 'b') { Value += 50; }                       
-                    if (kvp.Value == 'B') { Value += 75; }                        
+                    if (kvp.Value == 'B') { Value += 80; }                        
                     if (kvp.Value == 'w') { Value -= 50; }                       
-                    if (kvp.Value == 'W') { Value -= 75; }                 
+                    if (kvp.Value == 'W') { Value -= 80; }                 
                 } 
                 // CPU ist weiß
                 else if (ComputerColor == 1)
                 {
                     if (kvp.Value == 'b') { Value -= 50; }
-                    if (kvp.Value == 'B') { Value -= 75; }                        
+                    if (kvp.Value == 'B') { Value -= 80; }                        
                     if (kvp.Value == 'w') { Value += 50; }                        
-                    if (kvp.Value == 'W') { Value += 75; }                        
+                    if (kvp.Value == 'W') { Value += 80; }                        
                 }
             }
 
             //Anzahl gegnerischer Sprünge bewerten
-            Value += (opponentjumpsbefore - opponentjumpsafter) * 1000;
+            Value += (opponentjumpsbefore - opponentjumpsafter) * 250;
+
 
   
 
@@ -362,14 +360,19 @@ namespace Dame
             //Rücktausch
             ComputerColor = 1 - ComputerColor;
 
+
+
             return tempjumps.Count;
         }
 
-        private string get_best_move(List<string> valid, int opponentjumpsbefore, Board board)
+        private string get_best_move(List<string> valid, Board board)
         {
             //ermittle den Move der den höchsten Board Value liefert.
             List<string> best_moves = new List<string>();
             int highest_Value = 0, current_Value;
+
+            //Zählt Anzahl der möglichen Gegnersteine, die Springen können
+            int opponentjumpsbefore = count_opponent_jumps(board);
 
             //temporäres Board zum ausführen der Züge
             Board tempBoard = board;
@@ -384,7 +387,7 @@ namespace Dame
 
                 current_Value = calcuteBoard_Value(tempBoard, opponentjumpsbefore, opponentjumpsafter);
 
-                if (current_Value == highest_Value || best_moves.Count == 0)
+                if ((current_Value == highest_Value) || best_moves.Count == 0)
                 {
                     highest_Value = current_Value;
                     best_moves.Add(move);
@@ -396,9 +399,6 @@ namespace Dame
                     best_moves.Add(move);
                     highest_Value = current_Value;
                 }
-
-
-
             }
 
             Random Zufall = new Random();
