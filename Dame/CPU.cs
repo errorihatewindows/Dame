@@ -62,6 +62,38 @@ namespace Dame
             }
 
 
+
+            //ermittle die Anzahl der gegnerischen möglichen Sprünge
+            List<string> jump_oponent = new List<string>();
+            //temporärer Farbentausch
+            if (ComputerColor == 0) { ComputerColor = 1; }
+            else if (ComputerColor == 1) { ComputerColor = 0; }
+            
+            foreach (KeyValuePair<Piece, char> position in current_Board)
+            {
+                
+                if ((ComputerColor == 0 && (position.Value == 'b' || position.Value == 'B')) || (ComputerColor == 1 && (position.Value == 'w' || position.Value == 'W')))
+                    jump_oponent = deleteInvalid_jump(possible_jumps(position.Key), position.Key);
+                
+                if (jump_oponent.Count == 0)
+                    continue;
+
+                jump_oponent.Clear();
+
+                if (ComputerColor == 0 && (position.Value == 'b' || position.Value == 'B'))
+                    jump_oponent = jump_oponent.Concat(jumps(position.Key)).ToList();
+                    
+                if (ComputerColor == 1 && (position.Value == 'w' || position.Value == 'W'))
+                    jump_oponent = jump_oponent.Concat(jumps(position.Key)).ToList();
+
+            }
+
+            Console.WriteLine(jump_oponent.Count);
+
+            if (ComputerColor == 0) { ComputerColor = 1; }
+            else if (ComputerColor == 1) { ComputerColor = 0; }
+
+
             //ermittle den Move der den höchsten Board Value liefert.
             List<string> best_moves = new List<string>();
             int highest_Value = 0, current_Value = 0;
@@ -106,6 +138,19 @@ namespace Dame
 
 
 
+        // Listet alle möglichen Züge + gibt nur valide Züge zurück
+        private void checkposition(KeyValuePair<Piece, char> position) 
+        {
+            //Liste aller theoretisch möglichen Züge eines Spielsteins
+            List<Piece> possiblemove = possible_moves(position.Key);
+            List<Piece> possiblejump = possible_jumps(position.Key);
+
+            //Invalide Züge löschen
+            tempmove = tempmove.Concat(deleteInvalid_move(possiblemove, position.Key)).ToList();
+            tempjump = tempjump.Concat(deleteInvalid_jump(possiblejump, position.Key)).ToList();
+            
+        }
+
         private List<Piece> possible_jumps(Piece position)
         {
             List<Piece> possiblejump = new List<Piece>();
@@ -124,17 +169,6 @@ namespace Dame
             possiblemove.Add(Tuple.Create(position.Item1 - 1, position.Item2 - 1));
             possiblemove.Add(Tuple.Create(position.Item1 - 1, position.Item2 + 1));
             return possiblemove;
-        }
-        private void checkposition(KeyValuePair<Piece, char> position) // Listet alle möglichen Züge + gibt nur valide Züge zurück
-        {
-            //Liste aller theoretisch möglichen Züge eines Spielsteins
-            List<Piece> possiblemove = possible_moves(position.Key);
-            List<Piece> possiblejump = possible_jumps(position.Key);
-
-            //Invalide Züge löschen
-            tempmove = tempmove.Concat(deleteInvalid_move(possiblemove, position.Key)).ToList();
-            tempjump = tempjump.Concat(deleteInvalid_jump(possiblejump, position.Key)).ToList();
-            
         }
 
         private List<string> deleteInvalid_move(List<Piece> possiblemove, Piece position) //Löscht invalide Züge und gibt valide zurück
@@ -200,6 +234,7 @@ namespace Dame
             return validjump;
         }
         
+        //findet alle kompletten Sprungketten an gegebener Position
         private List<string> jumps(Piece position)
         {
             List<string> valid = new List<string>();
@@ -237,7 +272,7 @@ namespace Dame
 
         }
 
-        //Führt einen gegebenen Move oder Sprung aus 
+        //Führt einen gegebenen Move oder Sprung aus auf dem TempBoard der CPU
         private void update_Board(string Move)
         {
             Piece positionold = new Piece(0, 0);
@@ -283,7 +318,7 @@ namespace Dame
         private Board update_Board(string Move, Board board)
         {
             //temporäres Board auf currentBoard state setzen
-            Board tempBoard = new Board(Board);
+            Board tempBoard = new Board(board);
 
             Piece positionold = new Piece(0, 0);
             Piece positionnew = new Piece(0, 0);
@@ -340,6 +375,8 @@ namespace Dame
         {
             int Value = 0;
 
+
+            //ANzahl der Steine - Bewertung
             foreach (KeyValuePair<Piece, char> kvp in board)
             {
                 //CPU ist Schwarz
@@ -360,6 +397,11 @@ namespace Dame
                 }
             }
             
+
+            //Anzahl gegnerischer Sprünge bewerten
+
+
+
             return Value;
         }
 
