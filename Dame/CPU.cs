@@ -335,6 +335,7 @@ namespace Dame
             //Anzahl gegnerischer Sprünge bewerten
             Value += (opponentjumpsbefore - opponentjumpsafter) * 100;
 
+
             Console.Write(" = " + Value);
             Console.WriteLine();
   
@@ -367,12 +368,13 @@ namespace Dame
         private string get_best_move(List<string> valid, Board board)
         {
             Console.WriteLine();
-            //ermittle den Move der den höchsten Board Value liefert.
+
             List<string> best_moves = new List<string>();
             int highest_Value = 0, current_Value;
 
-            //Zählt Anzahl der möglichen Gegnersteine, die Springen können
+            //Zählt Anzahl der möglichen Gegnersteine und eigene, die Springen können
             int opponentjumpsbefore = count_opponent_jumps(board);
+
 
             //temporäres Board zum ausführen der Züge
             Board tempBoard = board;
@@ -384,8 +386,7 @@ namespace Dame
 
                 //Gegner Sprünge nach update zählen
                 int opponentjumpsafter = count_opponent_jumps(tempBoard);
-
-                
+               
                 Console.Write(move);
 
                 current_Value = calcuteBoard_Value(tempBoard, opponentjumpsbefore, opponentjumpsafter);
