@@ -347,10 +347,12 @@ namespace Dame
             Value += (opponentjumpsbefore - opponentjumpsafter) * 40;
 
             //Wenn keine Gegnersprünge verhindert werden können bevorzuge den Zug bei dem DU danach springen kannst wenn du somit keinen Gegnersprung ermöglichst
-            Value += (ownjumpsafter - ownjumpsbefore) * 10;
+            Value += (ownjumpsafter - ownjumpsbefore) * 5;
 
             //Bewege Steine aus der Damenreihe eher seltener (Damen werden außenvor gelassen)
             Value += (NumBefore - NumAfter) * -10;
+
+            
 
 
             Console.Write(" = " + Value + " , " + (opponentjumpsafter - opponentjumpsbefore) + " , " + (ownjumpsafter - ownjumpsbefore));
@@ -399,7 +401,7 @@ namespace Dame
             return tempjumps.Count;
         }
 
-        private int count_Pieces_on_Base(Board board)
+        private int count_Pieces_on_Baseline(Board board)
         {
             int amount = 0;
 
@@ -435,7 +437,7 @@ namespace Dame
             //Zählt Anzahl der möglichen Gegnersteine und eigene, die Springen können
             int opponentjumpsbefore = count_opponent_jumps(board);
             int ownjumpsbefore = count_own_jumps(board);
-            int NumBefore = count_Pieces_on_Base(board);
+            int NumBefore = count_Pieces_on_Baseline(board);
 
             //temporäres Board zum ausführen der Züge
             Board tempBoard = board;
@@ -448,7 +450,7 @@ namespace Dame
                 //Gegner Sprünge nach update zählen
                 int opponentjumpsafter = count_opponent_jumps(tempBoard);
                 int ownjumpsafter = count_own_jumps(tempBoard);
-                int NumAfter = count_Pieces_on_Base(tempBoard);
+                int NumAfter = count_Pieces_on_Baseline(tempBoard);
 
                 Console.Write(move);
 
