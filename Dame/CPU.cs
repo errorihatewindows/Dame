@@ -307,7 +307,7 @@ namespace Dame
         }
 
         //berwertet Boards für schwarz und weiß
-        private int calcuteBoard_Value(Board board, int opponentjumpsbefore, int opponentjumpsafter)
+        private int calcuteBoard_Value(Board board, int opponentjumpsbefore, int opponentjumpsafter, int ownjumpsbefore, int ownjumpsafter, int NumBefore, int NumAfter)
         {
             int Value = 0;
 
@@ -335,8 +335,15 @@ namespace Dame
             //Anzahl gegnerischer Sprünge bewerten
             Value += (opponentjumpsbefore - opponentjumpsafter) * 40;
 
+            //Wenn keine Gegnersprünge verhindert werden können bevorzuge den Zug bei dem DU danach springen kannst wenn du somit keinen Gegnersprung ermöglichst
+            if ((opponentjumpsbefore - opponentjumpsafter) == 0 )
+                Value += (ownjumpsafter - ownjumpsbefore + 1) * 20;
 
-            Console.Write(" = " + Value);
+            //Bewege Steine aus der Damenreihe eher seltener (Damen werden außenvor gelassen)
+            Value += (NumBefore - NumAfter) * -10;
+
+
+            Console.Write(" = " + Value + " , " + (opponentjumpsafter - opponentjumpsbefore) + " , " + (ownjumpsafter - ownjumpsbefore));
             Console.WriteLine();
   
 
@@ -364,6 +371,49 @@ namespace Dame
 
             return tempjumps.Count;
         }
+        
+        private int count_own_jumps(Board board)
+        {
+            //ermittle die Anzahl der gegnerischen möglichen Sprünge
+            List<string> tempjumps = new List<string>();
+
+            foreach (KeyValuePair<Piece, char> position in board)
+            {
+                //Stein hat Gegnerfarbe
+                //Anzahl der möglichen Sprungrichtungen eines Steines
+                if ((ComputerColor == 0 && (position.Value == 'b' || position.Value == 'B')) || (ComputerColor == 1 && (position.Value == 'w' || position.Value == 'W')))
+                    tempjumps = tempjumps.Concat(deleteInvalid_jump(possible_jumps(position.Key), position.Key, board)).ToList();
+
+            }
+
+            return tempjumps.Count;
+        }
+
+        private int count_Pieces_on_Base(Board board)
+        {
+            int amount = 0;
+
+            if (ComputerColor == 0)
+            {
+                //Damen werden außenvor gelassen
+                for(int i = 0; i <= 6; i += 2)
+                {
+                    if (board[Tuple.Create(i, 0)] == 'b')
+                        amount++;
+                }
+            }
+
+            if (ComputerColor == 1)
+            {
+                for (int i = 1; i <= 7; i += 2)
+                {
+                    if (board[Tuple.Create(i, 7)] == 'w')
+                        amount++;
+                }
+            }
+
+            return amount;
+        }
 
         private string get_best_move(List<string> valid, Board board)
         {
@@ -374,7 +424,8 @@ namespace Dame
 
             //Zählt Anzahl der möglichen Gegnersteine und eigene, die Springen können
             int opponentjumpsbefore = count_opponent_jumps(board);
-
+            int ownjumpsbefore = count_own_jumps(board);
+            int NumBefore = count_Pieces_on_Base(board);
 
             //temporäres Board zum ausführen der Züge
             Board tempBoard = board;
@@ -386,10 +437,12 @@ namespace Dame
 
                 //Gegner Sprünge nach update zählen
                 int opponentjumpsafter = count_opponent_jumps(tempBoard);
-               
+                int ownjumpsafter = count_own_jumps(tempBoard);
+                int NumAfter = count_Pieces_on_Base(tempBoard);
+
                 Console.Write(move);
 
-                current_Value = calcuteBoard_Value(tempBoard, opponentjumpsbefore, opponentjumpsafter);
+                current_Value = calcuteBoard_Value(tempBoard, opponentjumpsbefore, opponentjumpsafter, ownjumpsbefore, ownjumpsafter, NumBefore, NumAfter);
 
                 if ((current_Value == highest_Value) || best_moves.Count == 0)
                 {
