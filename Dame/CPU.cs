@@ -336,8 +336,7 @@ namespace Dame
             Value += (opponentjumpsbefore - opponentjumpsafter) * 40;
 
             //Wenn keine Gegnersprünge verhindert werden können bevorzuge den Zug bei dem DU danach springen kannst wenn du somit keinen Gegnersprung ermöglichst
-            if ((opponentjumpsbefore - opponentjumpsafter) == 0 )
-                Value += (ownjumpsafter - ownjumpsbefore + 1) * 20;
+            Value += (ownjumpsafter - ownjumpsbefore + 1) * 10;
 
             //Bewege Steine aus der Damenreihe eher seltener (Damen werden außenvor gelassen)
             Value += (NumBefore - NumAfter) * -10;
