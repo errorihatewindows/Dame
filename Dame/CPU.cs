@@ -318,17 +318,28 @@ namespace Dame
                 if (ComputerColor == 0)
                 {
                     if (kvp.Value == 'b') { Value += 50; }                       
-                    if (kvp.Value == 'B') { Value += 100; }                        
-                    if (kvp.Value == 'w') { Value -= 20; }                       
-                    if (kvp.Value == 'W') { Value -= 80; }                 
+                    if (kvp.Value == 'B') 
+                    { Value += 100;
+                        int Distance = calculateDistance(kvp.Key, board);
+                        if (Distance > 3)
+                            Value += (3 - Distance) * 2;
+                    }                        
+                    if (kvp.Value == 'w') { Value -= 50; }                       
+                    if (kvp.Value == 'W') { Value -= 100; }                 
                 } 
                 // CPU ist weiß
                 else if (ComputerColor == 1)
                 {
-                    if (kvp.Value == 'b') { Value -= 20; }
-                    if (kvp.Value == 'B') { Value -= 80; }                        
+                    if (kvp.Value == 'b') { Value -= 50; }
+                    if (kvp.Value == 'B') { Value -= 100; }                        
                     if (kvp.Value == 'w') { Value += 50; }                        
-                    if (kvp.Value == 'W') { Value += 100; }                        
+                    if (kvp.Value == 'W') 
+                    { 
+                        Value += 100;
+                        int Distance = calculateDistance(kvp.Key, board);
+                        if (Distance > 3)
+                            Value += (3 - Distance) * 2;
+                    }                        
                 }
             }
 
@@ -336,7 +347,7 @@ namespace Dame
             Value += (opponentjumpsbefore - opponentjumpsafter) * 40;
 
             //Wenn keine Gegnersprünge verhindert werden können bevorzuge den Zug bei dem DU danach springen kannst wenn du somit keinen Gegnersprung ermöglichst
-            Value += (ownjumpsafter - ownjumpsbefore + 1) * 10;
+            Value += (ownjumpsafter - ownjumpsbefore) * 10;
 
             //Bewege Steine aus der Damenreihe eher seltener (Damen werden außenvor gelassen)
             Value += (NumBefore - NumAfter) * -10;
@@ -462,6 +473,30 @@ namespace Dame
 
             Random Zufall = new Random();
             return best_moves[Zufall.Next(best_moves.Count)];
+        }
+
+        //Berechnet den Abstand einer Dame zum nächsten Gegnerstein
+        private int calculateDistance(Piece Dameposition, Board board)
+        {
+            int DistanceMoves = 10, tempMovedistance;
+
+            foreach (KeyValuePair<Piece,char> kvp in Board)
+            {
+                if (ComputerColor == 0 && (kvp.Value == 'w' || kvp.Value == 'W') || (ComputerColor == 1 && (kvp.Value == 'b' || kvp.Value == 'B')))
+                {
+                    if (Math.Abs(Dameposition.Item1 - kvp.Key.Item1) > Math.Abs(Dameposition.Item2 - kvp.Key.Item2))
+                        tempMovedistance = Math.Abs(Dameposition.Item1 - kvp.Key.Item1);
+                    else
+                        tempMovedistance = Math.Abs(Dameposition.Item2 - kvp.Key.Item2);
+
+                    if (tempMovedistance < DistanceMoves)
+                        DistanceMoves = tempMovedistance;
+
+                }
+                
+            }
+
+            return DistanceMoves;
         }
     }
 }
