@@ -87,49 +87,36 @@ namespace Dame
         // Wählt den Zug mit dem höchsten Board Value aus
         private string get_best_move(List<string> valid, Board board)
         {
-            Console.WriteLine();
-
             List<string> best_moves = new List<string>();
-            int highest_Value = 0, current_Value;
+            int highestDifference = 0;
 
-            //Zählt Anzahl der möglichen Gegnersteine und eigene, die Springen können
-            int opponentjumpsbefore = count_opponent_jumps(board);
-            int ownjumpsbefore = count_own_jumps(board);
-            int NumBefore = count_Pieces_on_Baseline(board);
+            //Value des akutellen Boardes
+            int ValueBefore = calcuteBoard_Value(board);
 
             //temporäres Board zum ausführen der Züge
-            Board tempBoard = board;
+            Board tempBoard = new Board(board);
 
             foreach (string move in valid)
             {
                 //temporäres board updaten
                 tempBoard = update_Board(move, board);
+                //Wert des temp Boardes ermitteln
+                int current_Value = calcuteBoard_Value(tempBoard);
 
-                //Gegner Sprünge nach update zählen
-                int opponentjumpsafter = count_opponent_jumps(tempBoard);
-                int ownjumpsafter = count_own_jumps(tempBoard);
-                int NumAfter = count_Pieces_on_Baseline(tempBoard);
-
-                Console.Write(move);
-
-                current_Value = calcuteBoard_Value(tempBoard, opponentjumpsbefore, opponentjumpsafter, ownjumpsbefore, ownjumpsafter, NumBefore, NumAfter);
-
-                if ((current_Value == highest_Value) || best_moves.Count == 0)
+                //aktuelle Boarddifferenz vergleichen
+                if (((current_Value - ValueBefore) == highestDifference) || best_moves.Count == 0)
                 {
-                    highest_Value = current_Value;
+                    highestDifference = (current_Value - ValueBefore);
                     best_moves.Add(move);
                 }
 
-                if (current_Value > highest_Value)
+                if ((current_Value - ValueBefore) > highestDifference)
                 {
                     best_moves.Clear();
                     best_moves.Add(move);
-                    highest_Value = current_Value;
+                    highestDifference = (current_Value - ValueBefore);
                 }
             }
-
-            Console.WriteLine();
-            Console.WriteLine("------" + highest_Value + "------");
 
             Random Zufall = new Random();
             return best_moves[Zufall.Next(best_moves.Count)];
@@ -377,7 +364,7 @@ namespace Dame
         }
 
         //berwertet Boards für schwarz und weiß
-        private int calcuteBoard_Value(Board board, int opponentjumpsbefore, int opponentjumpsafter, int ownjumpsbefore, int ownjumpsafter, int NumBefore, int NumAfter)
+        private int calcuteBoard_Value(Board board)
         {
             int Value = 0;
 
@@ -415,22 +402,17 @@ namespace Dame
             }
 
             //Anzahl gegnerischer Sprünge bewerten
-            Value += (opponentjumpsafter - opponentjumpsbefore) * adjustable_weights[5];
+            Value += count_opponent_jumps(board) * adjustable_weights[5];
 
             //bevorzuge den Zug bei dem DU danach springen kannst 
-            Value += (ownjumpsafter - ownjumpsbefore) * adjustable_weights[6];
+            Value += count_own_jumps(board) * adjustable_weights[6];
 
             //Bewege Steine aus der Damenreihe eher seltener (Damen werden außenvor gelassen)
-            Value += (NumBefore - NumAfter) * adjustable_weights[7];
+            Value += count_Pieces_on_Baseline(board) * adjustable_weights[7];
 
             //Gegner kann sich nicht mehr bewegen
             if (count_opponent_jumps(board) + count_opponent_move(board) == 0)
                 Value += 200;
-
-            
-            Console.Write(" = " + Value + " , " + (opponentjumpsafter - opponentjumpsbefore) + " , " + (ownjumpsafter - ownjumpsbefore));
-            Console.WriteLine();
-  
 
             return Value;
         }
