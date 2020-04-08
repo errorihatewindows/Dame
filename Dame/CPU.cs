@@ -145,7 +145,7 @@ namespace Dame
             List<Piece> possiblejump = possible_jumps(position.Key);
 
             //Invalide Züge löschen
-            tempmove = tempmove.Concat(deleteInvalid_move(possiblemove, position.Key)).ToList();
+            tempmove = tempmove.Concat(deleteInvalid_move(possiblemove, position.Key, board)).ToList();
             tempjump = tempjump.Concat(deleteInvalid_jump(possiblejump, position.Key, board)).ToList();
             
         }
@@ -173,7 +173,7 @@ namespace Dame
         }
 
         //Löscht alle Invaliden Moves aus gegebener Liste
-        private List<string> deleteInvalid_move(List<Piece> possiblemove, Piece position) //Löscht invalide Züge und gibt valide zurück
+        private List<string> deleteInvalid_move(List<Piece> possiblemove, Piece position, Board board) //Löscht invalide Züge und gibt valide zurück
         {
             List<string> validmove = new List<string>(); 
 
@@ -186,11 +186,11 @@ namespace Dame
                 if (option.Item2 > 7 || option.Item2 < 0) { continue; }
 
                 // normale Steine nur vorwärts
-                if (Board[position] == 'b') { if (position.Item2 - 1 == option.Item2) { continue; } }
-                if (Board[position] == 'w') { if (position.Item2 + 1 == option.Item2) { continue; } }
+                if (board[position] == 'b') { if (position.Item2 - 1 == option.Item2) { continue; } }
+                if (board[position] == 'w') { if (position.Item2 + 1 == option.Item2) { continue; } }
 
                 //Feld bereits belegt
-                if (Board[option] != '.') { continue; }
+                if (board[option] != '.') { continue; }
 
                 validmove.Add(drawing.TupleToString(position) + "," +  drawing.TupleToString(option));
             }
@@ -423,6 +423,10 @@ namespace Dame
             //Bewege Steine aus der Damenreihe eher seltener (Damen werden außenvor gelassen)
             Value += (NumBefore - NumAfter) * adjustable_weights[7];
 
+            //Gegner kann sich nicht mehr bewegen
+            if (count_opponent_jumps(board) + count_opponent_move(board) == 0)
+                Value += 200;
+
             
             Console.Write(" = " + Value + " , " + (opponentjumpsafter - opponentjumpsbefore) + " , " + (ownjumpsafter - ownjumpsbefore));
             Console.WriteLine();
@@ -470,6 +474,25 @@ namespace Dame
             }
 
             return tempjumps.Count;
+        }
+
+        private int count_opponent_move(Board board)
+        {
+            List<string> tempmoves = new List<string>();
+
+            //temporärer Farbentausch
+            ComputerColor = 1 - ComputerColor;
+
+            foreach (KeyValuePair<Piece, char> kvp in board)
+            {
+                if ((ComputerColor == 0 && (kvp.Value == 'b' || kvp.Value == 'B')) || (ComputerColor == 1 && (kvp.Value == 'w' || kvp.Value == 'W')))
+                    tempmoves = tempmoves.Concat(deleteInvalid_move(possible_moves(kvp.Key), kvp.Key, board)).ToList();
+            }
+
+            //Rücktausch 
+            ComputerColor = 1 - ComputerColor;
+
+            return tempmoves.Count;
         }
 
         //Zählt für gegebenes Board die Steine auf der Königsreihe
