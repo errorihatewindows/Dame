@@ -11,8 +11,7 @@ namespace Dame
     public class CPU
     {
 
-        private int[] adjustable_weights = new int[8] {
-
+        private double[] adjustable_weights = new double[8] {
             50,     // Wert eigener Stein
             100,    // Wert eigene Dame
             -20,    // Wert gegnerischer Stein
@@ -26,6 +25,10 @@ namespace Dame
 
 
 
+        public void set_weights(double[] new_weights)
+        {
+            adjustable_weights = new_weights;
+        }
 
         private Board Board;
         private int ComputerColor;
@@ -88,7 +91,7 @@ namespace Dame
         private string get_best_move(List<string> valid, Board board)
         {
             List<string> best_moves = new List<string>();
-            int highestValue = 0;
+            double highestValue = 0;
 
             //temporäres Board zum ausführen der Züge
             Board tempBoard = new Board(board);
@@ -98,7 +101,7 @@ namespace Dame
                 //temporäres board updaten
                 tempBoard = update_Board(move, board);
                 //Wert des temp Boardes ermitteln
-                int current_Value = calcuteBoard_Value(tempBoard);
+                double current_Value = calcuteBoard_Value(tempBoard);
 
                 //aktuelle Boarddifferenz vergleichen
                 if ((current_Value == highestValue) || best_moves.Count == 0)
@@ -361,9 +364,9 @@ namespace Dame
         }
 
         //berwertet Boards für schwarz und weiß
-        private int calcuteBoard_Value(Board board)
+        private double calcuteBoard_Value(Board board)
         {
-            int Value = 0;
+            double Value = 0;
 
             //ANzahl der Steine - Bewertung
             foreach (KeyValuePair<Piece, char> kvp in board)
@@ -409,7 +412,7 @@ namespace Dame
 
             //Gegner kann sich nicht mehr bewegen
             if (count_opponent_jumps(board) + count_opponent_move(board) == 0)
-                Value += 200;
+                Value += 200000.0;
 
                 
 

@@ -24,12 +24,15 @@ namespace Dame
         private int reversible_moves = 0;
         private Board board;
         private Form1 drawing;
-        Player_Data[] Player;
+        private Player_Data[] Player;
+        private Random Zufall;
         //Constructor
         public MCP(Form1 form)
         {
             drawing = form;
             Generate_Board();
+            Zufall = new Random();
+            
         }
 
         public void set_user(string player1, string player2)    //sets name and delegate for players
@@ -337,24 +340,105 @@ namespace Dame
             }
         }
 
-        public void simulate(int repeats)
+        private Dictionary<int,int> simulate_results(int repeats)
         {
-            drawing.labelText("Simulating...");
             Dictionary<int, int> results = new Dictionary<int, int>();
             results[1] = 0;     //weiß    gewinnt
             results[0] = 0;     //schwarz gewinnt
             results[-1] = 0;    //unentschieden
             results[-2] = 0;    //ungültiger Zug
-            string output;
             for (int i = 0; i < repeats; i++)
             {
                 results[run(false)]++;
             }
+            return results;
+        }
+        public void simulate(int repeats)
+        {
+            drawing.labelText("Simulating...");
+            Dictionary<int,int> results = simulate_results(repeats);
+            string output;
             output = "schwarz: " + results[0].ToString() +
                      "\nweiß: " + results[1].ToString() +
                      "\nunentschieden: " + results[-1].ToString();
             if (results[-2] != 0) { output += "\n invalide: " + results[-2].ToString(); }
             drawing.labelText(output);
+        }
+
+        private int value(Dictionary<int,int> outcome, int player)    //simulate result dictionary
+        {
+            if (outcome[-2] != 0) { return -10000; }
+            int winvalue = 2;
+            int loosevalue = 0;
+            int drawvalue = 1;
+            return (outcome[player] * winvalue + outcome[1-player] * loosevalue + outcome[-1] * drawvalue);
+        }
+
+        private Tuple<int,int> test(int samplesize)    //tests the current players and returns their results
+        {
+            Dictionary<int, int> sim_result = simulate_results(samplesize);
+            return Tuple.Create(value(sim_result, 0), value(sim_result, 1));
+        }
+        public void AI()
+        {
+            int samplesize = 20;        //how many games , half is black
+            int cycles = 10;            //repeat slaughterhouse x times
+            int students = 10;          //number of students slaughtered
+            int maxchange = 25;         //max change per cycle in percent
+            List<double[]> weights = new List<double[]>();
+            double[] winner = {
+            50,     // Wert eigener Stein
+            100,    // Wert eigene Dame
+            -20,    // Wert gegnerischer Stein
+            -80,    // Wert gegnerische Dame
+            -2,     // Distance Faktor Dame-Stein
+            -40,    // Bewertung gegnerischer Sprunganzahl
+            5,      // Zug der einen eigenen Sprung ermöglicht
+            +10     // Zug der einen Stein aus der Königsreihe heraus bewegt        
+            };       //stats of the winner (starts at our stats)
+            int highest_winrate;
+            int winrate;
+            
+
+            for (int i = 0; i < cycles; i++)
+            {
+                //BUILDER BOT
+                weights.Clear();
+                //set weights
+                for (int j = 0; j < students; j++)
+                {
+                    weights.Add(winner);
+                }
+
+                //modify weights at random
+                foreach (double[] weight in weights)
+                {
+                    for (int j = 0; j < weight.Length; j++)
+                    {
+                        weight[j] = weight[j] * (1+(Zufall.Next(0 - maxchange, maxchange)/100));
+                    }
+                }
+
+                //TEACHER BOT
+                highest_winrate = -10000;
+                for (int j = 0; j < students; j += 2)
+                {
+                    Player[0].cpu.set_weights(weights[j]);
+                    Player[1].cpu.set_weights(weights[j + 1]);
+                    Tuple<int, int> results1 = test(samplesize/2);
+                    //repeat for inverted colors
+                    Player[0].cpu.set_weights(weights[j + 1]);
+                    Player[1].cpu.set_weights(weights[j]);
+                    Tuple<int, int> results2 = test(samplesize/2);
+                    //check if black is current best
+                    winrate = results2.Item2 + results1.Item1;
+                    if (winrate > highest_winrate) { highest_winrate = winrate; winner = weights[j]; }
+                    //check if white is current best
+                    winrate = results2.Item2 + results1.Item1;
+                    if (winrate > highest_winrate) { highest_winrate = winrate; winner = weights[j]; }
+                }
+                
+            }
         }
     }
 }
