@@ -15,12 +15,12 @@ namespace Dame
 
             50,     // Wert eigener Stein
             100,    // Wert eigene Dame
-            -50,    // Wert gegnerischer Stein
-            -100,   // Wert gegnerische Dame
+            -20,    // Wert gegnerischer Stein
+            -80,    // Wert gegnerische Dame
             -2,     // Distance Faktor Dame-Stein
             -40,    // Bewertung gegnerischer Sprunganzahl
             5,      // Zug der einen eigenen Sprung ermöglicht
-            -10     // Zug der einen Stein aus der Königsreihe heraus bewegt        
+            +10     // Zug der einen Stein aus der Königsreihe heraus bewegt        
          
         };
 
@@ -88,10 +88,7 @@ namespace Dame
         private string get_best_move(List<string> valid, Board board)
         {
             List<string> best_moves = new List<string>();
-            int highestDifference = 0;
-
-            //Value des akutellen Boardes
-            int ValueBefore = calcuteBoard_Value(board);
+            int highestValue = 0;
 
             //temporäres Board zum ausführen der Züge
             Board tempBoard = new Board(board);
@@ -104,17 +101,17 @@ namespace Dame
                 int current_Value = calcuteBoard_Value(tempBoard);
 
                 //aktuelle Boarddifferenz vergleichen
-                if (((current_Value - ValueBefore) == highestDifference) || best_moves.Count == 0)
+                if ((current_Value == highestValue) || best_moves.Count == 0)
                 {
-                    highestDifference = (current_Value - ValueBefore);
+                    highestValue = current_Value;
                     best_moves.Add(move);
                 }
 
-                if ((current_Value - ValueBefore) > highestDifference)
+                if (current_Value > highestValue)
                 {
                     best_moves.Clear();
                     best_moves.Add(move);
-                    highestDifference = (current_Value - ValueBefore);
+                    highestValue = current_Value;
                 }
             }
 
@@ -408,11 +405,14 @@ namespace Dame
             Value += count_own_jumps(board) * adjustable_weights[6];
 
             //Bewege Steine aus der Damenreihe eher seltener (Damen werden außenvor gelassen)
-            Value += count_Pieces_on_Baseline(board) * adjustable_weights[7];
+            Value += (count_Pieces_on_Baseline(board)) * adjustable_weights[7];
 
             //Gegner kann sich nicht mehr bewegen
             if (count_opponent_jumps(board) + count_opponent_move(board) == 0)
                 Value += 200;
+
+                
+
 
             return Value;
         }
