@@ -436,8 +436,13 @@ namespace Dame
                     //check if white is current best
                     winrate = results2.Item2 + results1.Item1;
                     if (winrate > highest_winrate) { highest_winrate = winrate; winner = weights[j]; }
+
+                    //gibt aktuell beste weights aus
+                    drawing.labelWeights(winner);
                 }
-                
+
+                //Zeichnet Fortschritt in Prozent auf Label
+                drawing.labelStatus(((100 * i) / cycles).ToString());
             }
         }
     }

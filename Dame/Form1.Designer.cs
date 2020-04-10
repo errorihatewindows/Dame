@@ -80,6 +80,9 @@
             this.simulate = new System.Windows.Forms.Button();
             this.intSimulate = new System.Windows.Forms.TextBox();
             this.label38 = new System.Windows.Forms.Label();
+            this.button2 = new System.Windows.Forms.Button();
+            this.label39 = new System.Windows.Forms.Label();
+            this.labelweights = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -610,11 +613,41 @@
             this.label38.TabIndex = 106;
             this.label38.Text = "oder";
             // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(930, 40);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(247, 23);
+            this.button2.TabIndex = 107;
+            this.button2.Text = "Let´s make Love";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // label39
+            // 
+            this.label39.AutoSize = true;
+            this.label39.Location = new System.Drawing.Point(973, 87);
+            this.label39.Name = "label39";
+            this.label39.Size = new System.Drawing.Size(0, 13);
+            this.label39.TabIndex = 108;
+            // 
+            // labelweights
+            // 
+            this.labelweights.AutoSize = true;
+            this.labelweights.Location = new System.Drawing.Point(930, 262);
+            this.labelweights.Name = "labelweights";
+            this.labelweights.Size = new System.Drawing.Size(41, 13);
+            this.labelweights.TabIndex = 109;
+            this.labelweights.Text = "label40";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1268, 672);
+            this.Controls.Add(this.labelweights);
+            this.Controls.Add(this.label39);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.label38);
             this.Controls.Add(this.intSimulate);
             this.Controls.Add(this.simulate);
@@ -726,6 +759,9 @@
         private System.Windows.Forms.Button simulate;
         private System.Windows.Forms.TextBox intSimulate;
         private System.Windows.Forms.Label label38;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Label label39;
+        private System.Windows.Forms.Label labelweights;
     }
 }
 

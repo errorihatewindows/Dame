@@ -212,6 +212,12 @@ namespace Dame
         {
             startgame();
         }
+        private void button2_Click(object sender, EventArgs e)
+        {
+            mcp.AI();
+        }
+
+
 
         public string TupleToString(Tuple<int, int> field)
         {
@@ -284,6 +290,18 @@ namespace Dame
         {            
             label37.Text = "";
             label37.Text = Text;
+            wait(10);
+        }
+        public void labelStatus(string Text)
+        {
+            label39.Text = "";
+            label39.Text = Text;
+            wait(10);
+        }
+        public void labelWeights(string Text)
+        {
+            labelweights.Text = "";
+            labelweights.Text = Text;
             wait(10);
         }
 
@@ -378,6 +396,7 @@ namespace Dame
             }
 
         }
+
 
         private void startgame()
         {
