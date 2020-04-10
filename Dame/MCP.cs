@@ -383,12 +383,12 @@ namespace Dame
         {
             set_user("CPU1", "CPU2");
 
-            int samplesize = 20;        //how many games , half is black
+            int samplesize = 100;        //how many games , half is black
             int cycles = 10;            //repeat slaughterhouse x times
             int students = 10;          //number of students slaughtered
             int maxchange = 25;         //max change per cycle in percent
             List<double[]> weights = new List<double[]>();
-            double[] winner = {
+            double[] Parent = {
             50,     // Wert eigener Stein
             100,    // Wert eigene Dame
             -20,    // Wert gegnerischer Stein
@@ -396,8 +396,10 @@ namespace Dame
             -2,     // Distance Faktor Dame-Stein
             -40,    // Bewertung gegnerischer Sprunganzahl
              5,      // Zug der einen eigenen Sprung ermöglicht
-            +10     // Zug der einen Stein aus der Königsreihe heraus bewegt        
+            +10     // für jeden Stein der in der Königsreihe verweilt        
             };       //stats of the winner (starts at our stats)
+
+            double[] Winner = new double[8];
             int highest_winrate;
             int winrate;
             
@@ -410,8 +412,8 @@ namespace Dame
                 for (int j = 0; j < students; j++)
                 {
                     double[] weight = new double[8];
-                    winner.CopyTo(weight,0);
-                    weights.Add(winner);
+                    Parent.CopyTo(weight,0);
+                    weights.Add(weight);
                 }
 
                 //modify weights at random
@@ -426,31 +428,32 @@ namespace Dame
                 }
                 //TEACHER BOT
                 highest_winrate = -10000;
-                for (int j = 0; j < students; j += 2)
+                for (int j = 0; j < students; j ++)
                 {
                     Player[0].cpu.set_weights(weights[j]);
-                    Player[1].cpu.set_weights(weights[j + 1]);
+                    Player[1].cpu.set_weights(Parent);
                     Tuple<int, int> results1 = test(samplesize / 2);
                     //repeat for inverted colors
-                    Player[0].cpu.set_weights(weights[j + 1]);
+                    Player[0].cpu.set_weights(Parent);
                     Player[1].cpu.set_weights(weights[j]);
                     Tuple<int, int> results2 = test(samplesize / 2);
                     //check if black is current best
                     winrate = results2.Item2 + results1.Item1;
-                    if (winrate > highest_winrate) { highest_winrate = winrate; winner = weights[j]; }
-                    //check if white is current best
-                    winrate = results2.Item2 + results1.Item1;
-                    if (winrate > highest_winrate) { highest_winrate = winrate; winner = weights[j]; }
+                    if (winrate > highest_winrate) { highest_winrate = winrate; Winner = weights[j]; }
+
+           
                 }
 
-                string output = winner[0] +
-                    "\n" + winner[1] +
-                    "\n" + winner[2] +
-                    "\n" + winner[3] +
-                    "\n" + winner[4] +
-                    "\n" + winner[5] +
-                    "\n" + winner[6] +
-                    "\n" + winner[7];
+                Winner.CopyTo(Parent, 0);
+
+                string output = Winner[0] +
+                    "\n" + Winner[1] +
+                    "\n" + Winner[2] +
+                    "\n" + Winner[3] +
+                    "\n" + Winner[4] +
+                    "\n" + Winner[5] +
+                    "\n" + Winner[6] +
+                    "\n" + Winner[7];
                                         
                 //gibt aktuell beste weights aus
                     drawing.labelWeights(output);
