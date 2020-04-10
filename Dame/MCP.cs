@@ -409,6 +409,8 @@ namespace Dame
                 //set weights
                 for (int j = 0; j < students; j++)
                 {
+                    double[] weight = new double[8];
+                    winner.CopyTo(weight,0);
                     weights.Add(winner);
                 }
 
@@ -422,7 +424,6 @@ namespace Dame
                         weight[j] = weight[j] * (1+((double)(Zufall.Next(2 * maxchange + 1)-maxchange)/100));
                     }
                 }
-
                 //TEACHER BOT
                 highest_winrate = -10000;
                 for (int j = 0; j < students; j += 2)
