@@ -413,7 +413,8 @@ namespace Dame
                 //modify weights at random
                 foreach (double[] weight in weights)
                 {
-                    for (int j = 0; j < weight.Length; j++)
+                    //keep last round's winner as a contestend
+                    for (int j = 1; j < weight.Length; j++)
                     {
                         weight[j] = weight[j] * (1+(Zufall.Next(0 - maxchange, maxchange)/100));
                     }
