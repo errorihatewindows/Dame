@@ -397,7 +397,6 @@ namespace Dame
 
         }
 
-
         private void startgame()
         {
             Tuple<string, string> Input = getInput();

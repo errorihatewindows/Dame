@@ -626,7 +626,7 @@
             // label39
             // 
             this.label39.AutoSize = true;
-            this.label39.Location = new System.Drawing.Point(973, 87);
+            this.label39.Location = new System.Drawing.Point(1208, 45);
             this.label39.Name = "label39";
             this.label39.Size = new System.Drawing.Size(0, 13);
             this.label39.TabIndex = 108;
@@ -634,11 +634,10 @@
             // labelweights
             // 
             this.labelweights.AutoSize = true;
-            this.labelweights.Location = new System.Drawing.Point(930, 262);
+            this.labelweights.Location = new System.Drawing.Point(956, 87);
             this.labelweights.Name = "labelweights";
-            this.labelweights.Size = new System.Drawing.Size(41, 13);
+            this.labelweights.Size = new System.Drawing.Size(0, 13);
             this.labelweights.TabIndex = 109;
-            this.labelweights.Text = "label40";
             // 
             // Form1
             // 

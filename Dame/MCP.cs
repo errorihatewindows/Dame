@@ -381,6 +381,8 @@ namespace Dame
         }
         public void AI()
         {
+            set_user("CPU1", "CPU2");
+
             int samplesize = 20;        //how many games , half is black
             int cycles = 10;            //repeat slaughterhouse x times
             int students = 10;          //number of students slaughtered
@@ -393,7 +395,7 @@ namespace Dame
             -80,    // Wert gegnerische Dame
             -2,     // Distance Faktor Dame-Stein
             -40,    // Bewertung gegnerischer Sprunganzahl
-            5,      // Zug der einen eigenen Sprung ermöglicht
+             5,      // Zug der einen eigenen Sprung ermöglicht
             +10     // Zug der einen Stein aus der Königsreihe heraus bewegt        
             };       //stats of the winner (starts at our stats)
             int highest_winrate;
@@ -426,25 +428,35 @@ namespace Dame
                 {
                     Player[0].cpu.set_weights(weights[j]);
                     Player[1].cpu.set_weights(weights[j + 1]);
-                    Tuple<int, int> results1 = test(samplesize/2);
+                    Tuple<int, int> results1 = test(samplesize / 2);
                     //repeat for inverted colors
                     Player[0].cpu.set_weights(weights[j + 1]);
                     Player[1].cpu.set_weights(weights[j]);
-                    Tuple<int, int> results2 = test(samplesize/2);
+                    Tuple<int, int> results2 = test(samplesize / 2);
                     //check if black is current best
                     winrate = results2.Item2 + results1.Item1;
                     if (winrate > highest_winrate) { highest_winrate = winrate; winner = weights[j]; }
                     //check if white is current best
                     winrate = results2.Item2 + results1.Item1;
                     if (winrate > highest_winrate) { highest_winrate = winrate; winner = weights[j]; }
-
-                    //gibt aktuell beste weights aus
-                    drawing.labelWeights(winner);
                 }
 
+                string output = winner[0] +
+                    "\n" + winner[1] +
+                    "\n" + winner[2] +
+                    "\n" + winner[3] +
+                    "\n" + winner[4] +
+                    "\n" + winner[5] +
+                    "\n" + winner[6] +
+                    "\n" + winner[7];
+                                        
+                //gibt aktuell beste weights aus
+                    drawing.labelWeights(output);
+
                 //Zeichnet Fortschritt in Prozent auf Label
-                drawing.labelStatus(((100 * i) / cycles).ToString());
+                drawing.labelStatus(((100 * (i + 1)) / cycles + "%").ToString());
             }
+
         }
     }
 }
