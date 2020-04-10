@@ -12,14 +12,14 @@ namespace Dame
     {
 
         private double[] adjustable_weights = new double[8] {
-            0.1521,     // Wert eigener Stein 50
-            160.07,    // Wert eigene Dame 100
-            -16.6633,    // Wert gegnerischer Stein -20
-            -27.979,    // Wert gegnerische Dame -80
-            -0.0079777,     // Distance Faktor Dame-Stein -2
-            -23.8721,    // Bewertung gegnerischer Sprunganzahl -40
-            0.15744,      // Zug der einen eigenen Sprung ermöglicht 5
-            +2.7005364     // Berwertung Anzahl der Steine in Königsreihe 10       
+            42.099,     // Wert eigener Stein 50
+            117.009,    // Wert eigene Dame 100
+            -19.5367,    // Wert gegnerischer Stein -20
+            -66.34856,    // Wert gegnerische Dame -80
+            -2.722,     // Distance Faktor Dame-Stein -2
+            -42.458,    // Bewertung gegnerischer Sprunganzahl -40
+            4.92922,      // Zug der einen eigenen Sprung ermöglicht 5
+            11.56381     // Berwertung Anzahl der Steine in Königsreihe 10       
          
         };
 

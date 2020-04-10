@@ -383,10 +383,12 @@ namespace Dame
         {
             set_user("CPU1", "CPU2");
 
-            int samplesize = 100;        //how many games , half is black
+            int samplesize = 500;        //how many games , half is black
             int cycles = 10;            //repeat slaughterhouse x times
-            int students = 10;          //number of students slaughtered
+            int students = 20;          //number of students slaughtered
             int maxchange = 25;         //max change per cycle in percent
+            double maxchange_changefactor = Math.Pow((5 / maxchange), (1 / cycles));    //calculate facotr: maxchange reaches only 5% after n cycles 
+
             List<double[]> weights = new List<double[]>();
             double[] Parent = {
             50,     // Wert eigener Stein
@@ -406,6 +408,9 @@ namespace Dame
 
             for (int i = 0; i < cycles; i++)
             {
+                //Maxchange in each Generation lowerd
+                maxchange = (int)(maxchange * maxchange_changefactor);
+
                 //BUILDER BOT
                 weights.Clear();
                 //set weights
