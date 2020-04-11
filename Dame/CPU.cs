@@ -64,35 +64,48 @@ namespace Dame
         }
 
 
-        //erstellt eine Liste aller Validen Züge
-        private List<string> getAllValid(Board board)
+        private double max(int spieler, int tiefe, Board board)
         {
-            //Liste aller validen Züge
             List<string> valid = new List<string>();
 
-            foreach (KeyValuePair<Piece, char> position in board)
-            {
-                //Steinfarbe passt nicht zu Computerfarbe
-                if (((ComputerColor == 0) && (position.Value != 'b' && position.Value != 'B')) || ((ComputerColor == 1 && (position.Value != 'w' && position.Value != 'W'))))
-                    continue;
+            if (tiefe == 0 || (count_opponent_jumps(board) + count_opponent_move(board) == 0))
+                return calcuteBoard_Value(board);
 
-                //erstellt Liste tempjump, tempmove für eigene Steine
-                checkposition(position, board);
+            double maxWert = double.NegativeInfinity;
+            valid = getAllValid(board);
+            while (valid.Count != 0) {
+                fuehreNaechstenZugAus();
+                int wert = min(-spieler, tiefe - 1);
+                macheZugRueckgaengig();
+                if (wert > maxWert)
+                {
+                    maxWert = wert;
+                    if (tiefe == gewuenschteTiefe)
+                        gespeicherterZug = Zug;
+                }
             }
-
-
-            if (tempjump.Count == 0)
-            {
-                valid = tempmove;
-            }
-            else
-            {   //Überprüft Mehrfachsprung und gibt Liste aller validen Sprünge zurück (korrekte Syntax)
-                foreach (string jump in tempjump)
-                    valid = valid.Concat(jumps(drawing.StringToTuple(jump))).ToList();
-            }
-
-            return valid;
+            return maxWert;
         }
+        int min(int spieler, int tiefe)
+        {
+            if (tiefe == 0 or keineZuegeMehr(spieler))
+       return bewerten();
+            int minWert = unendlich;
+            generiereMoeglicheZuege(spieler);
+            while (noch Zug da) {
+                fuehreNaechstenZugAus();
+                int wert = max(-spieler, tiefe - 1);
+                macheZugRueckgaengig();
+                if (wert < minWert)
+                {
+                    minWert = wert;
+                }
+            }
+            return minWert;
+        }
+
+
+
 
 
         // Wählt den Zug mit dem höchsten Board Value aus
@@ -125,6 +138,35 @@ namespace Dame
         }
 
 
+        //erstellt eine Liste aller Validen Züge
+        private List<string> getAllValid(Board board)
+        {
+            //Liste aller validen Züge
+            List<string> valid = new List<string>();
+
+            foreach (KeyValuePair<Piece, char> position in board)
+            {
+                //Steinfarbe passt nicht zu Computerfarbe
+                if (((ComputerColor == 0) && (position.Value != 'b' && position.Value != 'B')) || ((ComputerColor == 1 && (position.Value != 'w' && position.Value != 'W'))))
+                    continue;
+
+                //erstellt Liste tempjump, tempmove für eigene Steine
+                checkposition(position, board);
+            }
+
+
+            if (tempjump.Count == 0)
+            {
+                valid = tempmove;
+            }
+            else
+            {   //Überprüft Mehrfachsprung und gibt Liste aller validen Sprünge zurück (korrekte Syntax)
+                foreach (string jump in tempjump)
+                    valid = valid.Concat(jumps(drawing.StringToTuple(jump))).ToList();
+            }
+
+            return valid;
+        }
 
         // Checkt jede Position nach Move oder Sprung
         private void checkposition(KeyValuePair<Piece, char> position, Board board) 
@@ -478,6 +520,19 @@ namespace Dame
 
             //Rücktausch 
             ComputerColor = 1 - ComputerColor;
+
+            return tempmoves.Count;
+        }
+        
+        private int count_own_move(Board board)
+        {
+            List<string> tempmoves = new List<string>();
+
+            foreach (KeyValuePair<Piece, char> kvp in board)
+            {
+                if ((ComputerColor == 0 && (kvp.Value == 'b' || kvp.Value == 'B')) || (ComputerColor == 1 && (kvp.Value == 'w' || kvp.Value == 'W')))
+                    tempmoves = tempmoves.Concat(deleteInvalid_move(possible_moves(kvp.Key), kvp.Key, board)).ToList();
+            }
 
             return tempmoves.Count;
         }
