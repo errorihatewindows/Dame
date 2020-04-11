@@ -17,50 +17,55 @@ namespace Dame
         public string name;
         public bool is_cpu;
         public CPU cpu;
+        public random_player rando;
     }
     public class MCP
     {
         private int reversible_moves = 0;
         private Board board;
         private Form1 drawing;
-        Player_Data[] Player;
+        private Player_Data[] Player;
+        private Random Zufall;
         //Constructor
         public MCP(Form1 form)
         {
             drawing = form;
             Generate_Board();
+            Zufall = new Random();
+            
         }
 
-        public void set_user(string player1, string player2)
+        public void set_user(string player1, string player2)    //sets name and delegate for players
         {
             Player = new Player_Data[2];
-            Player[0].name = player1;
-            Player[1].name = player2;
-            //set delegate (and class instance if needed) for player1
-            if (player1.StartsWith("CPU")) 
+            string[] player = { player1, player2 };
+            Player[0].name = player[0];
+            Player[1].name = player[1];
+            for (int i = 0; i < 2; i++) 
             {
-                Player[0].cpu = new CPU(drawing);
-                Player[0].move = Player[0].cpu.get_move;
-                Player[0].is_cpu = true;
+                //set delegate (and class instance if needed) for player1
+                if (player[i].StartsWith("CPU"))
+                {
+                    Player[i].cpu = new CPU(drawing);
+                    Player[i].move = Player[i].cpu.get_move;
+                    Player[i].is_cpu = true;
+                }
+                else if (player[i].StartsWith("RAND"))
+                {
+                    Player[i].rando = new random_player(drawing);
+                    Player[i].move = Player[i].rando.get_move;
+                    Player[i].is_cpu = true;
+                }
+                else
+                {
+                    Player[i].move = drawing.get_move;
+                    Player[i].is_cpu = false;
+                }
             }
-            else
-            { 
-                Player[0].move = drawing.get_move;
-                Player[0].is_cpu = false;
-            }
-            //do it again for player 2 ;D
-            if (player2.StartsWith("CPU"))
-            {
-                Player[1].cpu = new CPU(drawing);
-                Player[1].move = Player[1].cpu.get_move;
-                Player[1].is_cpu = true;
-            }
-            else 
-            { 
-                Player[1].move = drawing.get_move;
-                Player[1].is_cpu = false;
-            }
-        }   //sets name and delegate for players
+
+            Generate_Board();
+
+        }   
 
         public Board Get_Board()                //getter for internal board state
         {
@@ -204,9 +209,11 @@ namespace Dame
             if (!(board[move[0]] == color(player) || board[move[0]] == Convert.ToChar(color(player) - 32))) { return false; }
             //target must be empty
             if (board[move[1]] != '.') { return false; }
-            //players MUST jump if possible
-            if (!is_jump(move[0],move[1]))
+            //move is a normal move
+            if (!is_jump(move[0], move[1]))
             {
+                //moves are always 5 chars long
+                if (smove.Length != 5) { return false; }
                 foreach (KeyValuePair<Piece, char> kvp in board)
                 {
                     if (!(kvp.Value == color(player) || kvp.Value == (color(player) - 32))) { continue; }
@@ -280,49 +287,186 @@ namespace Dame
             return true;
         }
 
-        public int run()
+        public int run(bool output)
         {
+            //only wait or draw boards if output is set to true
             string move = "";
             bool valid;
             Generate_Board();
-            drawing.Draw_Board(board);
-            //make sure there are players set that are able to play
-            if (Player == null) { return -2; }
+            reversible_moves = 0;
             //main gameloop
             int player = 0;
             while (!is_lost(player) && reversible_moves < 30)
             {
-                Console.WriteLine(Player[player].name + " am Zug");
-                drawing.labelText(Player[player].name + " am Zug");
+                if (output)
+                {
+                    Console.WriteLine(Player[player].name + " am Zug");
+                    drawing.labelText(Player[player].name + " am Zug");
+                }
                 valid = false;
                 while (!valid)
                 {
+                    if (output) { drawing.Draw_Board(board); }
                     move = Player[player].move(new Board(board), player);
                     valid = Check_Move(move, player);
                     if ((Player[player].is_cpu) && (!valid)) 
                     { 
                         Console.WriteLine("CPU invalid move");
-                        System.Environment.Exit(0); 
+                        return -2; 
                     }
                 }
-                if (Player[player].is_cpu) { drawing.wait(500); }
+                if (Player[player].is_cpu && output) { drawing.wait(1000); }
                 Perform_Move(move, player);
-                drawing.Draw_Board(board);
                 //next player
                 player = 1 - player;
             }
             if (reversible_moves < 30)  //game ended in a win/loss
             {
-                Console.WriteLine(Player[1 - player].name + " hat gewonnen");
-                drawing.labelText(Player[1 - player].name + " hat gewonnen");
+                if (output)
+                {
+                    Console.WriteLine(Player[1 - player].name + " hat gewonnen");
+                    drawing.labelText(Player[1 - player].name + " hat gewonnen");
+                }
                 return (1 - player);
             }
             else    
             {
-                Console.WriteLine("Unentschieden!");
-                drawing.labelText("Unentschieden");
+                if (output)
+                {
+                    Console.WriteLine("Unentschieden!");
+                    drawing.labelText("Unentschieden");
+                }
                 return -1;
             }
+        }
+
+        private Dictionary<int,int> simulate_results(int repeats)
+        {
+            Dictionary<int, int> results = new Dictionary<int, int>();
+            results[1] = 0;     //weiß    gewinnt
+            results[0] = 0;     //schwarz gewinnt
+            results[-1] = 0;    //unentschieden
+            results[-2] = 0;    //ungültiger Zug
+            for (int i = 0; i < repeats; i++)
+            {
+                results[run(false)]++;
+            }
+            return results;
+        }
+        public void simulate(int repeats)
+        {
+            drawing.labelText("Simulating...");
+            Dictionary<int,int> results = simulate_results(repeats);
+            string output;
+            output = "schwarz: " + results[0].ToString() +
+                     "\nweiß: " + results[1].ToString() +
+                     "\nunentschieden: " + results[-1].ToString();
+            if (results[-2] != 0) { output += "\n invalide: " + results[-2].ToString(); }
+            drawing.labelText(output);
+        }
+
+        private int value(Dictionary<int,int> outcome, int player)    //simulate result dictionary
+        {
+            if (outcome[-2] != 0) { return -10000; }
+            int winvalue = 2;
+            int loosevalue = 0;
+            int drawvalue = 1;
+            return (outcome[player] * winvalue + outcome[1-player] * loosevalue + outcome[-1] * drawvalue);
+        }
+
+        private Tuple<int,int> test(int samplesize)    //tests the current players and returns their results
+        {
+            Dictionary<int, int> sim_result = simulate_results(samplesize);
+            return Tuple.Create(value(sim_result, 0), value(sim_result, 1));
+        }
+        public void AI()
+        {
+            set_user("CPU1", "CPU2");
+
+            int samplesize = 500;        //how many games , half is black
+            int cycles = 10;            //repeat slaughterhouse x times
+            int students = 20;          //number of students slaughtered
+            int maxchange = 25;         //max change per cycle in percent
+            double maxchange_changefactor = Math.Pow((5 / maxchange), (1 / cycles));    //calculate facotr: maxchange reaches only 5% after n cycles 
+
+            List<double[]> weights = new List<double[]>();
+            double[] Parent = {
+            50,     // Wert eigener Stein
+            100,    // Wert eigene Dame
+            -20,    // Wert gegnerischer Stein
+            -80,    // Wert gegnerische Dame
+            -2,     // Distance Faktor Dame-Stein
+            -40,    // Bewertung gegnerischer Sprunganzahl
+             5,      // Zug der einen eigenen Sprung ermöglicht
+            +10     // für jeden Stein der in der Königsreihe verweilt        
+            };       //stats of the winner (starts at our stats)
+
+            double[] Winner = new double[8];
+            int highest_winrate;
+            int winrate;
+            
+
+            for (int i = 0; i < cycles; i++)
+            {
+                //Maxchange in each Generation lowerd
+                maxchange = (int)(maxchange * maxchange_changefactor);
+
+                //BUILDER BOT
+                weights.Clear();
+                //set weights
+                for (int j = 0; j < students; j++)
+                {
+                    double[] weight = new double[8];
+                    Parent.CopyTo(weight,0);
+                    weights.Add(weight);
+                }
+
+                //modify weights at random
+                for (int k = 1; k < weights.Count; k++)
+                {
+                    double[] weight = weights[k];
+                    //keep last round's winner as a contestend
+                    for (int j = 0; j < weight.Length; j++)
+                    {
+                        weight[j] = weight[j] * (1+((double)(Zufall.Next(2 * maxchange + 1)-maxchange)/100));
+                    }
+                }
+                //TEACHER BOT
+                highest_winrate = -10000;
+                for (int j = 0; j < students; j ++)
+                {
+                    Player[0].cpu.set_weights(weights[j]);
+                    Player[1].cpu.set_weights(Parent);
+                    Tuple<int, int> results1 = test(samplesize / 2);
+                    //repeat for inverted colors
+                    Player[0].cpu.set_weights(Parent);
+                    Player[1].cpu.set_weights(weights[j]);
+                    Tuple<int, int> results2 = test(samplesize / 2);
+                    //check if black is current best
+                    winrate = results2.Item2 + results1.Item1;
+                    if (winrate > highest_winrate) { highest_winrate = winrate; Winner = weights[j]; }
+
+           
+                }
+
+                Winner.CopyTo(Parent, 0);
+
+                string output = Winner[0] +
+                    "\n" + Winner[1] +
+                    "\n" + Winner[2] +
+                    "\n" + Winner[3] +
+                    "\n" + Winner[4] +
+                    "\n" + Winner[5] +
+                    "\n" + Winner[6] +
+                    "\n" + Winner[7];
+                                        
+                //gibt aktuell beste weights aus
+                    drawing.labelWeights(output);
+
+                //Zeichnet Fortschritt in Prozent auf Label
+                drawing.labelStatus(((100 * (i + 1)) / cycles + "%").ToString());
+            }
+
         }
     }
 }

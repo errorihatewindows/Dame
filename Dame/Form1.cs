@@ -18,8 +18,14 @@ namespace Dame
     public partial class Form1 : Form
     {
         MCP mcp;
-        private bool Clicked = false, ENTER = false;
+        private bool ENTER = false, gamestarted = false;
         private string move = "", tempmove = "";
+        private Board lastBoard;
+
+        Bitmap b = new Bitmap(@"..\..\b.png");
+        Bitmap s = new Bitmap(@"..\..\s.png");
+        Bitmap BD = new Bitmap(@"..\..\BD.png");
+        Bitmap WD = new Bitmap(@"..\..\WD.png");
 
         public Form1()
         {
@@ -74,89 +80,54 @@ namespace Dame
             int choor_x = 90 + (x * 50);
             int choor_y = 90 + ((7 - y) * 50);
 
-            Bitmap b = new Bitmap(@"..\..\b.png");
-            Bitmap s = new Bitmap(@"..\..\s.png");
-            Bitmap BD = new Bitmap(@"..\..\BD.png");
-            Bitmap WD = new Bitmap(@"..\..\WD.png");
-
             //Großbuchstabe
             if (piece < 97)
             {
                 // ist es ein B?
-                if (piece == 66)
-                {
-
-                    //Dame Schwarz
-                    Pen pen = new Pen(Color.Black, 20);
-                    Brush brush = Brushes.IndianRed;
-                    man.DrawImage(BD, choor_x - 9, choor_y - 10);
-
-                }
-                else if (piece == 87)
-                {
-
-                    //Dame weiß
-                    Pen pen = new Pen(Color.FloralWhite, 20);
-                    Brush brush = Brushes.IndianRed;
-                    man.DrawImage(WD, choor_x - 10, choor_y - 10);
-
-                }
-
+                if (piece == 66)                
+                    man.DrawImage(BD, choor_x - 9, choor_y - 10);   //Dame Schwarz
+                //ist es ein W?
+                else if (piece == 87)                    
+                    man.DrawImage(WD, choor_x - 10, choor_y - 10);  //Dame weiß
             }
-            else  //Kleinbuchstabe
+            //Kleinbuchstabe
+            else
             {
                 //ist es ein b?
-                if (piece == 98)
-                {
-
-                    //Man Schwarz
-                    Pen pen = new Pen(Color.Black, 15);
-                    Brush brush = Brushes.Black;
-                    man.DrawImage(b, choor_x - 9, choor_y - 10);
-
-                }
+                if (piece == 98)                   
+                    man.DrawImage(b, choor_x - 9, choor_y - 10);    //Man Schwarz
+                //ist es ein w?
                 else if (piece == 119)
-                {
-
-                    //Man weiß
-                    Pen pen = new Pen(Color.FloralWhite, 15);
-                    Brush brush = Brushes.FloralWhite;
-                    man.DrawImage(s, choor_x - 10, choor_y - 10);
-
-                }
+                    man.DrawImage(s, choor_x - 10, choor_y - 10);   //Man weiß           
             }
+
+            man.Dispose();
+
         }
 
         public void Draw_Board(Dictionary<Tuple<int, int>, char> Board) // Zeichnet einen kompletten Schachbrett-Zustand
-        {
+        {         
+            Graphics l = this.CreateGraphics();
+            
+            //zeichne Rand
+            Pen pen = new Pen(Color.Black, 3);
+            l.DrawRectangle(pen, 74, 74, 401, 401);
 
             //Schachbrettmuster zeichnen
-            Graphics l = this.CreateGraphics(); 
-
-            Pen pen = new Pen(Color.Sienna, 1);
+            pen = new Pen(Color.Sienna, 1);
             Brush brush = Brushes.Sienna;
 
-            l.DrawRectangle(pen, 75, 75, 400, 400);
             l.FillRectangle(brush, 75, 75, 400, 400);
 
-
-            pen = new Pen(Color.PeachPuff, 1);
             brush = Brushes.PeachPuff;
 
-
-            for (int i = 75; i < 400; i = i + 100)
-                for (int j = 75; j < 400; j = j + 100)
-                {
-                    l.DrawRectangle(pen, i, j, 50, 50);
+            for (int i = 75; i < 400; i += 100)
+                for (int j = 75; j < 400; j += 100)
                     l.FillRectangle(brush, i, j, 50, 50);
-                }
 
-            for (int i = 125; i <= 450; i = i + 100)
-                for (int j = 125; j <= 450; j = j + 100)
-                {
-                    l.DrawRectangle(pen, i, j, 50, 50);
+            for (int i = 125; i <= 450; i += 100)
+                for (int j = 125; j <= 450; j += 100)
                     l.FillRectangle(brush, i, j, 50, 50);
-                }
 
             //Steine aufs Brett zeichnen
             foreach (KeyValuePair<Tuple<int, int>, char> kvp in Board)
@@ -173,7 +144,6 @@ namespace Dame
             move = Zug.Text;
             ENTER = true;
             Zug.Text = "";
-            Clicked = true;
         }
 
         //Bestätigen der ZU Eingabe per ENTER
@@ -196,15 +166,6 @@ namespace Dame
             }
 
         }
-        private void setFocus_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == (char)Keys.Enter)
-            {
-                e.Handled = true;
-                Zug_bestätigt_Click(this, new EventArgs());
-            }
-        }
-
 
         public string get_move(Board boarstate, int player)
         {
@@ -218,18 +179,16 @@ namespace Dame
                 tempmove = "";
 
                 //Warten auf Button Eingabe
-                while (!Clicked && !ENTER)
+                while (!ENTER)
                     wait(100);
 
-
-                Clicked = false;
                 ENTER = false;
 
                 valid = check_Syntax(move); //True wenn Syntax korrekt
 
                 if (!valid)
                 {
-                    
+                    Draw_Board(mcp.Get_Board());
 
                     MessageBox.Show("Ungültige Syntax für einen Zug."
                                     + Environment.NewLine
@@ -244,76 +203,20 @@ namespace Dame
                 }
             }
 
-            Draw_Board(mcp.Get_Board());
+            
             return move;           
         }
 
         //Spiel Starten
         private void button1_Click(object sender, EventArgs e)
         {
-
-
-            //Ausgewähltes Setup abfragen und laden
-            if (radioButtonSpieler.Checked)
-                mcp.set_user("Spieler 1", "Spieler 2"); //player vs player
-
-            if (radioButtonZufall.Checked)
-            {
-                if (radioButtonSchwarz.Checked)
-                    mcp.set_user("Spieler 1", "CPU");   //player vs CPU
-                if (radioButtonWeiß.Checked)
-                    mcp.set_user("CPU", "Spieler 1");   //CPU vs player
-            }
-
-            if (radioButtonKI.Checked)
-            {
-                MessageBox.Show("KI noch nicht verfügbar :(");
-                return;
-            }
-
-           
-            //Spieleinstellungen während des SPieles blockieren
-            groupBox1.Enabled = false;
-            groupBox2.Enabled = false;
-
-            //Zugeingabefelder sichtbar machen
-
-            Zug.Visible = true;
-            Zug_bestätigt.Visible = true;
-            label17.Visible = true;
-            
-            //Status Label verbergen
-            label37.Visible = false;
-
-            //Spiel ausführen      
-            int Winner = mcp.run();
-
-
-            if (Winner == -1)
-                MessageBox.Show("Ein Unentschieden!");
-            if (Winner == 0 && radioButtonSchwarz.Checked && radioButtonZufall.Checked)
-                MessageBox.Show("Schwarz, also Du, hast Gewonnen. Gratulation! Du hast besser gespielt als der Zufall :)");
-            if (Winner == 0 && radioButtonSchwarz.Checked && radioButtonKI.Checked)
-                MessageBox.Show("Schwarz, also Du, hast Gewonnen. Gratulation! Du hast besser gespielt als die KI :)");
-            if (Winner == 1 && radioButtonWeiß.Checked && radioButtonZufall.Checked)
-                MessageBox.Show("Weiß, also Du hast, Gewonnen. Gratulation! Du hast besser gespielt als der Zufall :)");
-            if (Winner == 1 && radioButtonWeiß.Checked && radioButtonKI.Checked)
-                MessageBox.Show("Weiß, also Du hast, Gewonnen. Gratulation! Du hast besser gespielt als die KI :)");
-            if (Winner == 0 && radioButtonWeiß.Checked && radioButtonZufall.Checked)
-                MessageBox.Show("Schwarz, hat Gewonnen. Pech für dich! Du bist schlechter als der Zufall :)");
-            if (Winner == 0 && radioButtonWeiß.Checked && radioButtonKI.Checked)
-                MessageBox.Show("Schwarz,  hat Gewonnen. Pech für dich! Du bist schlechter als die KI :)");
-            if (Winner == 1 && radioButtonSchwarz.Checked && radioButtonZufall.Checked)
-                MessageBox.Show("Weiß, hat Gewonnen. Pech für dich! Du bist schlechter als der Zufall :)");
-            if (Winner == 1 && radioButtonSchwarz.Checked && radioButtonKI.Checked)
-                MessageBox.Show("Weiß, hat Gewonnen. Pech für dich! Du bist schlechter als die KI :)");
-
-            //Spieleinstellungen nach des SPieles wieder freigeben
-            groupBox1.Enabled = true;
-            groupBox2.Enabled = true;
-
-
+            startgame();
         }
+        private void button2_Click(object sender, EventArgs e)
+        {
+            mcp.AI();
+        }
+
 
 
         public string TupleToString(Tuple<int, int> field)
@@ -384,16 +287,28 @@ namespace Dame
 
 
         public void labelText(string Text)
-        {
-            label37.Visible = true;
+        {            
+            label37.Text = "";
             label37.Text = Text;
+            wait(10);
         }
-
+        public void labelStatus(string Text)
+        {
+            label39.Text = "";
+            label39.Text = Text;
+            wait(10);
+        }
+        public void labelWeights(string Text)
+        {
+            labelweights.Text = "";
+            labelweights.Text = Text;
+            wait(10);
+        }
 
         private void Form1_MouseClick_1(object sender, MouseEventArgs e)
         {
-
-            if (!ENTER)
+            //Wenn noch nicht mit ENTER bestätigt oder Spiel gestartet
+            if (!ENTER && gamestarted)
             {
                 Rectangle screenRectangle = this.RectangleToScreen(this.ClientRectangle);
 
@@ -401,6 +316,7 @@ namespace Dame
                 int x = MousePosition.X - screenRectangle.X - 75;
                 int y = MousePosition.Y - screenRectangle.Y - 75;
 
+                //Mouse Click außerhalb des Spielfeldes
                 if (x > 400 || x < 0 || y < 0 || y > 400)
                 {
                     Console.WriteLine("out of border");
@@ -415,6 +331,11 @@ namespace Dame
                     Zug.Text = tempmove;
                 }
             }
+        }
+
+        private void button1_MouseUp(object sender, MouseEventArgs e)
+        {
+            Zug_bestätigt.Focus();
         }
 
         private string get_and_Highlight_Tile(int x, int y)
@@ -437,6 +358,109 @@ namespace Dame
             return position;
         }
 
+        private void simulate_Click(object sender, EventArgs e)
+        {
+            Tuple<string, string> Input = getInput();
 
+            int count = Convert.ToInt32(intSimulate.Text);
+
+            if (radioButtonSpielerSchwarz.Checked || radioButtonSpielerWeiß.Checked)
+                MessageBox.Show("Simulieren nicht bei eigenen Spielern möglich.");
+            else
+            {
+                mcp.set_user(Input.Item1, Input.Item2);
+                //Zeichnet die Spielfelder nicht, nur simulation
+                mcp.simulate(count);
+            }
+
+
+        }
+
+        public void update_Board()
+        {
+            Board newBoard = mcp.Get_Board();
+
+            foreach (KeyValuePair <Piece,char> kvp in newBoard)
+            {
+                if (kvp.Value == lastBoard[kvp.Key])
+                    continue;
+
+                Graphics ground = this.CreateGraphics();
+                Pen pen = new Pen(Color.Sienna);
+
+                int choor_x = 75 + (kvp.Key.Item1 * 50);
+                int choor_y = 75 + ((7 - kvp.Key.Item2) * 50);
+
+                ground.DrawRectangle(pen, choor_x, choor_y, 50, 50);
+                Draw_Piece(kvp.Key.Item1, kvp.Key.Item2, kvp.Value);
+            }
+
+        }
+
+        private void startgame()
+        {
+            Tuple<string, string> Input = getInput();
+
+            mcp.set_user(Input.Item1, Input.Item2);
+
+            //Spieleinstellungen während des SPieles blockieren
+            groupBox1.Enabled = false;
+            groupBox2.Enabled = false;
+
+            //Zugeingabefelder sichtbar machen
+
+            Zug.Visible = true;
+            Zug_bestätigt.Visible = true;
+            label17.Visible = true;
+
+            //Spiel ausführen      
+            lastBoard = mcp.Get_Board();
+            int Winner = mcp.run(true);
+
+            if (Winner == -1)
+                MessageBox.Show("Ein Unentschieden!");
+            if (Winner == 0)
+                MessageBox.Show("Schwarz hat Gewonnen!");
+            if (Winner == 1)
+                MessageBox.Show("Weiß hat Gewonnen!");
+
+            //Spieleinstellungen nach des SPieles wieder freigeben
+            groupBox1.Enabled = true;
+            groupBox2.Enabled = true;
+        }
+
+        private Tuple<string, string> getInput()
+        {
+            string Schwarz = "", Weiß = "";
+
+            //Ausgewähltes Setup abfragen und laden
+            if (radioButtonSpielerSchwarz.Checked)
+            {
+                Schwarz = "Spieler1"; //player vs player
+                //Merkieren der Felder mit Maus erlaubt
+                gamestarted = true;
+            }
+
+            if (radioButtonZufallSchwarz.Checked)
+                Schwarz = "RAND 1";
+            if (radioButtonKISchwarz.Checked)
+                Schwarz = "CPU 1";
+
+            if (radioButtonSpielerWeiß.Checked) 
+            {
+                Weiß = "Spieler2"; //player vs player
+                //Merkieren der Felder mit Maus erlaubt
+                gamestarted = true;
+            }
+                
+            if (radioButtonZufallWeiß.Checked)
+                Weiß = "RAND 2";
+            if (radioButtonKIWeiß.Checked)
+                Weiß = "CPU 2";
+
+            Tuple<string, string> choose = Tuple.Create(Schwarz, Weiß);
+
+            return choose;
+        }   //Abfrage der RadioButton auswahl, gibt Tuple zurück
     }
 }
