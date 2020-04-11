@@ -32,7 +32,7 @@ namespace Dame
 
         private Board Board;
         private int ComputerColor;
-        string final_move;
+        string final_move = "";
 
         int wishdepth = 2;
 
@@ -58,88 +58,74 @@ namespace Dame
             tempjump = new List<string>();
 
             //wählt den besten move aus
-            negaMax(current_Board, wishdepth, ComputerColor);
+            max(ComputerColor, wishdepth, current_Board);
 
             return final_move;
         }
+
+
+
+
+
 
 
         private double max(int spieler, int tiefe, Board board)
         {
             List<string> valid = new List<string>();
 
-            if (tiefe == 0 || (count_opponent_jumps(board) + count_opponent_move(board) == 0))
-                return calcuteBoard_Value(board);
+            if (tiefe == 0 || (count_own_jumps(board) + count_own_move(board) == 0))
+                return calcuteBoard_Value(board, spieler);
 
             double maxWert = double.NegativeInfinity;
-            valid = getAllValid(board);
-            while (valid.Count != 0) {
-                fuehreNaechstenZugAus();
-                int wert = min(-spieler, tiefe - 1);
-                macheZugRueckgaengig();
-                if (wert > maxWert)
+            valid = getAllValid(board, spieler);
+             if (valid.Count != 0)
+             {
+                foreach (string move in valid)
                 {
-                    maxWert = wert;
-                    if (tiefe == gewuenschteTiefe)
-                        gespeicherterZug = Zug;
+                    Board boardbefore = new Board(board);
+                    Board tempboard = update_Board(move, board);
+                    double wert = min(1 - spieler, tiefe - 1, tempboard);
+                    board = new Board(boardbefore);
+                    if (wert > maxWert)
+                    {
+                        maxWert = wert;
+                        if (tiefe == wishdepth)
+                            final_move = move;
+                    }
                 }
             }
+                
+                              
+                
             return maxWert;
         }
-        int min(int spieler, int tiefe)
+        private double min(int spieler, int tiefe, Board board)
         {
-            if (tiefe == 0 or keineZuegeMehr(spieler))
-       return bewerten();
-            int minWert = unendlich;
-            generiereMoeglicheZuege(spieler);
-            while (noch Zug da) {
-                fuehreNaechstenZugAus();
-                int wert = max(-spieler, tiefe - 1);
-                macheZugRueckgaengig();
-                if (wert < minWert)
+            List<string> valid = new List<string>();
+
+            if (tiefe == 0 || (count_opponent_jumps(board) + count_opponent_move(board) == 0))
+                return calcuteBoard_Value(board, spieler);
+            double minWert = double.NegativeInfinity;
+            valid = getAllValid(board, spieler);
+            if (valid.Count != 0) {
+                foreach (string move in valid)
                 {
-                    minWert = wert;
+                    Board boardbefore = new Board(board);
+                    Board tempboard = update_Board(move, board);
+                    double wert = max(1 - spieler, tiefe - 1, tempboard);
+                    board = new Board(boardbefore);
+                    if (wert < minWert)
+                    {
+                        minWert = wert;
+                    }
                 }
             }
             return minWert;
         }
 
 
-
-
-
-        // Wählt den Zug mit dem höchsten Board Value aus
-        private double negaMax(Board board, int depth, int player)
-        {
-            List<string> valid = new List<string>();
-
-            valid = getAllValid(board);
-
-            if (depth == 0 || valid.Count == 0) 
-                return calcuteBoard_Value(board);
-            
-            double maxWert = double.NegativeInfinity;
-
-            foreach (string move in valid)
-            {
-                Board boardstatebefore = new Board(board);
-                Board tempboard = update_Board(move, board);
-                double value = -negaMax(tempboard, depth - 1, (1- ComputerColor));
-                board = new Board(boardstatebefore);
-                if (value > maxWert)
-                {
-                    maxWert = value;
-                    if (depth == wishdepth)
-                        final_move = move;
-                }
-            }
-            
-            return maxWert;
-        }
-
-
         //erstellt eine Liste aller Validen Züge
-        private List<string> getAllValid(Board board)
+        private List<string> getAllValid(Board board, int player)
         {
             //Liste aller validen Züge
             List<string> valid = new List<string>();
@@ -147,7 +133,7 @@ namespace Dame
             foreach (KeyValuePair<Piece, char> position in board)
             {
                 //Steinfarbe passt nicht zu Computerfarbe
-                if (((ComputerColor == 0) && (position.Value != 'b' && position.Value != 'B')) || ((ComputerColor == 1 && (position.Value != 'w' && position.Value != 'W'))))
+                if (((player == 0) && (position.Value != 'b' && position.Value != 'B')) || ((player == 1 && (position.Value != 'w' && position.Value != 'W'))))
                     continue;
 
                 //erstellt Liste tempjump, tempmove für eigene Steine
@@ -408,7 +394,7 @@ namespace Dame
         }
 
         //berwertet Boards für schwarz und weiß
-        private double calcuteBoard_Value(Board board)
+        private double calcuteBoard_Value(Board board, int player)
         {
             double Value = 0;
 
@@ -416,7 +402,7 @@ namespace Dame
             foreach (KeyValuePair<Piece, char> kvp in board)
             {
                 //CPU ist Schwarz
-                if (ComputerColor == 0)
+                if (player == 0)
                 {
                     if (kvp.Value == 'b') { Value += adjustable_weights[0]; }                       
                     if (kvp.Value == 'B') 
@@ -430,7 +416,7 @@ namespace Dame
                     if (kvp.Value == 'W') { Value += adjustable_weights[2]; }                 
                 } 
                 // CPU ist weiß
-                else if (ComputerColor == 1)
+                else if (player == 1)
                 {
                     if (kvp.Value == 'b') { Value += adjustable_weights[2]; }
                     if (kvp.Value == 'B') { Value += adjustable_weights[3]; }                        
