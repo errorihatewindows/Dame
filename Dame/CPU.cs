@@ -50,23 +50,37 @@ namespace Dame
         {
             ComputerColor = player;
             Board = new Board(current_Board);
-            tempmove = new List<string>();
-            tempjump = new List<string>();
             //Liste aller validen Züge
             List<string> valid = new List<string>();
-            //Finaler move
-            string final_move;
+
+            tempmove = new List<string>();
+            tempjump = new List<string>();
+
+            valid = getAllValid(current_Board);
+
+            //wählt den besten move aus
+            string final_move = get_best_move(valid, current_Board);
+
+            return final_move;
+        }
 
 
-            foreach (KeyValuePair<Piece, char> position in Board)
+        //erstellt eine Liste aller Validen Züge
+        private List<string> getAllValid(Board board)
+        {
+            //Liste aller validen Züge
+            List<string> valid = new List<string>();
+
+            foreach (KeyValuePair<Piece, char> position in board)
             {
                 //Steinfarbe passt nicht zu Computerfarbe
-                if (((player == 0) && (position.Value != 'b' && position.Value != 'B')) || ((player == 1 && (position.Value != 'w' && position.Value != 'W'))))
+                if (((ComputerColor == 0) && (position.Value != 'b' && position.Value != 'B')) || ((ComputerColor == 1 && (position.Value != 'w' && position.Value != 'W'))))
                     continue;
 
-                checkposition(position, Board);
+                //erstellt Liste tempjump, tempmove für eigene Steine
+                checkposition(position, board);
             }
-            
+
 
             if (tempjump.Count == 0)
             {
@@ -78,13 +92,8 @@ namespace Dame
                     valid = valid.Concat(jumps(drawing.StringToTuple(jump))).ToList();
             }
 
-            //wählt den besten move aus
-            final_move = get_best_move(valid, current_Board);
-
-
-            return final_move;
+            return valid;
         }
-
 
 
         // Wählt den Zug mit dem höchsten Board Value aus
@@ -512,7 +521,7 @@ namespace Dame
         {
             int DistanceMoves = 8, tempMovedistance;
 
-            foreach (KeyValuePair<Piece,char> kvp in Board)
+            foreach (KeyValuePair<Piece,char> kvp in board)
             {
                 if (ComputerColor == 0 && (kvp.Value == 'w' || kvp.Value == 'W') || (ComputerColor == 1 && (kvp.Value == 'b' || kvp.Value == 'B')))
                 {
