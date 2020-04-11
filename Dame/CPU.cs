@@ -34,6 +34,8 @@ namespace Dame
         private int ComputerColor;
         string final_move;
 
+        int wishdepth = 2;
+
         //temporäre Listen          
         private List<string> tempmove = new List<string>();
         private List<string> tempjump = new List<string>();
@@ -56,7 +58,7 @@ namespace Dame
             tempjump = new List<string>();
 
             //wählt den besten move aus
-            negaMax(current_Board, 2, ComputerColor);
+            negaMax(current_Board, wishdepth, ComputerColor);
 
             return final_move;
         }
@@ -114,7 +116,7 @@ namespace Dame
                 if (value > maxWert)
                 {
                     maxWert = value;
-                    if (depth == 2)
+                    if (depth == wishdepth)
                         final_move = move;
                 }
             }
