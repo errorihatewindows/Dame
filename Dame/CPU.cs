@@ -34,7 +34,7 @@ namespace Dame
         private int ComputerColor;
         string final_move = "";
 
-        int wishdepth = 2;
+        int wishdepth = 3;
 
         //temporäre Listen          
         private List<string> tempmove = new List<string>();
@@ -82,10 +82,8 @@ namespace Dame
              {
                 foreach (string move in valid)
                 {
-                    Board boardbefore = new Board(board);
                     Board tempboard = update_Board(move, board);
                     double wert = min(1 - spieler, tiefe - 1, tempboard);
-                    board = new Board(boardbefore);
                     if (wert > maxWert)
                     {
                         maxWert = wert;
@@ -110,10 +108,8 @@ namespace Dame
             if (valid.Count != 0) {
                 foreach (string move in valid)
                 {
-                    Board boardbefore = new Board(board);
                     Board tempboard = update_Board(move, board);
                     double wert = max(1 - spieler, tiefe - 1, tempboard);
-                    board = new Board(boardbefore);
                     if (wert < minWert)
                     {
                         minWert = wert;
