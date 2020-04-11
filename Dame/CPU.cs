@@ -32,6 +32,7 @@ namespace Dame
 
         private Board Board;
         private int ComputerColor;
+        string final_move;
 
         //temporäre Listen          
         private List<string> tempmove = new List<string>();
@@ -50,16 +51,12 @@ namespace Dame
         {
             ComputerColor = player;
             Board = new Board(current_Board);
-            //Liste aller validen Züge
-            List<string> valid = new List<string>();
 
             tempmove = new List<string>();
             tempjump = new List<string>();
 
-            valid = getAllValid(current_Board);
-
             //wählt den besten move aus
-            string final_move = get_best_move(valid, current_Board);
+            negaMax(current_Board, 2, ComputerColor);
 
             return final_move;
         }
@@ -97,38 +94,32 @@ namespace Dame
 
 
         // Wählt den Zug mit dem höchsten Board Value aus
-        private string get_best_move(List<string> valid, Board board)
+        private double negaMax(Board board, int depth, int player)
         {
-            List<string> best_moves = new List<string>();
-            double highestValue = 0;
+            List<string> valid = new List<string>();
 
-            //temporäres Board zum ausführen der Züge
-            Board tempBoard = new Board(board);
+            valid = getAllValid(board);
+
+            if (depth == 0 || valid.Count == 0) 
+                return calcuteBoard_Value(board);
+            
+            double maxWert = double.NegativeInfinity;
 
             foreach (string move in valid)
             {
-                //temporäres board updaten
-                tempBoard = update_Board(move, board);
-                //Wert des temp Boardes ermitteln
-                double current_Value = calcuteBoard_Value(tempBoard);
-
-                //aktuelle Boarddifferenz vergleichen
-                if ((current_Value == highestValue) || best_moves.Count == 0)
+                Board boardstatebefore = new Board(board);
+                Board tempboard = update_Board(move, board);
+                double value = -negaMax(tempboard, depth - 1, (1- ComputerColor));
+                board = new Board(boardstatebefore);
+                if (value > maxWert)
                 {
-                    highestValue = current_Value;
-                    best_moves.Add(move);
-                }
-
-                if (current_Value > highestValue)
-                {
-                    best_moves.Clear();
-                    best_moves.Add(move);
-                    highestValue = current_Value;
+                    maxWert = value;
+                    if (depth == 2)
+                        final_move = move;
                 }
             }
-
-            Random Zufall = new Random();
-            return best_moves[Zufall.Next(best_moves.Count)];
+            
+            return maxWert;
         }
 
 
