@@ -104,8 +104,8 @@ namespace Dame
             List<string> valid = new List<string>();
 
             if (tiefe == 0 || (count_opponent_jumps(board) + count_opponent_move(board) == 0))
-                return calcuteBoard_Value(board, spieler);
-            double minWert = double.NegativeInfinity;
+                return calcuteBoard_Value(board, 1 - spieler);
+            double minWert = double.PositiveInfinity;
             valid = getAllValid(board, spieler);
             if (valid.Count != 0) {
                 foreach (string move in valid)
