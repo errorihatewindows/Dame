@@ -12,14 +12,14 @@ namespace Dame
     {
 
         private double[] adjustable_weights = new double[8] {
-            42.099,     // Wert eigener Stein 50
-            117.009,    // Wert eigene Dame 100
-            -19.5367,    // Wert gegnerischer Stein -20
-            -66.34856,    // Wert gegnerische Dame -80
-            -2.722,     // Distance Faktor Dame-Stein -2
-            -42.458,    // Bewertung gegnerischer Sprunganzahl -40
-            4.92922,      // Zug der einen eigenen Sprung ermöglicht 5
-            11.56381     // Berwertung Anzahl der Steine in Königsreihe 10       
+            50,     // Wert eigener Stein 50
+            100,    // Wert eigene Dame 100
+            -20,    // Wert gegnerischer Stein -20
+            -80,    // Wert gegnerische Dame -80
+            -2,     // Distance Faktor Dame-Stein -2
+            -40,   // Bewertung gegnerischer Sprunganzahl -40
+            5,     // Zug der einen eigenen Sprung ermöglicht 5
+            10     // Berwertung Anzahl der Steine in Königsreihe 10       
          
         };
 
@@ -31,9 +31,9 @@ namespace Dame
         }
 
         private Board Board;
-        string final_move = "";
+        string final_move;
 
-        int wishdepth = 4;
+        int wishdepth = 3;
 
         //temporäre Listen          
         private List<string> tempmove = new List<string>();
@@ -56,7 +56,7 @@ namespace Dame
             tempjump = new List<string>();
 
             //wählt den besten move aus
-            max(player, wishdepth, current_Board);
+            negaMax(current_Board, 0, player);
 
             return final_move;
         }
@@ -96,7 +96,7 @@ namespace Dame
             List<string> valid = new List<string>();
 
             if (tiefe == 0)
-                return calcuteBoard_Value(board, 1 - spieler);
+                return calcuteBoard_Value(board, 1- spieler);
             double minWert = double.PositiveInfinity;
             valid = getAllValid(board, spieler);
             if (valid.Count != 0) {
@@ -111,6 +111,30 @@ namespace Dame
                 }
             }
             return minWert;
+        }
+
+
+        private double negaMax(Board board, int depth, int player)
+        {          
+            if (depth == wishdepth)
+                return calcuteBoard_Value(board, player);
+            List<string> valid = getAllValid(board, player);
+            double maxWert = double.NegativeInfinity;
+            foreach (string move in valid)
+            {
+                Board tempboard = update_Board(move, board, player);
+                double value = -negaMax(tempboard, depth + 1, 1 - player);
+
+                if (value > maxWert)
+                {
+                    maxWert = value;
+                    if (depth == 0)
+                        final_move = move;
+                }
+
+            }
+
+            return maxWert;
         }
 
         //erstellt eine Liste aller Validen Züge
