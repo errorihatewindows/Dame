@@ -60,10 +60,8 @@ namespace Dame
 
 
 
-        public void Draw_Piece(int x, int y, char piece)      //Zeichnet Spielfiguren an gegebener Stelle 
+        public void Draw_Piece(int x, int y, char piece, Graphics l)      //Zeichnet Spielfiguren an gegebener Stelle 
         {
-            Graphics man = this.CreateGraphics();
-
             //relative Koordinaten in absolute + 0,0 nach links unten transformieren
             int choor_x = 90 + (x * 50);
             int choor_y = 90 + ((7 - y) * 50);
@@ -73,20 +71,20 @@ namespace Dame
             {
                 // ist es ein B?
                 if (piece == 66)                
-                    man.DrawImageUnscaled(BD, choor_x - 9, choor_y - 10);   //Dame Schwarz
+                    l.DrawImage(BD, choor_x - 9, choor_y - 10);   //Dame Schwarz
                 //ist es ein W?
                 else if (piece == 87)                    
-                    man.DrawImageUnscaled(WD, choor_x - 10, choor_y - 10);  //Dame weiß
+                    l.DrawImage(WD, choor_x - 10, choor_y - 10);  //Dame weiß
             }
             //Kleinbuchstabe
             else
             {
                 //ist es ein b?
                 if (piece == 98)                   
-                    man.DrawImageUnscaled(b, choor_x - 9, choor_y - 10);    //Man Schwarz
+                    l.DrawImage(b, choor_x - 9, choor_y - 10);    //Man Schwarz
                 //ist es ein w?
                 else if (piece == 119)
-                    man.DrawImageUnscaled(s, choor_x - 10, choor_y - 10);   //Man weiß           
+                    l.DrawImage(s, choor_x - 10, choor_y - 10);   //Man weiß           
             }
         }
 
@@ -116,7 +114,7 @@ namespace Dame
 
             //Steine aufs Brett zeichnen
             foreach (KeyValuePair<Tuple<int, int>, char> kvp in Board)
-                Draw_Piece(kvp.Key.Item1, kvp.Key.Item2, kvp.Value);
+                Draw_Piece(kvp.Key.Item1, kvp.Key.Item2, kvp.Value, l);
 
             l.Dispose();
         }
