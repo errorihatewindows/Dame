@@ -34,7 +34,7 @@ namespace Dame
         private int ComputerColor;
         string final_move = "";
 
-        int wishdepth = 3;
+        int wishdepth = 5;
 
         //temporäre Listen          
         private List<string> tempmove = new List<string>();
@@ -69,7 +69,7 @@ namespace Dame
         {
             List<string> valid = new List<string>();
 
-            if (tiefe == 0 || (count_own_jumps(board) + count_own_move(board) == 0))
+            if (tiefe == 0)
                 return calcuteBoard_Value(board, spieler);
 
             double maxWert = double.NegativeInfinity;
@@ -97,7 +97,7 @@ namespace Dame
         {
             List<string> valid = new List<string>();
 
-            if (tiefe == 0 || (count_opponent_jumps(board) + count_opponent_move(board) == 0))
+            if (tiefe == 0)
                 return calcuteBoard_Value(board, 1 - spieler);
             double minWert = double.PositiveInfinity;
             valid = getAllValid(board, spieler);
@@ -118,8 +118,10 @@ namespace Dame
         //erstellt eine Liste aller Validen Züge
         private List<string> getAllValid(Board board, int player)
         {
-            //Liste aller validen Züge
             List<string> valid = new List<string>();
+            //Liste aller validen Züge
+            tempjump.Clear();
+            tempmove.Clear();
 
             foreach (KeyValuePair<Piece, char> position in board)
             {
@@ -134,7 +136,7 @@ namespace Dame
 
             if (tempjump.Count == 0)
             {
-                valid = tempmove;
+                valid = new List<string>(tempmove);
             }
             else
             {   //Überprüft Mehrfachsprung und gibt Liste aller validen Sprünge zurück (korrekte Syntax)
