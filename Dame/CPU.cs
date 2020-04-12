@@ -14,8 +14,8 @@ namespace Dame
         private double[] adjustable_weights = new double[8] {
             50,     // Wert eigener Stein 50
             100,    // Wert eigene Dame 100
-            -20,    // Wert gegnerischer Stein -20
-            -80,    // Wert gegnerische Dame -80
+            -50,    // Wert gegnerischer Stein -20
+            -100,    // Wert gegnerische Dame -80
             -2,     // Distance Faktor Dame-Stein -2
             -40,   // Bewertung gegnerischer Sprunganzahl -40
             5,     // Zug der einen eigenen Sprung ermöglicht 5
