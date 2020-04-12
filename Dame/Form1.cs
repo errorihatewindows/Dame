@@ -20,7 +20,6 @@ namespace Dame
         MCP mcp;
         private bool ENTER = false, gamestarted = false;
         private string move = "", tempmove = "";
-        private Board lastBoard;
 
         Bitmap b = new Bitmap(@"b.png");
         Bitmap s = new Bitmap(@"s.png");
@@ -56,10 +55,6 @@ namespace Dame
             Draw_Board(mcp.Get_Board());
         }
 
-        private void Form1_Paint(object sender, PaintEventArgs e)
-        {
-            Draw_Board(mcp.Get_Board());
-        }
 
 
 
@@ -124,9 +119,6 @@ namespace Dame
                 Draw_Piece(kvp.Key.Item1, kvp.Key.Item2, kvp.Value);
 
             l.Dispose();
-
-            lastBoard = new Board(Board);
-
         }
         
 
@@ -180,7 +172,7 @@ namespace Dame
 
                 if (!valid)
                 {
-                    Invalidate();
+                    Draw_Board(mcp.Get_Board());
 
                     MessageBox.Show("Ungültige Syntax für einen Zug."
                                     + Environment.NewLine
@@ -382,7 +374,6 @@ namespace Dame
             label17.Visible = true;
 
             //Spiel ausführen      
-            lastBoard = mcp.Get_Board();
             int Winner = mcp.run(true);
 
             if (Winner == -1)
