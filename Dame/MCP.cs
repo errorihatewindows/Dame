@@ -307,7 +307,7 @@ namespace Dame
                 valid = false;
                 while (!valid)
                 {
-                    if (output) { drawing.Draw_Board(board); }
+                    if (output) { drawing.Invalidate(); }
                     move = Player[player].move(new Board(board), player);
                     valid = Check_Move(move, player);
                     if ((Player[player].is_cpu) && (!valid)) 

@@ -35,6 +35,7 @@ namespace Dame
         {
             InitializeComponent();
             mcp = new MCP(this);
+            DoubleBuffered = true;
 
         }
 
@@ -55,25 +56,12 @@ namespace Dame
             Draw_Board(mcp.Get_Board());
         }
 
-
-        //Wartet gewisse anzahl millisekunden
-        public void wait(int milliseconds)
+        private void Form1_Paint(object sender, PaintEventArgs e)
         {
-            System.Windows.Forms.Timer timer1 = new System.Windows.Forms.Timer();
-            if (milliseconds == 0 || milliseconds < 0) return;
-            timer1.Interval = milliseconds;
-            timer1.Enabled = true;
-            timer1.Start();
-            timer1.Tick += (s, e) =>
-            {
-                timer1.Enabled = false;
-                timer1.Stop();
-            };
-            while (timer1.Enabled)
-            {
-                Application.DoEvents();
-            }
-        }   //End of wait
+            Draw_Board(mcp.Get_Board());
+        }
+
+
 
 
 
@@ -192,7 +180,7 @@ namespace Dame
 
                 if (!valid)
                 {
-                    Draw_Board(mcp.Get_Board());
+                    Invalidate();
 
                     MessageBox.Show("Ungültige Syntax für einen Zug."
                                     + Environment.NewLine
@@ -220,8 +208,6 @@ namespace Dame
         {
             mcp.AI();
         }
-
-
 
         public string TupleToString(Tuple<int, int> field)
         {
@@ -288,7 +274,6 @@ namespace Dame
 
             return valid;
         }
-
 
         public void labelText(string Text)
         {            
@@ -445,5 +430,24 @@ namespace Dame
 
             return choose;
         }   //Abfrage der RadioButton auswahl, gibt Tuple zurück
+
+        //Wartet gewisse anzahl millisekunden
+        public void wait(int milliseconds)
+        {
+            System.Windows.Forms.Timer timer1 = new System.Windows.Forms.Timer();
+            if (milliseconds == 0 || milliseconds < 0) return;
+            timer1.Interval = milliseconds;
+            timer1.Enabled = true;
+            timer1.Start();
+            timer1.Tick += (s, e) =>
+            {
+                timer1.Enabled = false;
+                timer1.Stop();
+            };
+            while (timer1.Enabled)
+            {
+                Application.DoEvents();
+            }
+        }   //End of wait
     }
 }
