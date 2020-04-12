@@ -47,12 +47,12 @@ namespace Dame
 
         private void Form1_Shown(object sender, EventArgs e) //Zeichnet Grundzustand
         {
-            Draw_Board(mcp.Get_Board());
+            Invalidate();
         }
 
         private void Form1_SizeChanged(object sender, EventArgs e)
         {
-            Draw_Board(mcp.Get_Board());
+            Invalidate();
         }
 
 
@@ -170,7 +170,7 @@ namespace Dame
 
                 if (!valid)
                 {
-                    Draw_Board(mcp.Get_Board());
+                    Invalidate();
 
                     MessageBox.Show("Ungültige Syntax für einen Zug."
                                     + Environment.NewLine
@@ -438,5 +438,34 @@ namespace Dame
                 Application.DoEvents();
             }
         }   //End of wait
+
+        private void Form1_Paint(object sender, PaintEventArgs e)
+        {
+            Graphics l = e.Graphics;
+
+            //zeichne Rand
+            Pen pen = new Pen(Color.Black, 3);
+            l.DrawRectangle(pen, 74, 74, 401, 401);
+
+            //Schachbrettmuster zeichnen
+            pen = new Pen(Color.Sienna, 1);
+            Brush brush = Brushes.Sienna;
+
+            l.FillRectangle(brush, 75, 75, 400, 400);
+
+            brush = Brushes.PeachPuff;
+
+            for (int i = 75; i < 400; i += 100)
+                for (int j = 75; j < 400; j += 100)
+                    l.FillRectangle(brush, i, j, 50, 50);
+
+            for (int i = 125; i <= 450; i += 100)
+                for (int j = 125; j <= 450; j += 100)
+                    l.FillRectangle(brush, i, j, 50, 50);
+
+            //Steine aufs Brett zeichnen
+            foreach (KeyValuePair<Tuple<int, int>, char> kvp in mcp.Get_Board())
+                Draw_Piece(kvp.Key.Item1, kvp.Key.Item2, kvp.Value, l); 
+        }
     }
 }

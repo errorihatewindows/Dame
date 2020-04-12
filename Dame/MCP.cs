@@ -307,7 +307,7 @@ namespace Dame
                 valid = false;
                 while (!valid)
                 {
-                    if (output) { drawing.Draw_Board(board); }
+                    drawing.Invalidate();
                     move = Player[player].move(new Board(board), player);
                     valid = Check_Move(move, player);
                     if ((Player[player].is_cpu) && (!valid)) 
@@ -316,7 +316,7 @@ namespace Dame
                         return -2; 
                     }
                 }
-                if (Player[player].is_cpu && output) { drawing.wait(1000); }
+                //if (Player[player].is_cpu && output) { drawing.wait(1000); }
                 Perform_Move(move, player);
                 //next player
                 player = 1 - player;
