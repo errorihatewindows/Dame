@@ -33,7 +33,7 @@ namespace Dame
         private Board Board;
         string final_move;
 
-        int wishdepth = 5;
+        int wishdepth = 6;
 
         //temporäre Listen          
         private List<string> tempmove = new List<string>();
@@ -142,8 +142,6 @@ namespace Dame
                 {
                     valid = valid.Concat(jumps(drawing.StringToTuple(jump), player, board)).ToList();
 
-                    foreach (string m in valid)
-                        Console.WriteLine(m);
                 }
                     
             }
