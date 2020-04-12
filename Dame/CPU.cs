@@ -31,10 +31,9 @@ namespace Dame
         }
 
         private Board Board;
-        private int ComputerColor;
         string final_move = "";
 
-        int wishdepth = 5;
+        int wishdepth = 4;
 
         //temporäre Listen          
         private List<string> tempmove = new List<string>();
@@ -51,14 +50,13 @@ namespace Dame
         //gibt den Finalen Zug zurück
         public string get_move(Board current_Board, int player)
         {
-            ComputerColor = player;
             Board = new Board(current_Board);
 
             tempmove = new List<string>();
             tempjump = new List<string>();
 
             //wählt den besten move aus
-            max(ComputerColor, wishdepth, current_Board);
+            max(player, wishdepth, current_Board);
 
             return final_move;
         }
@@ -78,7 +76,7 @@ namespace Dame
              {
                 foreach (string move in valid)
                 {
-                    Board tempboard = update_Board(move, board);
+                    Board tempboard = update_Board(move, board, spieler);
                     double wert = min(1 - spieler, tiefe - 1, tempboard);
                     if (wert > maxWert)
                     {
@@ -104,7 +102,7 @@ namespace Dame
             if (valid.Count != 0) {
                 foreach (string move in valid)
                 {
-                    Board tempboard = update_Board(move, board);
+                    Board tempboard = update_Board(move, board, spieler);
                     double wert = max(1 - spieler, tiefe - 1, tempboard);
                     if (wert < minWert)
                     {
@@ -130,7 +128,7 @@ namespace Dame
                     continue;
 
                 //erstellt Liste tempjump, tempmove für eigene Steine
-                checkposition(position, board);
+                checkposition(position, board, player);
             }
 
 
@@ -141,22 +139,22 @@ namespace Dame
             else
             {   //Überprüft Mehrfachsprung und gibt Liste aller validen Sprünge zurück (korrekte Syntax)
                 foreach (string jump in tempjump)
-                    valid = valid.Concat(jumps(drawing.StringToTuple(jump))).ToList();
+                    valid = valid.Concat(jumps(drawing.StringToTuple(jump), player)).ToList();
             }
 
             return valid;
         }
 
         // Checkt jede Position nach Move oder Sprung
-        private void checkposition(KeyValuePair<Piece, char> position, Board board) 
+        private void checkposition(KeyValuePair<Piece, char> position, Board board, int player) 
         {
             //Liste aller theoretisch möglichen Züge eines Spielsteins
             List<Piece> possiblemove = possible_moves(position.Key);
             List<Piece> possiblejump = possible_jumps(position.Key);
 
             //Invalide Züge löschen
-            tempmove = tempmove.Concat(deleteInvalid_move(possiblemove, position.Key, board)).ToList();
-            tempjump = tempjump.Concat(deleteInvalid_jump(possiblejump, position.Key, board)).ToList();
+            tempmove = tempmove.Concat(deleteInvalid_move(possiblemove, position.Key, board, player)).ToList();
+            tempjump = tempjump.Concat(deleteInvalid_jump(possiblejump, position.Key, board, player)).ToList();
             
         }
 
@@ -183,7 +181,7 @@ namespace Dame
         }
 
         //Löscht alle Invaliden Moves aus gegebener Liste
-        private List<string> deleteInvalid_move(List<Piece> possiblemove, Piece position, Board board) //Löscht invalide Züge und gibt valide zurück
+        private List<string> deleteInvalid_move(List<Piece> possiblemove, Piece position, Board board, int player) //Löscht invalide Züge und gibt valide zurück
         {
             List<string> validmove = new List<string>(); 
 
@@ -209,7 +207,7 @@ namespace Dame
         }
 
         //Löscht alle Invaliden EINFACH-SPrünge aus gegebener Liste
-        private List<string> deleteInvalid_jump(List<Piece> possiblejump, Piece position, Board board)
+        private List<string> deleteInvalid_jump(List<Piece> possiblejump, Piece position, Board board, int Color)
         {
             List<string> validjump = new List<string>();
 
@@ -237,8 +235,8 @@ namespace Dame
                 if (board[Tuple.Create(x,y)] == '.') { continue; }
                 
                 //übersprungener Stein ist eigene Farbe
-                if ((ComputerColor == 0)   &&   ((board[Tuple.Create(x, y)] == 'b') || (board[Tuple.Create(x, y)] == 'B'))) { continue; }
-                if ((ComputerColor == 1)   &&   ((board[Tuple.Create(x, y)] == 'w') || (board[Tuple.Create(x, y)] == 'W'))) { continue; }
+                if ((Color == 0)   &&   ((board[Tuple.Create(x, y)] == 'b') || (board[Tuple.Create(x, y)] == 'B'))) { continue; }
+                if ((Color == 1)   &&   ((board[Tuple.Create(x, y)] == 'w') || (board[Tuple.Create(x, y)] == 'W'))) { continue; }
 
 
                 validjump.Add(drawing.TupleToString(position) + "," +  drawing.TupleToString(option));
@@ -248,7 +246,7 @@ namespace Dame
         }
         
         //findet alle kompletten Sprungketten an gegebener Position
-        private List<string> jumps(Piece position)
+        private List<string> jumps(Piece position, int Color)
         {
             List<string> valid = new List<string>();
             List<string> output = new List<string>();
@@ -259,7 +257,7 @@ namespace Dame
 
             //Stop condition of recursion
             //if no valid jumps are possible, return a string with only this position
-            if (deleteInvalid_jump(possiblejumps,position, currentboard).Count == 0)
+            if (deleteInvalid_jump(possiblejumps,position, currentboard, Color).Count == 0)
             {
                 valid.Add(drawing.TupleToString(position));
                 return valid;
@@ -267,11 +265,11 @@ namespace Dame
             //else get the full jump of every possible option at this position
             else
             {
-                foreach (string jump in deleteInvalid_jump(possiblejumps, position, currentboard))
+                foreach (string jump in deleteInvalid_jump(possiblejumps, position, currentboard, Color))
                 {
                     target = drawing.StringToTuple(jump[3].ToString() + jump[4].ToString());
-                    update_Board(jump);
-                    valid = valid.Concat(jumps(target)).ToList(); 
+                    update_Board(jump, Color);
+                    valid = valid.Concat(jumps(target, Color)).ToList(); 
                     Board = new Board(currentboard);
                 }
             }
@@ -286,7 +284,7 @@ namespace Dame
         }
 
         //Führt einen gegebenen Move oder Sprung aus auf dem TempBoard der CPU
-        private void update_Board(string Move)
+        private void update_Board(string Move, int Color)
         {
             Piece positionold = new Piece(0, 0);
             Piece positionnew = new Piece(0,0);
@@ -328,7 +326,7 @@ namespace Dame
         }
 
         //Führt einen gegebenen Move oder Sprung auf TEMPBOARD aus und gibt diese zurück
-        private Board update_Board(string Move, Board board)
+        private Board update_Board(string Move, Board board, int Color)
         {
             //temporäres Board auf currentBoard state setzen
             Board tempBoard = new Board(board);
@@ -353,7 +351,7 @@ namespace Dame
             else
             {
                 //für Anzahl an Updates 
-                for (int i = 0; i < ((Move.Length + 1) % 3) - 1; i++)
+                for (int i = 0; i < ((Move.Length + 1) / 3) - 1; i++)
                 {
                     positionold = drawing.StringToTuple((Move[(i * 3)].ToString() + Move[(i * 3) + 1].ToString()));
                     positionnew = drawing.StringToTuple((Move[(i * 3) + 3].ToString() + Move[(i * 3) + 4].ToString()));
@@ -375,8 +373,8 @@ namespace Dame
             //Damen setzten wenn Move auf Königsreihe führt
             if (positionnew.Item2 == 0 || positionnew.Item2 == 7)
             {
-                if (ComputerColor == 0) { tempBoard[positionnew] = 'B'; }
-                if (ComputerColor == 1) { tempBoard[positionnew] = 'W'; }
+                if (Color == 0) { tempBoard[positionnew] = 'B'; }
+                if (Color == 1) { tempBoard[positionnew] = 'W'; }
             }
 
             return tempBoard;
@@ -398,12 +396,12 @@ namespace Dame
                     if (kvp.Value == 'B') 
                     { 
                         Value += adjustable_weights[1];
-                        int Distance = calculateDistance(kvp.Key, board);
+                        int Distance = calculateDistance(kvp.Key, board, player);
                         if (Distance > 3)
                             Value += Math.Abs(3 - Distance) * adjustable_weights[4];
                     }                        
                     if (kvp.Value == 'w') { Value += adjustable_weights[2]; }                       
-                    if (kvp.Value == 'W') { Value += adjustable_weights[2]; }                 
+                    if (kvp.Value == 'W') { Value += adjustable_weights[3]; }                 
                 } 
                 // CPU ist weiß
                 else if (player == 1)
@@ -414,111 +412,25 @@ namespace Dame
                     if (kvp.Value == 'W') 
                     { 
                         Value += adjustable_weights[1];
-                        int Distance = calculateDistance(kvp.Key, board);
+                        int Distance = calculateDistance(kvp.Key, board, player);
                         if (Distance > 3)
                             Value += Math.Abs(3 - Distance) * adjustable_weights[4];
                     }                        
                 }
             }
 
-            //Anzahl gegnerischer Sprünge bewerten
-            Value += count_opponent_jumps(board) * adjustable_weights[5];
-
-            //bevorzuge den Zug bei dem DU danach springen kannst 
-            Value += count_own_jumps(board) * adjustable_weights[6];
-
             //Bewege Steine aus der Damenreihe eher seltener (Damen werden außenvor gelassen)
-            Value += (count_Pieces_on_Baseline(board)) * adjustable_weights[7];
-
-            //Gegner kann sich nicht mehr bewegen
-            if (count_opponent_jumps(board) + count_opponent_move(board) == 0)
-                Value += 200000.0;
-
-                
-
+            Value += (count_Pieces_on_Baseline(board, player)) * adjustable_weights[7];
 
             return Value;
         }
 
-        //Anzahl der Einfachsprünge des Gegners für gegebenes Board
-        private int count_opponent_jumps(Board board)
-        {
-            //ermittle die Anzahl der gegnerischen möglichen Sprünge
-            List<string> tempjumps = new List<string>();
-            //temporärer Farbentausch
-            ComputerColor = 1 - ComputerColor;
-
-            foreach (KeyValuePair<Piece, char> position in board)
-            {
-                //Stein hat Gegnerfarbe
-                //Anzahl der möglichen Sprungrichtungen eines Steines
-                if ((ComputerColor == 0 && (position.Value == 'b' || position.Value == 'B')) || (ComputerColor == 1 && (position.Value == 'w' || position.Value == 'W')))
-                    tempjumps = tempjumps.Concat(deleteInvalid_jump(possible_jumps(position.Key), position.Key, board)).ToList();
-                
-            }
-
-            //Rücktausch
-            ComputerColor = 1 - ComputerColor;
-
-            return tempjumps.Count;
-        }
-
-        //Anzahl der eigener Einfachsprünge für gegebenes Board
-        private int count_own_jumps(Board board)
-        {
-            //ermittle die Anzahl der gegnerischen möglichen Sprünge
-            List<string> tempjumps = new List<string>();
-
-            foreach (KeyValuePair<Piece, char> position in board)
-            {
-                //Stein hat Gegnerfarbe
-                //Anzahl der möglichen Sprungrichtungen eines Steines
-                if ((ComputerColor == 0 && (position.Value == 'b' || position.Value == 'B')) || (ComputerColor == 1 && (position.Value == 'w' || position.Value == 'W')))
-                    tempjumps = tempjumps.Concat(deleteInvalid_jump(possible_jumps(position.Key), position.Key, board)).ToList();
-
-            }
-
-            return tempjumps.Count;
-        }
-
-        private int count_opponent_move(Board board)
-        {
-            List<string> tempmoves = new List<string>();
-
-            //temporärer Farbentausch
-            ComputerColor = 1 - ComputerColor;
-
-            foreach (KeyValuePair<Piece, char> kvp in board)
-            {
-                if ((ComputerColor == 0 && (kvp.Value == 'b' || kvp.Value == 'B')) || (ComputerColor == 1 && (kvp.Value == 'w' || kvp.Value == 'W')))
-                    tempmoves = tempmoves.Concat(deleteInvalid_move(possible_moves(kvp.Key), kvp.Key, board)).ToList();
-            }
-
-            //Rücktausch 
-            ComputerColor = 1 - ComputerColor;
-
-            return tempmoves.Count;
-        }
-        
-        private int count_own_move(Board board)
-        {
-            List<string> tempmoves = new List<string>();
-
-            foreach (KeyValuePair<Piece, char> kvp in board)
-            {
-                if ((ComputerColor == 0 && (kvp.Value == 'b' || kvp.Value == 'B')) || (ComputerColor == 1 && (kvp.Value == 'w' || kvp.Value == 'W')))
-                    tempmoves = tempmoves.Concat(deleteInvalid_move(possible_moves(kvp.Key), kvp.Key, board)).ToList();
-            }
-
-            return tempmoves.Count;
-        }
-
         //Zählt für gegebenes Board die Steine auf der Königsreihe
-        private int count_Pieces_on_Baseline(Board board)
+        private int count_Pieces_on_Baseline(Board board, int player)
         {
             int amount = 0;
 
-            if (ComputerColor == 0)
+            if (player == 0)
             {
                 //Damen werden außenvor gelassen
                 for(int i = 0; i <= 6; i += 2)
@@ -528,7 +440,7 @@ namespace Dame
                 }
             }
 
-            if (ComputerColor == 1)
+            if (player == 1)
             {
                 for (int i = 1; i <= 7; i += 2)
                 {
@@ -541,13 +453,13 @@ namespace Dame
         }
 
         //Berechnet den Abstand einer Dame zum nächsten Gegnerstein
-        private int calculateDistance(Piece Dameposition, Board board)
+        private int calculateDistance(Piece Dameposition, Board board, int Color)
         {
             int DistanceMoves = 8, tempMovedistance;
 
             foreach (KeyValuePair<Piece,char> kvp in board)
             {
-                if (ComputerColor == 0 && (kvp.Value == 'w' || kvp.Value == 'W') || (ComputerColor == 1 && (kvp.Value == 'b' || kvp.Value == 'B')))
+                if (Color == 0 && (kvp.Value == 'w' || kvp.Value == 'W') || (Color == 1 && (kvp.Value == 'b' || kvp.Value == 'B')))
                 {
                     if (Math.Abs(Dameposition.Item1 - kvp.Key.Item1) > Math.Abs(Dameposition.Item2 - kvp.Key.Item2))
                         tempMovedistance = Math.Abs(Dameposition.Item1 - kvp.Key.Item1);
