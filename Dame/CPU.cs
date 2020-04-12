@@ -33,7 +33,7 @@ namespace Dame
         private Board Board;
         string final_move;
 
-        int wishdepth = 3;
+        int wishdepth = 5;
 
         //temporäre Listen          
         private List<string> tempmove = new List<string>();
@@ -56,14 +56,13 @@ namespace Dame
             tempjump = new List<string>();
 
             //wählt den besten move aus
-            negaMax(current_Board, 0, player);
+            max(current_Board, wishdepth, player);
 
             return final_move;
         }
 
-
         //Minimax ALogorithmus
-        private double max(int spieler, int tiefe, Board board)
+        private double max(Board board, int tiefe, int spieler)
         {
             List<string> valid = new List<string>();
 
@@ -72,12 +71,15 @@ namespace Dame
 
             double maxWert = double.NegativeInfinity;
             valid = getAllValid(board, spieler);
+
+
+
              if (valid.Count != 0)
              {
                 foreach (string move in valid)
                 {
-                    Board tempboard = update_Board(move, board, spieler);
-                    double wert = min(1 - spieler, tiefe - 1, tempboard);
+                    Board tempboard = update_Board(move, board, spieler, true);
+                    double wert = min(tempboard, tiefe - 1, 1 - spieler);
                     if (wert > maxWert)
                     {
                         maxWert = wert;
@@ -91,7 +93,7 @@ namespace Dame
                 
             return maxWert;
         }
-        private double min(int spieler, int tiefe, Board board)
+        private double min(Board board, int tiefe, int spieler)
         {
             List<string> valid = new List<string>();
 
@@ -102,8 +104,8 @@ namespace Dame
             if (valid.Count != 0) {
                 foreach (string move in valid)
                 {
-                    Board tempboard = update_Board(move, board, spieler);
-                    double wert = max(1 - spieler, tiefe - 1, tempboard);
+                    Board tempboard = update_Board(move, board, spieler, true);
+                    double wert = max(tempboard, tiefe - 1, 1 - spieler);
                     if (wert < minWert)
                     {
                         minWert = wert;
@@ -111,30 +113,6 @@ namespace Dame
                 }
             }
             return minWert;
-        }
-
-
-        private double negaMax(Board board, int depth, int player)
-        {          
-            if (depth == wishdepth)
-                return calcuteBoard_Value(board, player);
-            List<string> valid = getAllValid(board, player);
-            double maxWert = double.NegativeInfinity;
-            foreach (string move in valid)
-            {
-                Board tempboard = update_Board(move, board, player);
-                double value = -negaMax(tempboard, depth + 1, 1 - player);
-
-                if (value > maxWert)
-                {
-                    maxWert = value;
-                    if (depth == 0)
-                        final_move = move;
-                }
-
-            }
-
-            return maxWert;
         }
 
         //erstellt eine Liste aller Validen Züge
@@ -155,15 +133,19 @@ namespace Dame
                 checkposition(position, board, player);
             }
 
-
             if (tempjump.Count == 0)
             {
                 valid = new List<string>(tempmove);
-            }
-            else
+            } else
             {   //Überprüft Mehrfachsprung und gibt Liste aller validen Sprünge zurück (korrekte Syntax)
                 foreach (string jump in tempjump)
-                    valid = valid.Concat(jumps(drawing.StringToTuple(jump), player)).ToList();
+                {
+                    valid = valid.Concat(jumps(drawing.StringToTuple(jump), player, board)).ToList();
+
+                    foreach (string m in valid)
+                        Console.WriteLine(m);
+                }
+                    
             }
 
             return valid;
@@ -172,13 +154,9 @@ namespace Dame
         // Checkt jede Position nach Move oder Sprung
         private void checkposition(KeyValuePair<Piece, char> position, Board board, int player) 
         {
-            //Liste aller theoretisch möglichen Züge eines Spielsteins
-            List<Piece> possiblemove = possible_moves(position.Key);
-            List<Piece> possiblejump = possible_jumps(position.Key);
-
             //Invalide Züge löschen
-            tempmove = tempmove.Concat(deleteInvalid_move(possiblemove, position.Key, board, player)).ToList();
-            tempjump = tempjump.Concat(deleteInvalid_jump(possiblejump, position.Key, board, player)).ToList();
+            tempmove = tempmove.Concat(deleteInvalid_move(possible_moves(position.Key), position.Key, board, player)).ToList();
+            tempjump = tempjump.Concat(deleteInvalid_jump(possible_jumps(position.Key), position.Key, board, player)).ToList();
             
         }
 
@@ -270,18 +248,16 @@ namespace Dame
         }
         
         //findet alle kompletten Sprungketten an gegebener Position
-        private List<string> jumps(Piece position, int Color)
+        private List<string> jumps(Piece position, int Color, Board board)
         {
             List<string> valid = new List<string>();
             List<string> output = new List<string>();
             List<Piece> possiblejumps = possible_jumps(position);
             Piece target;
-            //save this recursion levels boardstate
-            Board currentboard = new Board(Board);
 
             //Stop condition of recursion
             //if no valid jumps are possible, return a string with only this position
-            if (deleteInvalid_jump(possiblejumps,position, currentboard, Color).Count == 0)
+            if (deleteInvalid_jump(possiblejumps,position, board, Color).Count == 0)
             {
                 valid.Add(drawing.TupleToString(position));
                 return valid;
@@ -289,12 +265,12 @@ namespace Dame
             //else get the full jump of every possible option at this position
             else
             {
-                foreach (string jump in deleteInvalid_jump(possiblejumps, position, currentboard, Color))
+                foreach (string jump in deleteInvalid_jump(possiblejumps, position, board, Color))
                 {
                     target = drawing.StringToTuple(jump[3].ToString() + jump[4].ToString());
-                    update_Board(jump, Color);
-                    valid = valid.Concat(jumps(target, Color)).ToList(); 
-                    Board = new Board(currentboard);
+                    Board tempboard = update_Board(jump, board, Color, false);
+                    valid = valid.Concat(jumps(target, Color, tempboard)).ToList(); 
+ 
                 }
             }
             //add ur position 
@@ -307,50 +283,8 @@ namespace Dame
 
         }
 
-        //Führt einen gegebenen Move oder Sprung aus auf dem TempBoard der CPU
-        private void update_Board(string Move, int Color)
-        {
-            Piece positionold = new Piece(0, 0);
-            Piece positionnew = new Piece(0,0);
-
-            //wenn das Update einen normalen Move enthält
-            if (Move[1] + 1 == Move[Move.Length - 1] || Move[1] -1 == Move[Move.Length - 1])
-            {
-                positionold = drawing.StringToTuple(Move[0].ToString() + Move[1].ToString());
-                positionnew = drawing.StringToTuple(Move[3].ToString() + Move[4].ToString());
-
-                //neuen Stein setzten
-                Board[positionnew] = Board[positionold];
-                //alten Stein entfernen
-                Board[positionold] = '.';
-
-            } 
-            
-            //Wenn das update einen Sprung der Länge x enthält
-            else
-            {          
-                //für Anzahl an Updates 
-                for (int i = 0; i < ((Move.Length + 1) / 3) - 1; i++)
-                {
-                    positionold = drawing.StringToTuple((Move[(i * 3)].ToString() + Move[(i * 3) + 1].ToString()));
-                    positionnew = drawing.StringToTuple((Move[(i * 3) + 3].ToString() + Move[(i * 3) + 4].ToString()));
-
-                    //neuen Stein setzten
-                    Board[positionnew] = Board[positionold];
-
-                    //Übersprungenen Stein entfernen
-                    Piece positionCaptured = new Piece((positionold.Item1 + positionnew.Item1) / 2, (positionold.Item2 + positionnew.Item2) / 2);
-                    Board[positionCaptured] = '.';
-
-                    //Alte Position updaten
-                    Board[positionold] = '.';
-
-                }
-            }
-        }
-
         //Führt einen gegebenen Move oder Sprung auf TEMPBOARD aus und gibt diese zurück
-        private Board update_Board(string Move, Board board, int Color)
+        private Board update_Board(string Move, Board board, int Color, bool Dame)
         {
             //temporäres Board auf currentBoard state setzen
             Board tempBoard = new Board(board);
@@ -394,12 +328,17 @@ namespace Dame
                 }
             }
 
-            //Damen setzten wenn Move auf Königsreihe führt
-            if (positionnew.Item2 == 0 || positionnew.Item2 == 7)
+            if (Dame)
             {
-                if (Color == 0) { tempBoard[positionnew] = 'B'; }
-                if (Color == 1) { tempBoard[positionnew] = 'W'; }
+                //Damen setzten wenn Move auf Königsreihe führt
+                if (positionnew.Item2 == 0 || positionnew.Item2 == 7)
+                {
+                    if (Color == 0) { tempBoard[positionnew] = 'B'; }
+                    if (Color == 1) { tempBoard[positionnew] = 'W'; }
+                }
             }
+
+            
 
             return tempBoard;
 
@@ -477,13 +416,13 @@ namespace Dame
         }
 
         //Berechnet den Abstand einer Dame zum nächsten Gegnerstein
-        private int calculateDistance(Piece Dameposition, Board board, int Color)
+        private int calculateDistance(Piece Dameposition, Board board, int player)
         {
             int DistanceMoves = 8, tempMovedistance;
 
             foreach (KeyValuePair<Piece,char> kvp in board)
             {
-                if (Color == 0 && (kvp.Value == 'w' || kvp.Value == 'W') || (Color == 1 && (kvp.Value == 'b' || kvp.Value == 'B')))
+                if (player == 0 && (kvp.Value == 'w' || kvp.Value == 'W') || (player == 1 && (kvp.Value == 'b' || kvp.Value == 'B')))
                 {
                     if (Math.Abs(Dameposition.Item1 - kvp.Key.Item1) > Math.Abs(Dameposition.Item2 - kvp.Key.Item2))
                         tempMovedistance = Math.Abs(Dameposition.Item1 - kvp.Key.Item1);
