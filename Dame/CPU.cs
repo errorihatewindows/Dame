@@ -64,11 +64,7 @@ namespace Dame
         }
 
 
-
-
-
-
-
+        //Minimax ALogorithmus
         private double max(int spieler, int tiefe, Board board)
         {
             List<string> valid = new List<string>();
@@ -118,7 +114,6 @@ namespace Dame
             }
             return minWert;
         }
-
 
         //erstellt eine Liste aller Validen Züge
         private List<string> getAllValid(Board board, int player)
@@ -287,9 +282,6 @@ namespace Dame
             return output;
 
         }
-
-
-
 
         //Führt einen gegebenen Move oder Sprung aus auf dem TempBoard der CPU
         private void update_Board(string Move)
