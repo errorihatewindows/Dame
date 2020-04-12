@@ -135,6 +135,8 @@ namespace Dame
 
             l.Dispose();
 
+            lastBoard = new Board(Board);
+
         }
         
 
@@ -376,11 +378,9 @@ namespace Dame
 
         }
 
-        public void update_Board()
+        public void update_Board(Board board)
         {
-            Board newBoard = mcp.Get_Board();
-
-            foreach (KeyValuePair <Piece,char> kvp in newBoard)
+            foreach (KeyValuePair <Piece,char> kvp in board)
             {
                 if (kvp.Value == lastBoard[kvp.Key])
                     continue;
@@ -394,6 +394,8 @@ namespace Dame
                 ground.DrawRectangle(pen, choor_x, choor_y, 50, 50);
                 Draw_Piece(kvp.Key.Item1, kvp.Key.Item2, kvp.Value);
             }
+
+            lastBoard = new Board(board);
 
         }
 

@@ -251,6 +251,7 @@ namespace Dame
 
         private void Perform_Move(string smove, int player)                      //performs the move (doesnt check for valid)
         {
+
             List<Piece> move = Split(smove);
             //reversible moves resets to 0 if moved with a uncrowned piece
             reversible_moves++;
@@ -306,7 +307,7 @@ namespace Dame
                 valid = false;
                 while (!valid)
                 {
-                    if (output) { drawing.Draw_Board(board); }
+                    if (output) { drawing.update_Board(board); }
                     move = Player[player].move(new Board(board), player);
                     valid = Check_Move(move, player);
                     if ((Player[player].is_cpu) && (!valid)) 
@@ -315,7 +316,6 @@ namespace Dame
                         return -2; 
                     }
                 }
-                if (output) { drawing.Draw_Board(board); }
                 if (Player[player].is_cpu && output) { drawing.wait(1000); }
                 Perform_Move(move, player);
                 //next player
