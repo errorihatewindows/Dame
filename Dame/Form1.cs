@@ -27,10 +27,15 @@ namespace Dame
         Bitmap BD = new Bitmap(@"BD.png");
         Bitmap WD = new Bitmap(@"WD.png");
 
+
+
+
+
         public Form1()
         {
             InitializeComponent();
             mcp = new MCP(this);
+
         }
 
 
@@ -85,24 +90,21 @@ namespace Dame
             {
                 // ist es ein B?
                 if (piece == 66)                
-                    man.DrawImage(BD, choor_x - 9, choor_y - 10);   //Dame Schwarz
+                    man.DrawImageUnscaled(BD, choor_x - 9, choor_y - 10);   //Dame Schwarz
                 //ist es ein W?
                 else if (piece == 87)                    
-                    man.DrawImage(WD, choor_x - 10, choor_y - 10);  //Dame weiß
+                    man.DrawImageUnscaled(WD, choor_x - 10, choor_y - 10);  //Dame weiß
             }
             //Kleinbuchstabe
             else
             {
                 //ist es ein b?
                 if (piece == 98)                   
-                    man.DrawImage(b, choor_x - 9, choor_y - 10);    //Man Schwarz
+                    man.DrawImageUnscaled(b, choor_x - 9, choor_y - 10);    //Man Schwarz
                 //ist es ein w?
                 else if (piece == 119)
-                    man.DrawImage(s, choor_x - 10, choor_y - 10);   //Man weiß           
+                    man.DrawImageUnscaled(s, choor_x - 10, choor_y - 10);   //Man weiß           
             }
-
-            man.Dispose();
-
         }
 
         public void Draw_Board(Dictionary<Tuple<int, int>, char> Board) // Zeichnet einen kompletten Schachbrett-Zustand
@@ -375,27 +377,6 @@ namespace Dame
                 mcp.simulate(count);
             }
 
-
-        }
-
-        public void update_Board(Board board)
-        {
-            foreach (KeyValuePair <Piece,char> kvp in board)
-            {
-                if (kvp.Value == lastBoard[kvp.Key])
-                    continue;
-
-                Graphics ground = this.CreateGraphics();
-                Pen pen = new Pen(Color.Sienna);
-
-                int choor_x = 75 + (kvp.Key.Item1 * 50);
-                int choor_y = 75 + ((7 - kvp.Key.Item2) * 50);
-
-                ground.DrawRectangle(pen, choor_x, choor_y, 50, 50);
-                Draw_Piece(kvp.Key.Item1, kvp.Key.Item2, kvp.Value);
-            }
-
-            lastBoard = new Board(board);
 
         }
 
