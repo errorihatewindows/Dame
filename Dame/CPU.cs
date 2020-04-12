@@ -30,7 +30,6 @@ namespace Dame
             adjustable_weights = new_weights;
         }
 
-        private Board Board;
         string final_move;
 
         int wishdepth = 6;
@@ -50,8 +49,6 @@ namespace Dame
         //gibt den Finalen Zug zurück
         public string get_move(Board current_Board, int player)
         {
-            Board = new Board(current_Board);
-
             tempmove = new List<string>();
             tempjump = new List<string>();
 
