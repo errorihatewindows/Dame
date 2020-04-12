@@ -22,10 +22,10 @@ namespace Dame
         private string move = "", tempmove = "";
         private Board lastBoard;
 
-        Bitmap b = new Bitmap(@"..\..\b.png");
-        Bitmap s = new Bitmap(@"..\..\s.png");
-        Bitmap BD = new Bitmap(@"..\..\BD.png");
-        Bitmap WD = new Bitmap(@"..\..\WD.png");
+        Bitmap b = new Bitmap(@"b.png");
+        Bitmap s = new Bitmap(@"s.png");
+        Bitmap BD = new Bitmap(@"BD.png");
+        Bitmap WD = new Bitmap(@"WD.png");
 
         public Form1()
         {
