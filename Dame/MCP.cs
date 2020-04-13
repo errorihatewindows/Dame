@@ -258,7 +258,7 @@ namespace Dame
             if (board[move[0]] == 'b' || board[move[0]] == 'w') { reversible_moves = 0; }
             for (int i = 0; i < (move.Count-1); i++)
             {
-                if (i > 0) { drawing.Invalidate(); drawing.wait(200); }
+                if (i > 0) { drawing.Invalidate(); drawing.wait(300); }
                 //if its a jump remove the middle piece and set reversible moves to 0
                 if (is_jump(move[i],move[i+1])) { reversible_moves = 0; board[between(move[i], move[i + 1])] = '.'; }
                 board[move[i + 1]] = board[move[i]];
@@ -323,8 +323,8 @@ namespace Dame
                         }
                     }
                 }
-                Perform_Move(move, player);
                 if (Player[player].is_cpu && output) { drawing.wait(1000); }
+                Perform_Move(move, player);
                 drawing.Invalidate();
                 //next player
                 player = 1 - player;
