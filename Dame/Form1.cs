@@ -467,5 +467,6 @@ namespace Dame
             foreach (KeyValuePair<Tuple<int, int>, char> kvp in mcp.Get_Board())
                 Draw_Piece(kvp.Key.Item1, kvp.Key.Item2, kvp.Value, l); 
         }
+
     }
 }

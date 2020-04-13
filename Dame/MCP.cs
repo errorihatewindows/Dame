@@ -206,9 +206,17 @@ namespace Dame
                 if (!is_black(position)) { return false; }
             }   //moves which made it this far are syntacticly correct, next check if they comply by the rules
             //check if its moving an own piece ( -20 converts lowercase to uppercase)
-            if (!(board[move[0]] == color(player) || board[move[0]] == Convert.ToChar(color(player) - 32))) { return false; }
+            if (!(board[move[0]] == color(player) || board[move[0]] == Convert.ToChar(color(player) - 32))) 
+            {
+                MessageBox.Show("Du musst deinen eigenen Stein bewegen :)");
+                return false; 
+            }
             //target must be empty
-            if (board[move[1]] != '.') { return false; }
+            if (board[move[1]] != '.') 
+            {
+                MessageBox.Show("Das Zielfeld ist bereits besetzt.");
+                return false; 
+            }
             //move is a normal move
             if (!is_jump(move[0], move[1]))
             {
@@ -218,11 +226,15 @@ namespace Dame
                 {
                     if (!(kvp.Value == color(player) || kvp.Value == (color(player) - 32))) { continue; }
                     //if a jump is possible, the move should have been a jump
-                    if (possible_jumps(kvp.Key, player).Count != 0) { return false; }
+                    if (possible_jumps(kvp.Key, player).Count != 0) 
+                    {
+                        MessageBox.Show("Du musst spirngen!");
+                        return false; 
+                    }
                 }
                 //there is no valid jump, is the move valid?
                 if (is_move(move[0],move[1])) { return true; }
-                else                           { return false; }
+                else                          { return false; }
             }   //move is a jump
             //check if every jump until the last one is valid
             int i = 0;

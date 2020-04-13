@@ -615,9 +615,9 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(930, 40);
+            this.button2.Location = new System.Drawing.Point(986, 77);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(247, 23);
+            this.button2.Size = new System.Drawing.Size(222, 23);
             this.button2.TabIndex = 107;
             this.button2.Text = "learn";
             this.button2.UseVisualStyleBackColor = true;
@@ -643,7 +643,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1268, 672);
+            this.ClientSize = new System.Drawing.Size(985, 672);
             this.Controls.Add(this.labelweights);
             this.Controls.Add(this.label39);
             this.Controls.Add(this.button2);
