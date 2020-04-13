@@ -144,12 +144,13 @@ namespace Dame
         //Spiel initialisieren
         private void button1_Click(object sender, EventArgs e)
         {
-            Zug_bestätigt.Focus();
-            startgame();
+            startgame();          
         }
         //Startet das Spiel
         private void startgame()
         {
+            Zug_bestätigt.Focus();
+
             Tuple<string, string> Input = getInput();
 
             mcp.set_user(Input.Item1, Input.Item2);
@@ -329,8 +330,6 @@ namespace Dame
         //Setzt MausEingaben zu Input Move zusammen
         private void Form1_MouseClick_1(object sender, MouseEventArgs e)
         {
-            Zug_bestätigt.Focus();
-
             //Wenn noch nicht mit ENTER bestätigt oder Spiel gestartet
             if (!ENTER && gamestarted)
             {
@@ -398,27 +397,7 @@ namespace Dame
    
         }
 
-
-        //Bestätigen der Zug Eingabe per ENTER
-        private void Zug_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == (char)Keys.Enter)
-            {
-                Zug_bestätigt_Click(this, new EventArgs());
-                e.Handled = true;
-
-            }
-        }
-        void Form1_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                Zug_bestätigt_Click(this, new EventArgs());
-                e.Handled = true;
-
-            }
-
-        }
+       
         //übergibt den finalen Move
         private void Zug_bestätigt_Click(object sender, EventArgs e)
         {
@@ -426,7 +405,6 @@ namespace Dame
             ENTER = true;
             Zug.Text = "";
         }
-
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -470,6 +448,25 @@ namespace Dame
             //Steine aufs Brett zeichnen
             foreach (KeyValuePair<Tuple<int, int>, char> kvp in mcp.Get_Board())
                 Draw_Piece(kvp.Key.Item1, kvp.Key.Item2, kvp.Value, l);
+        }
+
+        //Bestätigen oder Zurücksetzen des Zuges
+        private void Zug_bestätigt_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                Zug_bestätigt_Click(this, new EventArgs());
+                e.Handled = true;
+            }
+
+            if (e.KeyCode == Keys.Escape)
+            {
+                Zug.Text = "";
+                move = "";
+                tempmove = "";
+                e.Handled = true;
+            }
+                
         }
 
         //Wartet gewisse anzahl millisekunden
