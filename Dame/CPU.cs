@@ -32,7 +32,7 @@ namespace Dame
 
         string final_move;
 
-        int wishdepth = 10;
+        int wishdepth = 9;
       
         //temporäre Listen          
         private List<string> tempmove = new List<string>();
