@@ -33,7 +33,7 @@ namespace Dame
         string final_move;
 
         int wishdepth = 10;
-
+      
         //temporäre Listen          
         private List<string> tempmove = new List<string>();
         private List<string> tempjump = new List<string>();
@@ -70,7 +70,6 @@ namespace Dame
             valid = getAllValid(board, spieler);
 
 
-
              if (valid.Count != 0)
              {
                 foreach (string move in valid)
@@ -87,11 +86,10 @@ namespace Dame
                     }
                 }
             }
-                
-                              
-                
+                                                      
             return alpha;
         }
+      
         private double PlayerB(Board board, int tiefe, int spieler,double alpha)
         {
             List<string> valid = new List<string>();
@@ -100,6 +98,7 @@ namespace Dame
                 return calcuteBoard_Value(board, 1- spieler);
             double beta = double.PositiveInfinity;
             valid = getAllValid(board, spieler);
+
             if (valid.Count != 0) {
                 foreach (string move in valid)
                 {
@@ -344,7 +343,7 @@ namespace Dame
         }
 
         //berwertet Boards für schwarz und weiß
-        private double calcuteBoard_Value(Board board, int player)
+        public double calcuteBoard_Value(Board board, int player)
         {
             double Value = 0;
 

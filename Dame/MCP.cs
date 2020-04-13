@@ -206,9 +206,17 @@ namespace Dame
                 if (!is_black(position)) { return false; }
             }   //moves which made it this far are syntacticly correct, next check if they comply by the rules
             //check if its moving an own piece ( -20 converts lowercase to uppercase)
-            if (!(board[move[0]] == color(player) || board[move[0]] == Convert.ToChar(color(player) - 32))) { return false; }
+            if (!(board[move[0]] == color(player) || board[move[0]] == Convert.ToChar(color(player) - 32))) 
+            {
+                MessageBox.Show("Du musst deinen eigenen Stein bewegen :)");
+                return false; 
+            }
             //target must be empty
-            if (board[move[1]] != '.') { return false; }
+            if (board[move[1]] != '.') 
+            {
+                MessageBox.Show("Das Zielfeld ist bereits besetzt.");
+                return false; 
+            }
             //move is a normal move
             if (!is_jump(move[0], move[1]))
             {
@@ -218,11 +226,15 @@ namespace Dame
                 {
                     if (!(kvp.Value == color(player) || kvp.Value == (color(player) - 32))) { continue; }
                     //if a jump is possible, the move should have been a jump
-                    if (possible_jumps(kvp.Key, player).Count != 0) { return false; }
+                    if (possible_jumps(kvp.Key, player).Count != 0) 
+                    {
+                        MessageBox.Show("Du musst Springen!");
+                        return false; 
+                    }
                 }
                 //there is no valid jump, is the move valid?
                 if (is_move(move[0],move[1])) { return true; }
-                else                           { return false; }
+                else                          { return false; }
             }   //move is a jump
             //check if every jump until the last one is valid
             int i = 0;
@@ -251,12 +263,14 @@ namespace Dame
 
         private void Perform_Move(string smove, int player)                      //performs the move (doesnt check for valid)
         {
+
             List<Piece> move = Split(smove);
             //reversible moves resets to 0 if moved with a uncrowned piece
             reversible_moves++;
             if (board[move[0]] == 'b' || board[move[0]] == 'w') { reversible_moves = 0; }
             for (int i = 0; i < (move.Count-1); i++)
             {
+                if (i > 0) { drawing.Invalidate(); drawing.wait(300); }
                 //if its a jump remove the middle piece and set reversible moves to 0
                 if (is_jump(move[i],move[i+1])) { reversible_moves = 0; board[between(move[i], move[i + 1])] = '.'; }
                 board[move[i + 1]] = board[move[i]];
@@ -296,29 +310,50 @@ namespace Dame
             reversible_moves = 0;
             //main gameloop
             int player = 0;
+            Timer turn_timer = new Timer();
+            turn_timer.Interval = 1000;      //how long to wait on CPU moves?
+            turn_timer.Tick += (s, e) =>
+            {
+                turn_timer.Enabled = false;
+                turn_timer.Stop();
+            };
             while (!is_lost(player) && reversible_moves < 30)
             {
+                //start turntimer
+                turn_timer.Enabled = true;
+                turn_timer.Start();
                 if (output)
                 {
+                    CPU temp = new CPU(drawing);
                     Console.WriteLine(Player[player].name + " am Zug");
-                    drawing.labelText(Player[player].name + " am Zug");
+                    drawing.labelText(Player[player].name + " am Zug\n Boardvalue: " + temp.calcuteBoard_Value(board, player).ToString());
                 }
                 valid = false;
                 while (!valid)
                 {
-                    if (output) { drawing.Draw_Board(board); }
                     move = Player[player].move(new Board(board), player);
                     valid = Check_Move(move, player);
-                    if ((Player[player].is_cpu) && (!valid)) 
-                    { 
-                        Console.WriteLine("CPU invalid move");
-                        return -2; 
+                    if (!valid) 
+                    {
+                        if (Player[player].is_cpu)
+                        {
+                            Console.WriteLine("CPU invalid move");
+                            return -2;
+                        }
+                        else
+                        {
+                            drawing.Invalidate();
+                        }
                     }
                 }
 
-                if (output) { drawing.Draw_Board(board); }
-                //if (Player[player].is_cpu && output) { drawing.wait(1000); }
+                //if output mode is enabled CPU should wait if the minimum turn time is not yet over
+                while (turn_timer.Enabled && Player[player].is_cpu && output)
+                {
+                    Application.DoEvents();
+                }
                 Perform_Move(move, player);
+                drawing.Invalidate();
                 //next player
                 player = 1 - player;
             }
