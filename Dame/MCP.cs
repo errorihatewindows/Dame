@@ -310,8 +310,18 @@ namespace Dame
             reversible_moves = 0;
             //main gameloop
             int player = 0;
+            Timer turn_timer = new Timer();
+            turn_timer.Interval = 1000;      //how long to wait on CPU moves?
+            turn_timer.Tick += (s, e) =>
+            {
+                turn_timer.Enabled = false;
+                turn_timer.Stop();
+            };
             while (!is_lost(player) && reversible_moves < 30)
             {
+                //start turntimer
+                turn_timer.Enabled = true;
+                turn_timer.Start();
                 if (output)
                 {
                     Console.WriteLine(Player[player].name + " am Zug");
@@ -335,7 +345,11 @@ namespace Dame
                         }
                     }
                 }
-                if (Player[player].is_cpu && output) { drawing.wait(1000); }
+                //if output mode is enabled CPU should wait if the minimum turn time is not yet over
+                while (turn_timer.Enabled && Player[player].is_cpu && output)
+                {
+                    Application.DoEvents();
+                }
                 Perform_Move(move, player);
                 drawing.Invalidate();
                 //next player

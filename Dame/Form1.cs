@@ -423,7 +423,7 @@ namespace Dame
         //Wartet gewisse anzahl millisekunden
         public void wait(int milliseconds)
         {
-            System.Windows.Forms.Timer timer1 = new System.Windows.Forms.Timer();
+            Timer timer1 = new Timer();
             if (milliseconds == 0 || milliseconds < 0) return;
             timer1.Interval = milliseconds;
             timer1.Enabled = true;
