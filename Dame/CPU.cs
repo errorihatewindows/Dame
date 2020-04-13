@@ -340,7 +340,7 @@ namespace Dame
         }
 
         //berwertet Boards für schwarz und weiß
-        private double calcuteBoard_Value(Board board, int player)
+        public double calcuteBoard_Value(Board board, int player)
         {
             double Value = 0;
 

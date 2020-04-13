@@ -324,8 +324,9 @@ namespace Dame
                 turn_timer.Start();
                 if (output)
                 {
+                    CPU temp = new CPU(drawing);
                     Console.WriteLine(Player[player].name + " am Zug");
-                    drawing.labelText(Player[player].name + " am Zug");
+                    drawing.labelText(Player[player].name + " am Zug\n Boardvalue: " + temp.calcuteBoard_Value(board, player).ToString());
                 }
                 valid = false;
                 while (!valid)
