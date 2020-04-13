@@ -53,20 +53,20 @@ namespace Dame
             tempjump = new List<string>();
 
             //wählt den besten move aus
-            max(current_Board, wishdepth, player);
+            PlayerA(current_Board, 0, player,double.PositiveInfinity);
 
             return final_move;
         }
 
         //Minimax ALogorithmus
-        private double max(Board board, int tiefe, int spieler)
+        private double PlayerA(Board board, int tiefe, int spieler, double beta)
         {
             List<string> valid = new List<string>();
 
-            if (tiefe == 0)
+            if (tiefe == wishdepth)
                 return calcuteBoard_Value(board, spieler);
 
-            double maxWert = double.NegativeInfinity;
+            double alpha = double.NegativeInfinity;
             valid = getAllValid(board, spieler);
 
 
@@ -76,11 +76,13 @@ namespace Dame
                 foreach (string move in valid)
                 {
                     Board tempboard = update_Board(move, board, spieler, true);
-                    double wert = min(tempboard, tiefe - 1, 1 - spieler);
-                    if (wert > maxWert)
+                    double wert = PlayerB(tempboard, tiefe + 1, 1 - spieler,alpha);
+                    //beta cutoff
+                    if (wert > beta) return beta;
+                    if (wert > alpha)
                     {
-                        maxWert = wert;
-                        if (tiefe == wishdepth)
+                        alpha = wert;
+                        if (tiefe == 0)
                             final_move = move;
                     }
                 }
@@ -88,28 +90,30 @@ namespace Dame
                 
                               
                 
-            return maxWert;
+            return alpha;
         }
-        private double min(Board board, int tiefe, int spieler)
+        private double PlayerB(Board board, int tiefe, int spieler,double alpha)
         {
             List<string> valid = new List<string>();
 
-            if (tiefe == 0)
+            if (tiefe == wishdepth)
                 return calcuteBoard_Value(board, 1- spieler);
-            double minWert = double.PositiveInfinity;
+            double beta = double.PositiveInfinity;
             valid = getAllValid(board, spieler);
             if (valid.Count != 0) {
                 foreach (string move in valid)
                 {
                     Board tempboard = update_Board(move, board, spieler, true);
-                    double wert = max(tempboard, tiefe - 1, 1 - spieler);
-                    if (wert < minWert)
+                    double wert = PlayerA(tempboard, tiefe + 1, 1 - spieler,beta);
+                    //alpha cutoff
+                    if (wert < alpha) return alpha;
+                    if (wert < beta)
                     {
-                        minWert = wert;
+                        beta = wert;
                     }
                 }
             }
-            return minWert;
+            return beta;
         }
 
         //erstellt eine Liste aller Validen Züge
