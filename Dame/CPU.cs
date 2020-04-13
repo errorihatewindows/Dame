@@ -32,7 +32,9 @@ namespace Dame
 
         string final_move;
 
-        int wishdepth = 10;
+        int wishdepth = 6;
+        //letzten 6 EIGENEN züge
+        private List<string> history = new List<string>();
 
         //temporäre Listen          
         private List<string> tempmove = new List<string>();
@@ -51,10 +53,15 @@ namespace Dame
         {
             tempmove = new List<string>();
             tempjump = new List<string>();
+            final_move = "";
 
-            //wählt den besten move aus
-            PlayerA(current_Board, 0, player,double.PositiveInfinity);
-
+            //wählt den besten move aus, 
+            PlayerA(current_Board, 0, player, double.PositiveInfinity);
+            //wenn der move nicht geupdated wurde führen alle züge zu verlust
+            if (final_move == "") { final_move = getAllValid(current_Board, player)[0]; }
+            //update history
+            history.Add(final_move);
+            if (history.Count > 6) { history.RemoveAt(0); }
             return final_move;
         }
 
@@ -68,23 +75,22 @@ namespace Dame
 
             double alpha = double.NegativeInfinity;
             valid = getAllValid(board, spieler);
-
-
-
-             if (valid.Count != 0)
+            
+            if (valid.Count != 0)
              {
+                valid = Heuristic(valid, board, spieler);
                 foreach (string move in valid)
                 {
                     Board tempboard = update_Board(move, board, spieler, true);
                     double wert = PlayerB(tempboard, tiefe + 1, 1 - spieler,alpha);
-                    //beta cutoff
-                    if (wert >= beta) return beta;
                     if (wert > alpha)
                     {
                         alpha = wert;
                         if (tiefe == 0)
                             final_move = move;
                     }
+                    //beta cutoff
+                    if (wert >= beta) return beta;
                 }
             }
                 
@@ -100,9 +106,11 @@ namespace Dame
                 return calcuteBoard_Value(board, 1- spieler);
             double beta = double.PositiveInfinity;
             valid = getAllValid(board, spieler);
+            
             if (valid.Count != 0) {
+                valid = Heuristic(valid, board, spieler);
                 foreach (string move in valid)
-                {
+                { 
                     Board tempboard = update_Board(move, board, spieler, true);
                     double wert = PlayerA(tempboard, tiefe + 1, 1 - spieler,beta);
                     //alpha cutoff
@@ -114,6 +122,37 @@ namespace Dame
                 }
             }
             return beta;
+        }
+
+        //Sortiert eine Liste mit Zügen nach einer Heuristik
+        private List<string> Heuristic(List<string> valid, Board board, int player)
+        {
+            //output builds from best to worst, reverse from worst to best
+            List<string> reverse = new List<string>();
+            List<string> output = new List<string>();
+            List<string> False = new List<string>();
+
+            //keinen Zug der gemerkten History wiederholen
+            foreach (string move in valid)
+            {
+                if (history.Contains(move)) { reverse.Add(move); }
+                else { False.Add(move); }
+            }
+            valid = False;
+            False = new List<string>();
+            //Dame bewegen
+            foreach (string move in valid)
+            {
+                if (board[drawing.StringToTuple(move.Substring(0, 2))] == Convert.ToChar('B'+21*player)) { output.Add(move); }
+                else { False.Add(move); }
+            }
+            valid = False;
+            False = new List<string>();
+
+            //moves that dont apply to any conditions are insertet between output and reverse
+            output = output.Concat(valid).ToList();
+            output = output.Concat(reverse).ToList();
+            return output;
         }
 
         //erstellt eine Liste aller Validen Züge
