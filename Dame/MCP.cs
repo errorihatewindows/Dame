@@ -338,6 +338,7 @@ namespace Dame
                         if (Player[player].is_cpu)
                         {
                             Console.WriteLine("CPU invalid move");
+                            Console.WriteLine(move);
                             return -2;
                         }
                         else

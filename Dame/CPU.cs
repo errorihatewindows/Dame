@@ -11,16 +11,11 @@ namespace Dame
     public class CPU
     {
 
-        private double[] adjustable_weights = new double[8] {
+        private double[] adjustable_weights = new double[4] {
             50,     // Wert eigener Stein 50
-            100,    // Wert eigene Dame 100
+            300,    // Wert eigene Dame 100
             -50,    // Wert gegnerischer Stein -20
-            -100,    // Wert gegnerische Dame -80
-            -2,     // Distance Faktor Dame-Stein -2
-            -40,   // Bewertung gegnerischer Sprunganzahl -40
-            5,     // Zug der einen eigenen Sprung ermöglicht 5
-            10     // Berwertung Anzahl der Steine in Königsreihe 10       
-         
+            -300,    // Wert gegnerische Dame -80      
         };
 
 
@@ -32,8 +27,10 @@ namespace Dame
 
         string final_move;
 
-        int wishdepth = 8;
-      
+        int wishdepth = 10;
+        //letzten 6 EIGENEN züge
+        private List<string> history = new List<string>();
+
         //temporäre Listen          
         private List<string> tempmove = new List<string>();
         private List<string> tempjump = new List<string>();
@@ -51,10 +48,16 @@ namespace Dame
         {
             tempmove = new List<string>();
             tempjump = new List<string>();
+            final_move = "";
 
-            //wählt den besten move aus
-            PlayerA(current_Board, 0, player,double.PositiveInfinity);
-
+            //wählt den besten move aus, 
+            PlayerA(current_Board, 0, player, double.PositiveInfinity);
+            //wenn der move nicht geupdated wurde führen alle züge zu verlust
+            if (final_move == "") { final_move = getAllValid(current_Board, player)[0]; }
+            //update history
+            history.Add(final_move);
+            if (history.Count > 6) { history.RemoveAt(0); }
+            //increase search depth
             return final_move;
         }
 
@@ -68,22 +71,27 @@ namespace Dame
 
             double alpha = double.NegativeInfinity;
             valid = getAllValid(board, spieler);
-
-
              if (valid.Count != 0)
              {
+                valid = Heuristic(valid, board, spieler);
                 foreach (string move in valid)
                 {
                     Board tempboard = update_Board(move, board, spieler, true);
                     double wert = PlayerB(tempboard, tiefe + 1, 1 - spieler,alpha);
                     //beta cutoff
-                    if (wert >= beta) return beta;
+                    if (wert >= beta)
+                    {
+                        if (tiefe == 0)
+                            final_move = move;
+                        return beta;
+                    }
                     if (wert > alpha)
                     {
                         alpha = wert;
                         if (tiefe == 0)
                             final_move = move;
                     }
+
                 }
             }
                                                       
@@ -98,10 +106,10 @@ namespace Dame
                 return calcuteBoard_Value(board, 1- spieler);
             double beta = double.PositiveInfinity;
             valid = getAllValid(board, spieler);
-
             if (valid.Count != 0) {
+                valid = Heuristic(valid, board, spieler);
                 foreach (string move in valid)
-                {
+                { 
                     Board tempboard = update_Board(move, board, spieler, true);
                     double wert = PlayerA(tempboard, tiefe + 1, 1 - spieler,beta);
                     //alpha cutoff
@@ -113,6 +121,44 @@ namespace Dame
                 }
             }
             return beta;
+        }
+
+        //Sortiert eine Liste mit Zügen nach einer Heuristik
+        private List<string> Heuristic(List<string> valid, Board board, int player)
+        {
+            //output builds from best to worst, reverse from worst to best
+            List<string> reverse = new List<string>();
+            List<string> output = new List<string>();
+            List<string> False = new List<string>();
+
+            //keinen Zug der gemerkten History wiederholen
+            foreach (string move in valid)
+            {
+                if (history.Contains(move)) { reverse.Insert(0, move); }
+                else { False.Add(move); }
+            }
+            valid = False;
+            False = new List<string>();
+            //Dame bewegen
+            foreach (string move in valid)
+            {
+                if (board[drawing.StringToTuple(move.Substring(0, 2))] == Convert.ToChar('B'+21*player)) { output.Add(move); }
+                else { False.Add(move); }
+            }
+            valid = False;
+            False = new List<string>();
+            //keine steine aus der grundreihe
+            foreach (string move in valid)
+            {
+                if (move[1] == Convert.ToChar('1'+8*player)) { reverse.Insert(0, move); }
+                else { False.Add(move); }
+            }
+            valid = False;
+            False = new List<string>();
+            //moves that dont apply to any conditions are insertet between output and reverse
+            output = output.Concat(valid).ToList();
+            output = output.Concat(reverse).ToList();
+            return output;
         }
 
         //erstellt eine Liste aller Validen Züge
@@ -353,14 +399,8 @@ namespace Dame
                 //CPU ist Schwarz
                 if (player == 0)
                 {
-                    if (kvp.Value == 'b') { Value += adjustable_weights[0]; }                       
-                    if (kvp.Value == 'B') 
-                    { 
-                        Value += adjustable_weights[1];
-                        int Distance = calculateDistance(kvp.Key, board, player);
-                        if (Distance > 3)
-                            Value += Math.Abs(3 - Distance) * adjustable_weights[4];
-                    }                        
+                    if (kvp.Value == 'b') { Value += adjustable_weights[0]; }
+                    if (kvp.Value == 'B') { Value += adjustable_weights[1]; }                 
                     if (kvp.Value == 'w') { Value += adjustable_weights[2]; }                       
                     if (kvp.Value == 'W') { Value += adjustable_weights[3]; }                 
                 } 
@@ -370,71 +410,11 @@ namespace Dame
                     if (kvp.Value == 'b') { Value += adjustable_weights[2]; }
                     if (kvp.Value == 'B') { Value += adjustable_weights[3]; }                        
                     if (kvp.Value == 'w') { Value += adjustable_weights[0]; }                        
-                    if (kvp.Value == 'W') 
-                    { 
-                        Value += adjustable_weights[1];
-                        int Distance = calculateDistance(kvp.Key, board, player);
-                        if (Distance > 3)
-                            Value += Math.Abs(3 - Distance) * adjustable_weights[4];
-                    }                        
+                    if (kvp.Value == 'W') { Value += adjustable_weights[1]; }
                 }
             }
-
-            //Bewege Steine aus der Damenreihe eher seltener (Damen werden außenvor gelassen)
-            Value += (count_Pieces_on_Baseline(board, player)) * adjustable_weights[7];
-
             return Value;
         }
 
-        //Zählt für gegebenes Board die Steine auf der Königsreihe
-        private int count_Pieces_on_Baseline(Board board, int player)
-        {
-            int amount = 0;
-
-            if (player == 0)
-            {
-                //Damen werden außenvor gelassen
-                for(int i = 0; i <= 6; i += 2)
-                {
-                    if (board[Tuple.Create(i, 0)] == 'b')
-                        amount++;
-                }
-            }
-
-            if (player == 1)
-            {
-                for (int i = 1; i <= 7; i += 2)
-                {
-                    if (board[Tuple.Create(i, 7)] == 'w')
-                        amount++;
-                }
-            }
-
-            return amount;
-        }
-
-        //Berechnet den Abstand einer Dame zum nächsten Gegnerstein
-        private int calculateDistance(Piece Dameposition, Board board, int player)
-        {
-            int DistanceMoves = 8, tempMovedistance;
-
-            foreach (KeyValuePair<Piece,char> kvp in board)
-            {
-                if (player == 0 && (kvp.Value == 'w' || kvp.Value == 'W') || (player == 1 && (kvp.Value == 'b' || kvp.Value == 'B')))
-                {
-                    if (Math.Abs(Dameposition.Item1 - kvp.Key.Item1) > Math.Abs(Dameposition.Item2 - kvp.Key.Item2))
-                        tempMovedistance = Math.Abs(Dameposition.Item1 - kvp.Key.Item1);
-                    else
-                        tempMovedistance = Math.Abs(Dameposition.Item2 - kvp.Key.Item2);
-
-                    if (tempMovedistance < DistanceMoves)
-                        DistanceMoves = tempMovedistance;
-
-                }
-                
-            }
-
-            return DistanceMoves;
-        }
     }
 }
