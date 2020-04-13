@@ -265,6 +265,7 @@
             this.Zug.Size = new System.Drawing.Size(222, 20);
             this.Zug.TabIndex = 81;
             this.Zug.Visible = false;
+            this.Zug.TextChanged += new System.EventHandler(this.Zug_TextChanged);
             this.Zug.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Zug_KeyPress);
             // 
             // label17
@@ -286,8 +287,6 @@
             this.button1.Text = "Spiel Starten";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
-            this.button1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.button1_MouseUp);
-            // 
             // label18
             // 
             this.label18.AutoSize = true;
