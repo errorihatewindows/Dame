@@ -60,16 +60,11 @@ namespace Dame
 
         //Minimax ALogorithmus
         private double max(Board board, int tiefe, int spieler)
-        {
-            List<string> valid = new List<string>();
-
+        {           
             if (tiefe == 0)
                 return calcuteBoard_Value(board, spieler);
-
             double maxWert = double.NegativeInfinity;
-            valid = getAllValid(board, spieler);
-
-
+            List<string> valid = getAllValid(board, spieler);
 
              if (valid.Count != 0)
              {
@@ -85,19 +80,15 @@ namespace Dame
                     }
                 }
             }
-                
-                              
-                
+                                
             return maxWert;
         }
         private double min(Board board, int tiefe, int spieler)
-        {
-            List<string> valid = new List<string>();
-
+        {            
             if (tiefe == 0)
                 return calcuteBoard_Value(board, 1- spieler);
             double minWert = double.PositiveInfinity;
-            valid = getAllValid(board, spieler);
+            List<string> valid = getAllValid(board, spieler);
             if (valid.Count != 0) {
                 foreach (string move in valid)
                 {
