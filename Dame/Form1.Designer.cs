@@ -257,6 +257,7 @@
             this.Zug_bestätigt.UseVisualStyleBackColor = true;
             this.Zug_bestätigt.Visible = false;
             this.Zug_bestätigt.Click += new System.EventHandler(this.Zug_bestätigt_Click);
+            this.Zug_bestätigt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Zug_bestätigt_KeyDown);
             // 
             // Zug
             // 
@@ -265,7 +266,8 @@
             this.Zug.Size = new System.Drawing.Size(222, 20);
             this.Zug.TabIndex = 81;
             this.Zug.Visible = false;
-            this.Zug.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Zug_KeyPress);
+            this.Zug.TextChanged += new System.EventHandler(this.Zug_TextChanged);
+            this.Zug.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Zug_KeyDown);
             // 
             // label17
             // 
@@ -286,7 +288,6 @@
             this.button1.Text = "Spiel Starten";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
-            this.button1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.button1_MouseUp);
             // 
             // label18
             // 
@@ -615,9 +616,9 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(930, 40);
+            this.button2.Location = new System.Drawing.Point(983, 77);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(247, 23);
+            this.button2.Size = new System.Drawing.Size(222, 23);
             this.button2.TabIndex = 107;
             this.button2.Text = "learn";
             this.button2.UseVisualStyleBackColor = true;
@@ -634,7 +635,7 @@
             // labelweights
             // 
             this.labelweights.AutoSize = true;
-            this.labelweights.Location = new System.Drawing.Point(956, 87);
+            this.labelweights.Location = new System.Drawing.Point(1012, 119);
             this.labelweights.Name = "labelweights";
             this.labelweights.Size = new System.Drawing.Size(0, 13);
             this.labelweights.TabIndex = 109;
@@ -643,7 +644,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1268, 672);
+            this.ClientSize = new System.Drawing.Size(983, 672);
             this.Controls.Add(this.labelweights);
             this.Controls.Add(this.label39);
             this.Controls.Add(this.button2);
@@ -696,6 +697,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Shown += new System.EventHandler(this.Form1_Shown);
             this.SizeChanged += new System.EventHandler(this.Form1_SizeChanged);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseClick_1);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();

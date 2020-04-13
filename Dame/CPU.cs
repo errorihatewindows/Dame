@@ -71,8 +71,7 @@ namespace Dame
 
             double alpha = double.NegativeInfinity;
             valid = getAllValid(board, spieler);
-            
-            if (valid.Count != 0)
+             if (valid.Count != 0)
              {
                 valid = Heuristic(valid, board, spieler);
                 foreach (string move in valid)
@@ -95,11 +94,10 @@ namespace Dame
 
                 }
             }
-                
-                              
-                
+                                                      
             return alpha;
         }
+      
         private double PlayerB(Board board, int tiefe, int spieler,double alpha)
         {
             List<string> valid = new List<string>();
@@ -108,7 +106,6 @@ namespace Dame
                 return calcuteBoard_Value(board, 1- spieler);
             double beta = double.PositiveInfinity;
             valid = getAllValid(board, spieler);
-            
             if (valid.Count != 0) {
                 valid = Heuristic(valid, board, spieler);
                 foreach (string move in valid)
@@ -392,7 +389,7 @@ namespace Dame
         }
 
         //berwertet Boards für schwarz und weiß
-        private double calcuteBoard_Value(Board board, int player)
+        public double calcuteBoard_Value(Board board, int player)
         {
             double Value = 0;
 
