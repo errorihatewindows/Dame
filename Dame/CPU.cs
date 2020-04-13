@@ -72,14 +72,14 @@ namespace Dame
                 {
                     Board tempboard = update_Board(move, board, spieler, true);
                     double wert = min(tempboard, tiefe - 1, 1 - spieler);
-                    if (wert > maxWert)
+                    if (wert >= maxWert)
                     {
                         maxWert = wert;
                         if (tiefe == wishdepth)
                             final_move = move;
                     }
                 }
-            }
+             }
                                 
             return maxWert;
         }
