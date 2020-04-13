@@ -392,17 +392,18 @@ namespace Dame
 
             for (int i = 0; i < move.Length; i += 3)
             {   
-                if (move[i] > 72 || move[i] < 65) { continue;  }
-                
-                if (move[i + 1] > 56 || move[i + 1] < 49) {
-                    Console.WriteLine("Wums");
-                    continue; }
+                //Feld ist außerhalb des Spielbrettes
+                if (move[i] > 72 || move[i] < 65) { continue;  }                
+                if (move[i + 1] > 56 || move[i + 1] < 49) { continue; }
 
+                //letztes Feld in move andere Farbe
+                if (i == move.Length - 2) { pen = new Pen(Color.DodgerBlue, 4); }
 
+                //Zeichne markierung
                 Piece field = StringToTuple(move[i].ToString() + move[i + 1].ToString());               
                 l.DrawRectangle(pen, (field.Item1 * 50) + 75, (Math.Abs(field.Item2 - 7) * 50) + 75, 50, 50);
             }
-   
+
         }
 
        
@@ -463,6 +464,8 @@ namespace Dame
         {
             if (e.KeyCode == Keys.Enter)
             {
+
+                Zug_bestätigt.Focus();
                 Zug_bestätigt_Click(this, new EventArgs());
                 e.Handled = true;
             }
