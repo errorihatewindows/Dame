@@ -385,13 +385,20 @@ namespace Dame
         //Markiert ausgewählte Felder
         private void highlight_Tiles(string move, Graphics l)
         {
-            
+            move = move.ToUpper();
+
             Pen pen = new Pen(Color.LightSkyBlue, 4);
 
             for (int i = 0; i < move.Length; i += 3)
-            {
-                Piece field = StringToTuple(move[i].ToString() + move[i + 1].ToString());
+            {   
+                if (move[i] > 72 || move[i] < 65) { continue;  }
                 
+                if (move[i + 1] > 56 || move[i + 1] < 49) {
+                    Console.WriteLine("Wums");
+                    continue; }
+
+
+                Piece field = StringToTuple(move[i].ToString() + move[i + 1].ToString());               
                 l.DrawRectangle(pen, (field.Item1 * 50) + 75, (Math.Abs(field.Item2 - 7) * 50) + 75, 50, 50);
             }
    
@@ -451,6 +458,22 @@ namespace Dame
         }
 
         //Bestätigen oder Zurücksetzen des Zuges
+        private void Zug_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                Zug_bestätigt_Click(this, new EventArgs());
+                e.Handled = true;
+            }
+
+            if (e.KeyCode == Keys.Escape)
+            {
+                Zug.Text = "";
+                move = "";
+                tempmove = "";
+                e.Handled = true;
+            }
+        }
         private void Zug_bestätigt_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)

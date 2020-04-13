@@ -267,6 +267,7 @@
             this.Zug.TabIndex = 81;
             this.Zug.Visible = false;
             this.Zug.TextChanged += new System.EventHandler(this.Zug_TextChanged);
+            this.Zug.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Zug_KeyDown);
             // 
             // label17
             // 
