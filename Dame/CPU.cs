@@ -32,7 +32,7 @@ namespace Dame
 
         string final_move;
 
-        int wishdepth = 6;
+        int wishdepth = 10;
 
         //temporäre Listen          
         private List<string> tempmove = new List<string>();
@@ -78,7 +78,7 @@ namespace Dame
                     Board tempboard = update_Board(move, board, spieler, true);
                     double wert = PlayerB(tempboard, tiefe + 1, 1 - spieler,alpha);
                     //beta cutoff
-                    if (wert > beta) return beta;
+                    if (wert >= beta) return beta;
                     if (wert > alpha)
                     {
                         alpha = wert;
@@ -106,7 +106,7 @@ namespace Dame
                     Board tempboard = update_Board(move, board, spieler, true);
                     double wert = PlayerA(tempboard, tiefe + 1, 1 - spieler,beta);
                     //alpha cutoff
-                    if (wert < alpha) return alpha;
+                    if (wert <= alpha) return alpha;
                     if (wert < beta)
                     {
                         beta = wert;
