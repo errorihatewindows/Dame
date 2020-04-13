@@ -346,6 +346,7 @@ namespace Dame
                         }
                     }
                 }
+
                 //if output mode is enabled CPU should wait if the minimum turn time is not yet over
                 while (turn_timer.Enabled && Player[player].is_cpu && output)
                 {
@@ -356,6 +357,7 @@ namespace Dame
                 //next player
                 player = 1 - player;
             }
+            if (output) { drawing.Draw_Board(board); }
             if (reversible_moves < 30)  //game ended in a win/loss
             {
                 if (output)
