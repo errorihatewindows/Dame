@@ -386,7 +386,7 @@ namespace Dame
         private void highlight_Tiles(string move, Graphics l)
         {
             
-            Pen pen = new Pen(Color.Red, 3);
+            Pen pen = new Pen(Color.LightSkyBlue, 4);
 
             for (int i = 0; i < move.Length; i += 3)
             {

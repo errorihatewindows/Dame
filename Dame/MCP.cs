@@ -228,7 +228,7 @@ namespace Dame
                     //if a jump is possible, the move should have been a jump
                     if (possible_jumps(kvp.Key, player).Count != 0) 
                     {
-                        MessageBox.Show("Du musst spirngen!");
+                        MessageBox.Show("Du musst Springen!");
                         return false; 
                     }
                 }
