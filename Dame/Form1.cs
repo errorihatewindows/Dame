@@ -359,6 +359,7 @@ namespace Dame
         private void Zug_TextChanged(object sender, EventArgs e)
         {
             Graphics l = CreateGraphics();
+            tempmove = Zug.Text;
 
             if (Zug.Text.Length == 0)
                 Invalidate();
