@@ -464,7 +464,7 @@ namespace Dame
         {
             if (e.KeyCode == Keys.Enter)
             {
-
+                e.SuppressKeyPress = true;
                 Zug_bestätigt.Focus();
                 Zug_bestätigt_Click(this, new EventArgs());
                 e.Handled = true;
@@ -472,6 +472,7 @@ namespace Dame
 
             if (e.KeyCode == Keys.Escape)
             {
+                e.SuppressKeyPress = true;
                 Zug.Text = "";
                 move = "";
                 tempmove = "";
