@@ -144,7 +144,7 @@ namespace Dame
         //Spiel initialisieren
         private void button1_Click(object sender, EventArgs e)
         {
-            startgame();          
+            startgame();
         }
         //Startet das Spiel
         private void startgame()

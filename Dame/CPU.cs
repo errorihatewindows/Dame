@@ -27,7 +27,7 @@ namespace Dame
 
         string final_move;
 
-        int wishdepth = 10;
+        int wishdepth = 8;
         //letzten 6 EIGENEN züge
         private List<string> history = new List<string>();
 
